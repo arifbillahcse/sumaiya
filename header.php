@@ -15,7 +15,7 @@
     <div class="header-inner">
         <!-- Logo -->
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo" aria-label="<?php esc_attr_e( 'Home', 'flexible-remote-services' ); ?>">
-            flexible<span class="accent">remote</span>services
+            Media<span class="accent">Forge</span> Summit
         </a>
 
         <!-- Desktop Navigation -->
@@ -33,11 +33,11 @@
 
         <!-- Header CTA Buttons -->
         <div class="header-cta">
-            <a href="<?php echo esc_url( home_url( '/contact/#quote' ) ); ?>" class="btn btn-outline">
-                <?php esc_html_e( 'Get Free Quote', 'flexible-remote-services' ); ?>
+            <a href="<?php echo esc_url( home_url( '/schedule/' ) ); ?>" class="btn btn-outline">
+                <?php esc_html_e( 'View Schedule', 'flexible-remote-services' ); ?>
             </a>
-            <a href="<?php echo esc_url( home_url( '/contact/#consultation' ) ); ?>" class="btn btn-primary">
-                <?php esc_html_e( 'Book Consultation', 'flexible-remote-services' ); ?>
+            <a href="<?php echo esc_url( home_url( '/register/' ) ); ?>" class="btn btn-primary">
+                <?php esc_html_e( 'Register Now', 'flexible-remote-services' ); ?>
             </a>
         </div>
 
@@ -62,11 +62,11 @@
     ) );
     ?>
     <div class="mobile-cta">
-        <a href="<?php echo esc_url( home_url( '/contact/#quote' ) ); ?>" class="btn btn-outline">
-            <?php esc_html_e( 'Get Free Quote', 'flexible-remote-services' ); ?>
+        <a href="<?php echo esc_url( home_url( '/schedule/' ) ); ?>" class="btn btn-outline">
+            <?php esc_html_e( 'View Schedule', 'flexible-remote-services' ); ?>
         </a>
-        <a href="<?php echo esc_url( home_url( '/contact/#consultation' ) ); ?>" class="btn btn-primary">
-            <?php esc_html_e( 'Book Consultation', 'flexible-remote-services' ); ?>
+        <a href="<?php echo esc_url( home_url( '/register/' ) ); ?>" class="btn btn-primary">
+            <?php esc_html_e( 'Register Now', 'flexible-remote-services' ); ?>
         </a>
     </div>
 </nav>

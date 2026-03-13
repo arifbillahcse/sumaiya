@@ -6,10 +6,10 @@
         <!-- Column 1: Brand & Social -->
         <div class="footer-brand">
             <div class="footer-logo">
-                flexible<span class="accent">remote</span>services
+                Media<span class="accent">Forge</span> Summit
             </div>
             <p class="footer-description">
-                <?php esc_html_e( 'We build stunning, SEO-optimized websites that help businesses grow. Specialized in serving event planners, medical professionals, electricians, plumbers, and jewelry businesses.', 'flexible-remote-services' ); ?>
+                <?php esc_html_e( 'The world\'s leading annual conference at the intersection of technology and media. Bringing together innovators, executives, and creators from over 60 countries.', 'flexible-remote-services' ); ?>
             </p>
             <div class="footer-social">
                 <a href="#" aria-label="<?php esc_attr_e( 'LinkedIn', 'flexible-remote-services' ); ?>" target="_blank" rel="noopener noreferrer">
@@ -60,7 +60,7 @@
             <h4><?php esc_html_e( 'Get In Touch', 'flexible-remote-services' ); ?></h4>
             <div class="footer-contact-item">
                 <i class="fas fa-envelope"></i>
-                <a href="mailto:info@flexibleremoteservices.com">info@flexibleremoteservices.com</a>
+                <a href="mailto:info@mediaforgesummit.com">info@mediaforgesummit.com</a>
             </div>
             <form class="newsletter-form" onsubmit="handleNewsletter(event)">
                 <label for="newsletter-email"><?php esc_html_e( 'Subscribe to our newsletter', 'flexible-remote-services' ); ?></label>
@@ -83,7 +83,7 @@
     <!-- Footer Bottom -->
     <div class="footer-bottom">
         <div class="footer-bottom-inner">
-            <p>&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php esc_html_e( 'Flexible Remote Services. All rights reserved.', 'flexible-remote-services' ); ?></p>
+            <p>&copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php esc_html_e( 'MediaForge Summit. All rights reserved.', 'flexible-remote-services' ); ?></p>
             <nav class="footer-legal-nav" aria-label="<?php esc_attr_e( 'Legal Navigation', 'flexible-remote-services' ); ?>">
                 <?php
                 wp_nav_menu( array(
