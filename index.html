@@ -447,6 +447,103 @@
     </div>
 </section>
 
+<!-- ===== PAST EDITIONS ===== -->
+<section class="home-editions">
+    <div class="container">
+        <h2 class="section-title text-center fade-in">11 Years of Defining the Industry</h2>
+        <p class="section-subtitle text-center fade-in">
+            From its inaugural edition in 2014 to the landmark gathering of 2025, MediaForge Summit
+            has grown into the world's most authoritative annual forum for media and technology.
+        </p>
+        <div class="home-editions__grid">
+            <div class="home-editions__card fade-in">
+                <span class="home-editions__year">2023</span>
+                <div class="home-editions__location">
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Amsterdam, Netherlands
+                </div>
+                <ul class="home-editions__stats">
+                    <li><strong>3,800</strong> Attendees</li>
+                    <li><strong>160+</strong> Speakers</li>
+                    <li><strong>54</strong> Countries</li>
+                </ul>
+                <p class="home-editions__theme">Theme: <em>The Platform Reckoning</em></p>
+            </div>
+            <div class="home-editions__card home-editions__card--featured fade-in">
+                <span class="home-editions__year">2024</span>
+                <div class="home-editions__location">
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Singapore
+                </div>
+                <ul class="home-editions__stats">
+                    <li><strong>4,000</strong> Attendees</li>
+                    <li><strong>170+</strong> Speakers</li>
+                    <li><strong>58</strong> Countries</li>
+                </ul>
+                <p class="home-editions__theme">Theme: <em>AI at the Crossroads</em></p>
+            </div>
+            <div class="home-editions__card fade-in">
+                <span class="home-editions__year">2025</span>
+                <div class="home-editions__location">
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i> Toronto, Canada
+                </div>
+                <ul class="home-editions__stats">
+                    <li><strong>4,100</strong> Attendees</li>
+                    <li><strong>175+</strong> Speakers</li>
+                    <li><strong>60</strong> Countries</li>
+                </ul>
+                <p class="home-editions__theme">Theme: <em>Audience First</em></p>
+            </div>
+        </div>
+        <div class="text-center" style="margin-top: 40px;">
+            <a href="about.html" class="btn btn-outline">Our Full History</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="home-newsletter">
+    <div class="container home-newsletter__inner">
+        <div class="home-newsletter__content fade-in">
+            <span class="home-newsletter__badge">
+                <i class="fas fa-envelope-open-text" aria-hidden="true"></i> Summit Dispatch
+            </span>
+            <h2 class="home-newsletter__title">Stay Informed. Stay Ahead.</h2>
+            <p class="home-newsletter__text">
+                Join 18,000+ media and technology professionals who receive the MediaForge Summit
+                Dispatch — exclusive speaker announcements, programme previews, industry insights,
+                and early-bird pass alerts delivered directly to your inbox.
+            </p>
+            <ul class="home-newsletter__perks">
+                <li><i class="fas fa-check" aria-hidden="true"></i> Early access to the full conference programme</li>
+                <li><i class="fas fa-check" aria-hidden="true"></i> Exclusive speaker interviews &amp; previews</li>
+                <li><i class="fas fa-check" aria-hidden="true"></i> Priority notification for pass releases</li>
+                <li><i class="fas fa-check" aria-hidden="true"></i> Post-event session recordings &amp; reports</li>
+            </ul>
+        </div>
+        <div class="home-newsletter__form-wrap fade-in">
+            <form class="home-newsletter__form" id="homepageNewsletter" onsubmit="handleHomepageNewsletter(event)" novalidate>
+                <label for="hn-name">Full Name</label>
+                <input type="text" id="hn-name" name="name" placeholder="Your full name" required>
+                <label for="hn-email">Work Email</label>
+                <input type="email" id="hn-email" name="email" placeholder="your@organisation.com" required>
+                <label for="hn-org">Organisation</label>
+                <input type="text" id="hn-org" name="organisation" placeholder="Your company or publication">
+                <button type="submit" class="btn btn-primary btn--full">
+                    Subscribe to the Dispatch
+                </button>
+                <p class="home-newsletter__consent">
+                    By subscribing you agree to receive emails from MediaForge Summit. Unsubscribe at any time.
+                    View our <a href="#">Privacy Policy</a>.
+                </p>
+            </form>
+            <div class="home-newsletter__success" id="hnSuccess" hidden>
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <strong>You're subscribed!</strong>
+                <p>Thank you for joining the Summit Dispatch. Look out for your first issue soon.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ===== CTA BANNER ===== -->
 <section class="home-cta">
     <div class="container home-cta__inner">
@@ -571,6 +668,16 @@
         tick();
         setInterval(tick, 1000);
     }());
+
+    // Homepage newsletter form
+    function handleHomepageNewsletter(e) {
+        e.preventDefault();
+        var form    = document.getElementById('homepageNewsletter');
+        var success = document.getElementById('hnSuccess');
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        form.hidden    = true;
+        success.hidden = false;
+    }
 </script>
 </body>
 </html>
