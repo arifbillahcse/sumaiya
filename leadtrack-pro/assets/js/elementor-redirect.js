@@ -1,55 +1,86 @@
-/* LeadTrack Pro – Elementor Form Redirect */
-(function ($) {
-  'use strict';
+/**
+ * LeadTrack Pro — Elementor Form Success Redirect
+ *
+ * Listens for Elementor Pro form-success events and redirects the visitor
+ * to the Thank You page URL provided by LeadTrackElementor.thankyouUrl.
+ *
+ * Depends on:
+ *   jQuery
+ *   LeadTrackElementor (localised by wp_localize_script)
+ *     .thankyouUrl {string} The full Thank You page URL.
+ *
+ * Elementor fires the 'submit_success' event on the form widget element
+ * after a successful AJAX submission.
+ */
 
-  var redirect = window.LeadTrackRedirect || {};
-  var thankYouUrl = redirect.thankYouUrl || '';
+/* global LeadTrackElementor */
 
-  if (!thankYouUrl) {
-    return;
-  }
+( function ( $ ) {
+	'use strict';
 
-  function doRedirect() {
-    sessionStorage.setItem('ltp_from_form', '1');
-    window.location.href = thankYouUrl;
-  }
+	if ( typeof LeadTrackElementor === 'undefined' || ! LeadTrackElementor.thankyouUrl ) {
+		return;
+	}
 
-  // ── Elementor Pro form success event (primary) ──────────────────────────
-  // Elementor Pro fires a jQuery event on the form element after success.
-  $(document).on('submit_success', '.elementor-form', function (e, response) {
-    doRedirect();
-  });
+	var redirectUrl = LeadTrackElementor.thankyouUrl;
 
-  // ── Elementor JS API hook (fallback for newer Elementor versions) ───────
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof elementorFrontend === 'undefined') {
-      return;
-    }
+	/**
+	 * Perform the redirect.
+	 * Wrapped in a helper so we can call it from multiple event sources.
+	 */
+	function doRedirect() {
+		window.location.href = redirectUrl;
+	}
 
-    // Hook into every form widget once it's ready.
-    elementorFrontend.hooks.addAction(
-      'frontend/element_ready/form.default',
-      function ($scope) {
-        var $form = $scope.find('.elementor-form');
+	// -----------------------------------------------------------------------
+	// Method 1 — Elementor Pro < 3.x custom event on the form widget.
+	// -----------------------------------------------------------------------
+	$( document ).on( 'submit_success', '.elementor-form', function () {
+		doRedirect();
+	} );
 
-        $form.on('submit_success', function (e, response) {
-          // Respect Elementor's own redirect action if configured.
-          if (
-            response &&
-            response.data &&
-            response.data.redirect_url &&
-            response.data.redirect_url !== ''
-          ) {
-            return; // Elementor already redirecting.
-          }
-          doRedirect();
-        });
-      }
-    );
-  });
+	// -----------------------------------------------------------------------
+	// Method 2 — Elementor Pro 3.x+ fires a namespaced jQuery event.
+	// -----------------------------------------------------------------------
+	$( document ).on( 'elementor/forms/submit_success', function () {
+		doRedirect();
+	} );
 
-  // ── Custom event emitted by antispam.js on block ────────────────────────
-  document.addEventListener('ltp:spam_detected', function () {
-    // Do nothing — spam detected, no redirect.
-  });
-}(jQuery));
+	// -----------------------------------------------------------------------
+	// Method 3 — Intercept AJAX response data injected by the PHP class.
+	//
+	// LeadTrack_Elementor_Integration::inject_redirect_into_response() adds
+	// a `redirect_url` key to the Elementor AJAX JSON payload.  We hook into
+	// the global jQuery ajaxComplete to catch that and redirect if present.
+	// -----------------------------------------------------------------------
+	$( document ).ajaxComplete( function ( event, xhr, settings ) {
+		// Only intercept Elementor form AJAX calls.
+		if ( ! settings.data || settings.data.indexOf( 'action=elementor_pro_forms_send_form' ) === -1 ) {
+			return;
+		}
+
+		var responseText = xhr.responseText || '';
+		if ( ! responseText ) {
+			return;
+		}
+
+		var json;
+		try {
+			json = JSON.parse( responseText );
+		} catch ( e ) {
+			return;
+		}
+
+		// Respect a redirect_url in the response data (set by our PHP filter).
+		if ( json && json.data && json.data.redirect_url ) {
+			window.location.href = json.data.redirect_url;
+			return;
+		}
+
+		// Fallback: redirect on any success response from Elementor forms.
+		if ( json && json.success === true ) {
+			doRedirect();
+		}
+	} );
+
+} )( jQuery );
