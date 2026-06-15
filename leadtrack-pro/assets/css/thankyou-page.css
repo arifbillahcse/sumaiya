@@ -1,192 +1,227 @@
-/* =====================================================
-   LeadTrack Pro – Thank You Page Styles
-   Mobile-first, no external dependencies
-   ===================================================== */
+/**
+ * LeadTrack Pro — Thank You Page Styles
+ *
+ * Mobile-first, using CSS custom properties for easy theming.
+ * Animated success checkmark via pure CSS border animation.
+ */
 
+/* =========================================================================
+   CSS Custom Properties
+   ========================================================================= */
 :root {
-  --ltp-primary:      #4f46e5;
-  --ltp-primary-dark: #3730a3;
-  --ltp-success:      #22c55e;
-  --ltp-success-dark: #16a34a;
-  --ltp-text:         #1e293b;
-  --ltp-muted:        #64748b;
-  --ltp-bg:           #f8fafc;
-  --ltp-card-bg:      #ffffff;
-  --ltp-border:       #e2e8f0;
-  --ltp-radius:       16px;
-  --ltp-shadow:       0 4px 24px rgba(0, 0, 0, 0.08);
-  --ltp-transition:   0.25s ease;
+  --lt-color-primary:     #4f46e5;
+  --lt-color-primary-dk:  #3730a3;
+  --lt-color-success:     #22c55e;
+  --lt-color-success-dk:  #16a34a;
+  --lt-color-text:        #1e293b;
+  --lt-color-text-muted:  #64748b;
+  --lt-color-bg-start:    #ede9fe;
+  --lt-color-bg-end:      #e0f2fe;
+  --lt-color-card-bg:     #ffffff;
+  --lt-color-card-shadow: rgba(99, 102, 241, 0.15);
+  --lt-radius-card:       1.5rem;
+  --lt-radius-btn:        3rem;
+  --lt-font-family:       -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+                          Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  --lt-transition:        0.3s ease;
+  --lt-checkmark-size:    6rem;
+  --lt-checkmark-stroke:  0.35rem;
 }
 
-/* Page wrapper ---------------------------------------- */
-.ltp-thankyou {
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
+/* =========================================================================
+   Outer wrapper — gradient background
+   ========================================================================= */
+.lt-thankyou {
+  display:         flex;
+  align-items:     center;
   justify-content: center;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+  min-height:      60vh;
+  padding:         2rem 1rem;
+  font-family:     var(--lt-font-family);
+  background:      linear-gradient(135deg, var(--lt-color-bg-start) 0%, var(--lt-color-bg-end) 100%);
+  box-sizing:      border-box;
 }
 
-.ltp-thankyou__inner {
-  background: var(--ltp-card-bg);
-  border-radius: var(--ltp-radius);
-  box-shadow: var(--ltp-shadow);
-  padding: 48px 32px;
-  text-align: center;
-  width: 100%;
-  max-width: 560px;
-  animation: ltpFadeUp 0.5s ease both;
+/* =========================================================================
+   Card
+   ========================================================================= */
+.lt-thankyou__card {
+  background:    var(--lt-color-card-bg);
+  border-radius: var(--lt-radius-card);
+  box-shadow:    0 20px 60px var(--lt-color-card-shadow);
+  max-width:     34rem;
+  width:         100%;
+  padding:       3rem 2rem;
+  text-align:    center;
+  animation:     lt-card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes ltpFadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes lt-card-in {
+  from {
+    opacity:   0;
+    transform: translateY(2rem) scale(0.96);
+  }
+  to {
+    opacity:   1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* Animated checkmark ---------------------------------- */
-.ltp-thankyou__icon {
-  margin-bottom: 28px;
+/* =========================================================================
+   Animated checkmark (pure CSS, no SVG, no JavaScript)
+   Uses overlapping divs + border + CSS transforms
+   ========================================================================= */
+.lt-thankyou__icon {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  margin:          0 auto 1.75rem;
 }
 
-.ltp-checkmark {
-  width: 80px;
-  height: 80px;
+.lt-checkmark {
+  position:      relative;
+  width:         var(--lt-checkmark-size);
+  height:        var(--lt-checkmark-size);
   border-radius: 50%;
-  display: block;
-  margin: 0 auto;
+  background:    transparent;
 }
 
-.ltp-checkmark__circle {
-  stroke: var(--ltp-success);
-  stroke-width: 2;
-  stroke-dasharray: 166;
-  stroke-dashoffset: 166;
-  stroke-miterlimit: 10;
-  animation: ltpStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s forwards;
+/* Animated circle outline */
+.lt-checkmark__circle {
+  position:      absolute;
+  inset:         0;
+  border-radius: 50%;
+  border:        var(--lt-checkmark-stroke) solid var(--lt-color-success);
+  transform:     scale(0);
+  animation:     lt-circle-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
 }
 
-.ltp-checkmark__check {
-  stroke: var(--ltp-success);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  animation: ltpStroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+@keyframes lt-circle-in {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
-@keyframes ltpStroke {
-  100% { stroke-dashoffset: 0; }
+/* Checkmark stem (the short part of the tick) */
+.lt-checkmark__stem {
+  position:         absolute;
+  bottom:           calc(var(--lt-checkmark-size) * 0.24);
+  left:             calc(var(--lt-checkmark-size) * 0.22);
+  width:            var(--lt-checkmark-stroke);
+  height:           calc(var(--lt-checkmark-size) * 0.30);
+  background-color: var(--lt-color-success);
+  border-radius:    var(--lt-checkmark-stroke);
+  transform-origin: bottom center;
+  transform:        rotate(45deg) scaleY(0);
+  animation:        lt-stem-in 0.25s ease 0.5s both;
 }
 
-/* Headline & message ---------------------------------- */
-.ltp-thankyou__headline {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+@keyframes lt-stem-in {
+  from { transform: rotate(45deg) scaleY(0); }
+  to   { transform: rotate(45deg) scaleY(1); }
+}
+
+/* Checkmark kick (the long part of the tick) */
+.lt-checkmark__kick {
+  position:         absolute;
+  bottom:           calc(var(--lt-checkmark-size) * 0.24);
+  left:             calc(var(--lt-checkmark-size) * 0.22);
+  width:            var(--lt-checkmark-stroke);
+  height:           calc(var(--lt-checkmark-size) * 0.50);
+  background-color: var(--lt-color-success);
+  border-radius:    var(--lt-checkmark-stroke);
+  transform-origin: bottom center;
+  transform:        rotate(-45deg) scaleY(0);
+  animation:        lt-kick-in 0.35s ease 0.55s both;
+}
+
+@keyframes lt-kick-in {
+  from { transform: rotate(-45deg) scaleY(0); }
+  to   { transform: rotate(-45deg) scaleY(1); }
+}
+
+/* =========================================================================
+   Typography
+   ========================================================================= */
+.lt-thankyou__title {
+  margin:      0 0 1rem;
+  font-size:   clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 700;
-  color: var(--ltp-text);
-  margin: 0 0 12px;
+  color:       var(--lt-color-text);
   line-height: 1.2;
 }
 
-.ltp-thankyou__message {
-  font-size: 1.0625rem;
-  color: var(--ltp-muted);
-  margin: 0 0 36px;
+.lt-thankyou__message {
+  margin:      0 0 2rem;
+  font-size:   1.0625rem;
+  color:       var(--lt-color-text-muted);
   line-height: 1.65;
 }
 
-/* Steps ------------------------------------------------ */
-.ltp-thankyou__steps {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 36px;
-  text-align: left;
-}
-
-.ltp-step {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  background: var(--ltp-bg);
-  border: 1px solid var(--ltp-border);
-  transition: background var(--ltp-transition);
-}
-
-.ltp-step--active {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-}
-
-.ltp-step__num {
-  display: flex;
-  align-items: center;
+/* =========================================================================
+   CTA Button
+   ========================================================================= */
+.lt-thankyou__actions {
+  display:    flex;
+  gap:        1rem;
+  flex-wrap:  wrap;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--ltp-primary);
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  flex-shrink: 0;
 }
 
-.ltp-step--active .ltp-step__num {
-  background: var(--ltp-success);
+.lt-thankyou__cta {
+  display:          inline-block;
+  padding:          0.85rem 2.25rem;
+  background:       var(--lt-color-primary);
+  color:            #ffffff;
+  border-radius:    var(--lt-radius-btn);
+  font-size:        0.9375rem;
+  font-weight:      600;
+  text-decoration:  none;
+  letter-spacing:   0.01em;
+  transition:       background var(--lt-transition), transform var(--lt-transition), box-shadow var(--lt-transition);
+  box-shadow:       0 4px 14px rgba(79, 70, 229, 0.35);
 }
 
-.ltp-step__text {
-  font-size: 0.9375rem;
-  color: var(--ltp-text);
-  font-weight: 500;
+.lt-thankyou__cta:hover,
+.lt-thankyou__cta:focus-visible {
+  background:  var(--lt-color-primary-dk);
+  transform:   translateY(-2px);
+  box-shadow:  0 8px 20px rgba(79, 70, 229, 0.45);
+  color:       #ffffff;
+  outline:     none;
 }
 
-/* CTA Button ------------------------------------------ */
-.ltp-thankyou__cta {
-  display: inline-block;
-  background: var(--ltp-primary);
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 14px 36px;
-  border-radius: 10px;
-  transition: background var(--ltp-transition), transform var(--ltp-transition), box-shadow var(--ltp-transition);
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
-  letter-spacing: 0.01em;
-}
-
-.ltp-thankyou__cta:hover,
-.ltp-thankyou__cta:focus {
-  background: var(--ltp-primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
-  color: #ffffff;
-}
-
-.ltp-thankyou__cta:active {
+.lt-thankyou__cta:active {
   transform: translateY(0);
 }
 
-/* Responsive ------------------------------------------ */
+/* =========================================================================
+   Responsive
+   ========================================================================= */
 @media (min-width: 640px) {
-  .ltp-thankyou__inner {
-    padding: 60px 48px;
+  .lt-thankyou__card {
+    padding: 4rem 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lt-thankyou__card,
+  .lt-checkmark__circle,
+  .lt-checkmark__stem,
+  .lt-checkmark__kick {
+    animation: none;
+    transform: none;
+    opacity:   1;
   }
 
-  .ltp-thankyou__steps {
-    flex-direction: row;
-    justify-content: center;
+  .lt-checkmark__circle {
+    transform: scale(1);
   }
 
-  .ltp-step {
-    flex-direction: column;
-    text-align: center;
-    flex: 1;
-    padding: 16px 12px;
+  .lt-checkmark__stem {
+    transform: rotate(45deg) scaleY(1);
+  }
+
+  .lt-checkmark__kick {
+    transform: rotate(-45deg) scaleY(1);
   }
 }
