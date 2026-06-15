@@ -1,0 +1,225 @@
+/* =====================================================
+   LeadTrack Pro – Admin Settings Styles
+   ===================================================== */
+
+.ltp-wrap {
+  max-width: 860px;
+}
+
+.ltp-page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.5rem !important;
+  color: #1e293b;
+  margin-bottom: 20px !important;
+}
+
+.ltp-logo {
+  color: #4f46e5;
+  font-size: 1.2rem;
+}
+
+/* Tabs ------------------------------------------------ */
+.ltp-tab-nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.ltp-tab {
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: all 0.2s ease;
+  position: relative;
+  top: 2px;
+}
+
+.ltp-tab:hover {
+  color: #4f46e5;
+  background: #f0f4ff;
+}
+
+.ltp-tab--active {
+  color: #4f46e5;
+  background: #ffffff;
+  border-color: #e2e8f0;
+  border-bottom-color: #ffffff;
+}
+
+/* Card ------------------------------------------------ */
+.ltp-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+
+.ltp-card h2 {
+  font-size: 1.125rem;
+  color: #1e293b;
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Table ----------------------------------------------- */
+.ltp-table th {
+  width: 220px;
+  padding: 12px 0;
+  font-weight: 600;
+  color: #374151;
+  vertical-align: top;
+}
+
+.ltp-table td {
+  padding: 10px 0;
+}
+
+.ltp-table .description {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+/* Toggle switch --------------------------------------- */
+.ltp-toggle {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+  vertical-align: middle;
+}
+
+.ltp-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.ltp-toggle__slider {
+  position: absolute;
+  inset: 0;
+  background: #cbd5e1;
+  border-radius: 26px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ltp-toggle__slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.ltp-toggle input:checked + .ltp-toggle__slider {
+  background: #4f46e5;
+}
+
+.ltp-toggle input:checked + .ltp-toggle__slider::before {
+  transform: translateX(20px);
+}
+
+/* Submit button --------------------------------------- */
+.ltp-submit-btn {
+  background: #4f46e5 !important;
+  border-color: #3730a3 !important;
+  color: #fff !important;
+  padding: 10px 28px !important;
+  height: auto !important;
+  border-radius: 8px !important;
+  font-size: 0.9375rem !important;
+  font-weight: 600 !important;
+}
+
+.ltp-submit-btn:hover {
+  background: #3730a3 !important;
+}
+
+.ltp-hidden-submit {
+  display: none !important;
+}
+
+/* Setup guide ----------------------------------------- */
+.ltp-steps {
+  padding-left: 0;
+  list-style: none;
+  counter-reset: step-counter;
+}
+
+.ltp-steps li {
+  padding: 16px 20px 16px 56px;
+  border-left: 3px solid #4f46e5;
+  margin-bottom: 16px;
+  border-radius: 0 8px 8px 0;
+  background: #f8faff;
+  position: relative;
+}
+
+.ltp-steps li::before {
+  counter-increment: step-counter;
+  content: counter(step-counter);
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #4f46e5;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ltp-steps li strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #1e293b;
+}
+
+.ltp-steps li p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9375rem;
+}
+
+.ltp-shortcode-box {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: #1e293b;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.9375rem;
+}
+
+.ltp-shortcode-box code {
+  background: #334155;
+  color: #a5f3fc;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-size: 1rem;
+}
