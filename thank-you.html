@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Thank You | Flexible Remote Services</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- ═══════════════════════════════════════════════════════
+       REPLACE THESE TWO IDs WITH YOUR REAL VALUES
+       ═══════════════════════════════════════════════════════ -->
+  <meta name="frs:pixel-id" content="YOUR_META_PIXEL_ID" />
+  <meta name="frs:gtm-id"   content="GTM-XXXXXXX" />
+
+  <!-- Google Tag Manager — head snippet -->
+  <script>
+  (function(){
+    var gtmId = document.querySelector('meta[name="frs:gtm-id"]').content;
+    if (!gtmId || gtmId === 'GTM-XXXXXXX') return;
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+    f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',gtmId);
+  })();
+  </script>
+
+  <!-- Meta Pixel — base code (PageView only here; Lead fires below) -->
+  <script>
+  (function(){
+    var pixelId = document.querySelector('meta[name="frs:pixel-id"]').content;
+    if (!pixelId || pixelId === 'YOUR_META_PIXEL_ID') return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){
+    n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+    t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', pixelId);
+    fbq('track', 'PageView');
+  })();
+  </script>
+
+  <style>
+    /* ── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ── Tokens ─────────────────────────────────────────── */
+    :root {
+      --navy:      #17274D;
+      --cyan:      #3BFFDD;
+      --cyan-dark: #00c8c8;
+      --bg:        #E7EFED;
+      --white:     #FFFFFF;
+      --gray:      #667085;
+      --dark:      #101828;
+      --radius:    16px;
+      --shadow:    0 8px 32px rgba(0,0,0,.10);
+      --transition: .3s ease;
+    }
+
+    /* ── Body ─────────────────────────────────────────── */
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+
+    /* ── Page wrapper ─────────────────────────────────── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .site-header {
+      background: var(--navy);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -.5px;
+    }
+    .logo span { color: var(--cyan); }
+    .header-link {
+      font-size: .875rem;
+      color: var(--cyan);
+      text-decoration: none;
+      border: 1px solid var(--cyan);
+      border-radius: 8px;
+      padding: 8px 18px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .header-link:hover { background: var(--cyan); color: var(--navy); }
+
+    /* ── Main ─────────────────────────────────────────── */
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 60px 24px;
+    }
+
+    /* ── Card ─────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 56px 48px;
+      max-width: 580px;
+      width: 100%;
+      text-align: center;
+      animation: card-in .55s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(28px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);   }
+    }
+
+    /* ── Check animation ─────────────────────────────── */
+    .check-wrap {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 28px;
+      position: relative;
+    }
+    .check-wrap svg { overflow: visible; }
+    .circle-bg {
+      fill: none;
+      stroke: #e0faf6;
+      stroke-width: 8;
+    }
+    .circle-progress {
+      fill: none;
+      stroke: var(--cyan-dark);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 226;
+      stroke-dashoffset: 226;
+      transform-origin: center;
+      transform: rotate(-90deg);
+      animation: ring-fill .6s .1s ease forwards;
+    }
+    @keyframes ring-fill {
+      to { stroke-dashoffset: 0; }
+    }
+    .check-path {
+      fill: none;
+      stroke: var(--cyan-dark);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: check-draw .4s .65s ease forwards;
+    }
+    @keyframes check-draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ── Badge ─────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      background: #e0faf6;
+      color: var(--cyan-dark);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Typography ─────────────────────────────────────── */
+    .card h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .card p {
+      font-size: 1rem;
+      color: var(--gray);
+      line-height: 1.75;
+      margin-bottom: 36px;
+    }
+
+    /* ── Divider ─────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin-bottom: 32px;
+    }
+
+    /* ── Steps ─────────────────────────────────────────── */
+    .next-steps {
+      text-align: left;
+      margin-bottom: 36px;
+    }
+    .next-steps h2 {
+      font-size: .85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--white);
+      font-size: .75rem;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+    .step-text strong {
+      display: block;
+      font-size: .9rem;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .step-text span {
+      font-size: .82rem;
+      color: var(--gray);
+    }
+
+    /* ── CTA buttons ─────────────────────────────────────── */
+    .cta-group {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .9rem;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 13px 26px;
+      text-decoration: none;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition),
+                  background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 20px rgba(23,39,77,.3); }
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border-color: var(--navy);
+    }
+    .btn-outline:hover { background: var(--navy); color: var(--white); }
+
+    /* ── Timer bar ─────────────────────────────────────── */
+    .timer-bar-wrap {
+      margin-top: 28px;
+      font-size: .78rem;
+      color: var(--gray);
+    }
+    .timer-bar {
+      height: 4px;
+      background: #eee;
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .timer-bar-fill {
+      height: 100%;
+      background: var(--cyan-dark);
+      border-radius: 2px;
+      width: 100%;
+      animation: timer-drain var(--countdown-duration, 10s) linear forwards;
+    }
+    @keyframes timer-drain {
+      to { width: 0%; }
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .site-footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      font-size: .8rem;
+      padding: 20px 24px;
+    }
+    .site-footer a { color: var(--cyan); text-decoration: none; }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 520px) {
+      .card { padding: 36px 22px; }
+      .card h1 { font-size: 1.5rem; }
+      .cta-group { flex-direction: column; }
+      .btn { justify-content: center; }
+    }
+
+    /* ── Accessibility: skip link ─────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--cyan);
+      color: var(--navy);
+      padding: 8px 12px;
+      z-index: 9999;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 0 0 8px 0;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript id="gtm-noscript"></noscript>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="page">
+
+    <!-- ── Header ──────────────────────────────────────── -->
+    <header class="site-header" role="banner">
+      <a href="/" class="logo">flexible<span>remote</span>services</a>
+      <a href="/services/" class="header-link">Our Services</a>
+    </header>
+
+    <!-- ── Main content ────────────────────────────────── -->
+    <main id="main-content">
+      <div class="card" role="main">
+
+        <!-- Animated check mark -->
+        <div class="check-wrap" aria-hidden="true">
+          <svg viewBox="0 0 88 88" width="88" height="88">
+            <circle class="circle-bg"       cx="44" cy="44" r="36" />
+            <circle class="circle-progress" cx="44" cy="44" r="36" />
+            <path   class="check-path" d="M28 44 L39 55 L60 33" />
+          </svg>
+        </div>
+
+        <span class="badge">Submission Confirmed</span>
+
+        <h1>You're all set!</h1>
+        <p>
+          Thank you for reaching out to Flexible Remote Services.<br />
+          We've received your request and will be in touch within
+          <strong>1 business day</strong>.
+        </p>
+
+        <hr class="divider" />
+
+        <!-- What happens next -->
+        <div class="next-steps" aria-label="What happens next">
+          <h2>What happens next</h2>
+
+          <div class="step">
+            <div class="step-num" aria-hidden="true">1</div>
+            <div class="step-text">
+              <strong>We review your submission</strong>
+              <span>Our team reads every enquiry and tailors a response.</span>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" aria-hidden="true">2</div>
+            <div class="step-text">
+              <strong>You get a personalised reply</strong>
+              <span>Expect an email within 1 business day with next steps.</span>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num" aria-hidden="true">3</div>
+            <div class="step-text">
+              <strong>We get to work</strong>
+              <span>Once aligned, we kick off your project with a clear plan.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA buttons -->
+        <div class="cta-group">
+          <a href="/" class="btn btn-primary">
+            ← Back to Home
+          </a>
+          <a href="/services/" class="btn btn-outline">
+            Explore Services
+          </a>
+        </div>
+
+        <!-- Auto-redirect countdown -->
+        <div class="timer-bar-wrap" id="timerWrap" aria-live="polite">
+          Returning to home in <span id="countdown">10</span>s
+          <div class="timer-bar"><div class="timer-bar-fill" id="timerFill"></div></div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ── Footer ───────────────────────────────────────── -->
+    <footer class="site-footer" role="contentinfo">
+      <p>
+        &copy; <span id="year"></span> Flexible Remote Services. All rights reserved. &nbsp;|&nbsp;
+        <a href="/privacy-policy/">Privacy Policy</a> &nbsp;|&nbsp;
+        <a href="/terms-and-conditions/">Terms &amp; Conditions</a>
+      </p>
+    </footer>
+
+  </div><!-- /.page -->
+
+  <!--
+  ═══════════════════════════════════════════════════════════════
+    TRACKING + ANTI-SPAM LOGIC
+  ═══════════════════════════════════════════════════════════════
+  -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── 0. GTM noscript iframe ─────────────────────────── */
+    var gtmId = document.querySelector('meta[name="frs:gtm-id"]').content;
+    if (gtmId && gtmId !== 'GTM-XXXXXXX') {
+      var ns = document.getElementById('gtm-noscript');
+      ns.innerHTML = '<iframe src="https://www.googletagmanager.com/ns.html?id=' +
+        encodeURIComponent(gtmId) + '" height="0" width="0" ' +
+        'style="display:none;visibility:hidden"></iframe>';
+    }
+
+    /* ── 1. Token guard — block direct / shared URL access ── */
+    var STORAGE_KEY = 'frs_lead_ref';
+
+    function getTokenFromURL() {
+      return new URLSearchParams(window.location.search).get('ref') || '';
+    }
+
+    function isValidToken(token) {
+      // A valid token is exactly 32 alphanumeric characters.
+      // The real cryptographic check happens server-side (PHP transient).
+      // This client-side check is a UX guard only.
+      return /^[a-zA-Z0-9]{20,64}$/.test(token);
+    }
+
+    var urlToken = getTokenFromURL();
+
+    // First visit: store token; returning visit: read from sessionStorage.
+    if (urlToken && isValidToken(urlToken)) {
+      sessionStorage.setItem(STORAGE_KEY, urlToken);
+      // Clean the token from the URL bar (avoids bookmark/share pollution).
+      history.replaceState(null, '', window.location.pathname);
+    }
+
+    var storedToken = sessionStorage.getItem(STORAGE_KEY);
+
+    if (!storedToken || !isValidToken(storedToken)) {
+      // No valid token → redirect away immediately.
+      window.location.replace('/');
+    }
+
+    /* ── 2. Meta Pixel Lead event — fires ONCE per session ── */
+    var FIRED_KEY = 'frs_lead_fired';
+
+    function fireLeadEvent() {
+      if (sessionStorage.getItem(FIRED_KEY)) return; // already fired
+
+      var pixelId = document.querySelector('meta[name="frs:pixel-id"]').content;
+
+      // Fire via fbq() if pixel is already initialised
+      if (typeof fbq === 'function' && pixelId && pixelId !== 'YOUR_META_PIXEL_ID') {
+        fbq('track', 'Lead', {
+          content_name: 'Contact Form',
+          content_category: 'Lead Generation'
+        });
+        sessionStorage.setItem(FIRED_KEY, '1');
+      }
+
+      // GTM data layer push (Custom Event trigger: frs_lead)
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'frs_lead',
+        lead_source: 'contact_form'
+      });
+    }
+
+    /* ── 3. Year in footer ─────────────────────────────── */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ── 4. Auto-redirect countdown (10 seconds) ─────────── */
+    var REDIRECT_AFTER = 10; // seconds
+    var countdownEl = document.getElementById('countdown');
+    var timerWrap   = document.getElementById('timerWrap');
+    var timerFill   = document.getElementById('timerFill');
+    var remaining   = REDIRECT_AFTER;
+    var redirected  = false;
+
+    timerFill.style.setProperty('--countdown-duration', REDIRECT_AFTER + 's');
+
+    var ticker = setInterval(function () {
+      remaining--;
+      if (countdownEl) countdownEl.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(ticker);
+        if (!redirected) {
+          redirected = true;
+          window.location.href = '/';
+        }
+      }
+    }, 1000);
+
+    // Cancel redirect if user interacts with the page
+    ['click', 'keydown', 'mousemove', 'touchstart'].forEach(function (ev) {
+      document.addEventListener(ev, function cancelRedirect() {
+        clearInterval(ticker);
+        redirected = true;
+        if (timerWrap) timerWrap.style.display = 'none';
+        document.removeEventListener(ev, cancelRedirect);
+      }, { once: true });
+    });
+
+    /* ── 5. Fire on load ──────────────────────────────── */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fireLeadEvent);
+    } else {
+      fireLeadEvent();
+    }
+
+  }());
+  </script>
+
+</body>
+</html>
