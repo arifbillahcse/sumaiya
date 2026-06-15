@@ -1,81 +1,159 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+/**
+ * Anti-Spam for LeadTrack Pro
+ *
+ * Provides server-side validation for the honeypot field and timing check,
+ * plus optional Google reCAPTCHA v2 verification.
+ *
+ * @package LeadTrack_Pro
+ */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Class LeadTrack_Antispam
+ */
 class LeadTrack_Antispam {
 
+	/**
+	 * Minimum number of seconds a real user would take to fill out a form.
+	 *
+	 * @var int
+	 */
+	const MIN_SUBMISSION_TIME = 3;
+
+	/**
+	 * Boot the class.
+	 */
 	public static function init() {
 		$options = get_option( LEADTRACK_PRO_OPTION_KEY, array() );
+
 		if ( empty( $options['enable_antispam'] ) ) {
 			return;
 		}
 
-		$instance = new self();
+		// Validate on standard form POSTs (CF7, WPForms, Gravity Forms, etc.).
+		add_action( 'init', array( __CLASS__, 'validate_submission' ), 1 );
 
-		// reCAPTCHA v3 verification hook (fires before Elementor processes form).
-		if ( ! empty( $options['enable_recaptcha'] ) && ! empty( $options['recaptcha_secret_key'] ) ) {
-			add_action( 'elementor_pro/forms/validation', array( $instance, 'verify_recaptcha' ), 10, 2 );
-		}
-
-		// Honeypot + time validation via Elementor form validation hook.
-		add_action( 'elementor_pro/forms/validation', array( $instance, 'validate_honeypot_and_time' ), 5, 2 );
+		// Hook into Elementor Pro form validation.
+		add_action( 'elementor/loaded', function () {
+			add_action( 'elementor_pro/forms/validation', array( 'LeadTrack_Antispam', 'validate_elementor_form' ), 10, 2 );
+		} );
 	}
 
 	/**
-	 * Server-side: reject if honeypot field (_ltp_hp) has a value.
+	 * Validate an incoming POST submission.
+	 *
+	 * Checks honeypot and timing fields injected by antispam.js.
+	 * Silently terminates the request if spam is detected.
 	 */
-	public function validate_honeypot_and_time( $record, $ajax_handler ) {
-		$raw_fields = $record->get( 'fields' );
-
-		// Honeypot check — JS injects a hidden field; bots fill it.
-		if ( isset( $_POST['_ltp_hp'] ) && '' !== sanitize_text_field( wp_unslash( $_POST['_ltp_hp'] ) ) ) {
-			$ajax_handler->add_error_message( esc_html__( 'Spam detected.', 'leadtrack-pro' ) );
-			$ajax_handler->is_success = false;
+	public static function validate_submission() {
+		// Only run on POST requests that contain our timestamp field.
+		if ( 'POST' !== $_SERVER['REQUEST_METHOD'] || ! isset( $_POST['_lt_form_time'] ) ) {
 			return;
 		}
 
-		// Time-based check.
-		$options    = get_option( LEADTRACK_PRO_OPTION_KEY, array() );
-		$time_limit = absint( $options['antispam_time_limit'] ?? 3 );
+		// 1. Honeypot check.
+		$options        = get_option( LEADTRACK_PRO_OPTION_KEY, array() );
+		$honeypot_field = isset( $options['honeypot_field'] ) ? sanitize_key( $options['honeypot_field'] ) : 'lt_hp_email';
 
-		if ( isset( $_POST['_ltp_ts'] ) ) {
-			$submitted_at  = absint( wp_unslash( $_POST['_ltp_ts'] ) );
-			$time_elapsed  = time() - $submitted_at;
-			if ( $time_elapsed < $time_limit ) {
-				$ajax_handler->add_error_message( esc_html__( 'Please take a moment before submitting.', 'leadtrack-pro' ) );
-				$ajax_handler->is_success = false;
+		if ( ! empty( $_POST[ $honeypot_field ] ) ) {
+			// Bot filled in the honeypot — silently die.
+			wp_die( '', '', array( 'response' => 200 ) );
+		}
+
+		// 2. Timing check.
+		$form_time     = isset( $_POST['_lt_form_time'] ) ? absint( $_POST['_lt_form_time'] ) : 0;
+		$elapsed       = time() - $form_time;
+
+		if ( $form_time > 0 && $elapsed < self::MIN_SUBMISSION_TIME ) {
+			wp_die( '', '', array( 'response' => 200 ) );
+		}
+
+		// 3. Optional reCAPTCHA verification.
+		if ( ! empty( $options['recaptcha_secret_key'] ) && isset( $_POST['g-recaptcha-response'] ) ) {
+			$valid = self::verify_recaptcha(
+				sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ),
+				$options['recaptcha_secret_key']
+			);
+
+			if ( ! $valid ) {
+				wp_die(
+					esc_html__( 'reCAPTCHA verification failed. Please try again.', 'leadtrack-pro' ),
+					esc_html__( 'Spam Detected', 'leadtrack-pro' ),
+					array( 'response' => 403, 'back_link' => true )
+				);
 			}
 		}
 	}
 
 	/**
-	 * Server-side: verify reCAPTCHA v3 token.
+	 * Validate an Elementor Pro form submission.
+	 *
+	 * @param \ElementorPro\Modules\Forms\Classes\Form_Record  $record  Form record.
+	 * @param \ElementorPro\Modules\Forms\Classes\Ajax_Handler $handler AJAX handler.
 	 */
-	public function verify_recaptcha( $record, $ajax_handler ) {
-		$options    = get_option( LEADTRACK_PRO_OPTION_KEY, array() );
-		$secret_key = sanitize_text_field( $options['recaptcha_secret_key'] ?? '' );
+	public static function validate_elementor_form( $record, $handler ) {
+		$options        = get_option( LEADTRACK_PRO_OPTION_KEY, array() );
+		$honeypot_field = isset( $options['honeypot_field'] ) ? sanitize_key( $options['honeypot_field'] ) : 'lt_hp_email';
 
-		if ( empty( $secret_key ) || ! isset( $_POST['_ltp_recaptcha_token'] ) ) {
+		// Honeypot.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! empty( $_POST[ $honeypot_field ] ) ) {
+			$handler->add_error( $honeypot_field, esc_html__( 'Spam detected.', 'leadtrack-pro' ) );
 			return;
 		}
 
-		$token    = sanitize_text_field( wp_unslash( $_POST['_ltp_recaptcha_token'] ) );
-		$response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', array(
-			'body' => array(
-				'secret'   => $secret_key,
-				'response' => $token,
-				'remoteip' => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' ),
-			),
-		) );
+		// Timing.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$form_time = isset( $_POST['_lt_form_time'] ) ? absint( $_POST['_lt_form_time'] ) : 0;
+		if ( $form_time > 0 && ( time() - $form_time ) < self::MIN_SUBMISSION_TIME ) {
+			$handler->add_error( '_lt_form_time', esc_html__( 'Submission too fast. Please try again.', 'leadtrack-pro' ) );
+		}
+
+		// reCAPTCHA.
+		if ( ! empty( $options['recaptcha_secret_key'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$token = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : '';
+			if ( ! self::verify_recaptcha( $token, $options['recaptcha_secret_key'] ) ) {
+				$handler->add_error( 'g-recaptcha-response', esc_html__( 'reCAPTCHA verification failed.', 'leadtrack-pro' ) );
+			}
+		}
+	}
+
+	/**
+	 * Verify a Google reCAPTCHA v2 token with the remote API.
+	 *
+	 * @param string $token      The g-recaptcha-response token from the client.
+	 * @param string $secret_key The reCAPTCHA secret key.
+	 * @return bool True if the token is valid, false otherwise.
+	 */
+	public static function verify_recaptcha( $token, $secret_key ) {
+		if ( empty( $token ) || empty( $secret_key ) ) {
+			return false;
+		}
+
+		$response = wp_remote_post(
+			'https://www.google.com/recaptcha/api/siteverify',
+			array(
+				'timeout' => 10,
+				'body'    => array(
+					'secret'   => sanitize_text_field( $secret_key ),
+					'response' => sanitize_text_field( $token ),
+					'remoteip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
+				),
+			)
+		);
 
 		if ( is_wp_error( $response ) ) {
-			return; // Fail open on network errors to avoid blocking real users.
+			return false;
 		}
 
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$body   = wp_remote_retrieve_body( $response );
+		$result = json_decode( $body, true );
 
-		if ( empty( $body['success'] ) || ( isset( $body['score'] ) && $body['score'] < 0.5 ) ) {
-			$ajax_handler->add_error_message( esc_html__( 'reCAPTCHA verification failed. Please try again.', 'leadtrack-pro' ) );
-			$ajax_handler->is_success = false;
-		}
+		return ! empty( $result['success'] );
 	}
 }
