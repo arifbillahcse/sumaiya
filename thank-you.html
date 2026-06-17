@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You — We Received Your Request</title>
+
+  <!-- ✅ Meta Pixel Base Code — Replace YOUR_PIXEL_ID -->
+  <script>
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID'); // 🔁 Replace YOUR_PIXEL_ID
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/>
+  </noscript>
+
+  <!-- ✅ Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;
+    j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+    f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');
+    // 🔁 Replace GTM-XXXXXXX
+  </script>
+
+  <link rel="stylesheet" href="thank-you.css" />
+</head>
+<body>
+
+  <!-- GTM noscript -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+
+  <div class="ty-wrapper">
+    <div class="ty-card">
+
+      <div class="checkmark-circle">
+        <svg viewBox="0 0 52 52" class="checkmark-svg">
+          <circle class="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none"/>
+          <path class="checkmark-tick" fill="none" d="M14 27 l8 8 l16-16"/>
+        </svg>
+      </div>
+
+      <h1>Thank You!</h1>
+      <p class="subtitle">We've received your request and will be in touch within <strong>24 hours</strong>.</p>
+
+      <div class="info-box">
+        <p>📩 Check your email for a confirmation.</p>
+        <p>📞 We may call you at the number provided.</p>
+      </div>
+
+      <a href="index.html" class="back-btn">← Back to Home</a>
+
+    </div>
+  </div>
+
+  <!-- ✅ Meta Lead Event + GTM Push — fires ONCE per genuine submission -->
+  <script src="thank-you.js"></script>
+</body>
+</html>

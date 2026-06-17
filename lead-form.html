@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lead Form</title>
+
+  <!-- ✅ Replace with your actual Meta Pixel ID -->
+  <script>
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID'); // 🔁 Replace YOUR_PIXEL_ID
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/>
+  </noscript>
+
+  <!-- ✅ Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;
+    j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+    f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');
+    // 🔁 Replace GTM-XXXXXXX
+  </script>
+
+  <!-- ✅ reCAPTCHA v3 - Replace with your site key -->
+  <script src="https://www.google.com/recaptcha/api.js?render=YOUR_RECAPTCHA_SITE_KEY"></script>
+  <!-- 🔁 Replace YOUR_RECAPTCHA_SITE_KEY -->
+
+  <link rel="stylesheet" href="lead-form.css" />
+</head>
+<body>
+
+  <!-- GTM noscript -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+
+  <div class="form-wrapper">
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Get a Free Consultation</h2>
+        <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+      </div>
+
+      <form id="leadForm" novalidate>
+
+        <!-- ✅ HONEYPOT - Invisible to humans, bots fill this -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="website_url">Leave this empty</label>
+          <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <!-- Hidden reCAPTCHA token -->
+        <input type="hidden" id="recaptchaToken" name="recaptcha_token" />
+
+        <!-- Form fields -->
+        <div class="form-group">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" name="fullName" placeholder="Your full name" required />
+          <span class="error-msg" id="nameError">Please enter your name.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+          <span class="error-msg" id="emailError">Please enter a valid email.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number <span class="required">*</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 000 000 0000" required />
+          <span class="error-msg" id="phoneError">Please enter your phone number.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message (Optional)</label>
+          <textarea id="message" name="message" placeholder="Tell us about your project..." rows="4"></textarea>
+        </div>
+
+        <div id="formError" class="form-error-banner" style="display:none;">
+          Something went wrong. Please try again.
+        </div>
+
+        <button type="submit" id="submitBtn" class="submit-btn">
+          <span id="btnText">Send My Request</span>
+          <span id="btnLoader" class="loader" style="display:none;"></span>
+        </button>
+
+        <p class="privacy-note">🔒 Your information is 100% secure and never shared.</p>
+      </form>
+    </div>
+  </div>
+
+  <script src="lead-form.js"></script>
+</body>
+</html>
