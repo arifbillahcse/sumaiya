@@ -1,7 +1,13 @@
+/* Licensed fonts: drop the .woff2 files into /assets/fonts (see README). Falls back to Source Serif 4 / Figtree. */
+@font-face{font-family:"Quincy CF Text";font-weight:400;font-style:normal;font-display:swap;src:local("Quincy CF Text Regular"),local("QuincyCFText-Regular"),url(assets/fonts/quincy-cf-text-regular.woff2) format("woff2")}
+@font-face{font-family:"Quincy CF Text";font-weight:500;font-style:normal;font-display:swap;src:local("Quincy CF Text Medium"),local("QuincyCFText-Medium"),url(assets/fonts/quincy-cf-text-medium.woff2) format("woff2")}
+@font-face{font-family:"Circular Std";font-weight:400;font-style:normal;font-display:swap;src:local("Circular Std Book"),local("CircularStd-Book"),url(assets/fonts/circular-book.woff2) format("woff2")}
+@font-face{font-family:"Circular Std";font-weight:500;font-style:normal;font-display:swap;src:local("Circular Std Medium"),local("CircularStd-Medium"),url(assets/fonts/circular-medium.woff2) format("woff2")}
+@font-face{font-family:"Circular Std";font-weight:700;font-style:normal;font-display:swap;src:local("Circular Std Bold"),local("CircularStd-Bold"),url(assets/fonts/circular-bold.woff2) format("woff2")}
 :root{
-  --navy:#29354f; --navy-d:#1f2940; --coral:#e97666; --coral-d:#d9614f;
+  --navy:#28354F; --navy-d:#1e283b; --coral:#EA7764; --coral-d:#d9614f;
   --mist:#d8e5e6; --grey:#f1f1f1; --ink:#29354f; --white:#fff;
-  --serif:"Source Serif 4",Georgia,serif; --sans:"Figtree",system-ui,sans-serif;
+  --serif:"Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif; --sans:"Circular Std","Circular","CircularXX","Circular LL",Figtree,system-ui,sans-serif;
   --r:14px; --hdr:78px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -13,14 +19,14 @@ a{color:inherit}
 .narrow{width:min(820px,100% - 40px)}
 .center{text-align:center}
 .skip{position:absolute;left:-999px}.skip:focus{left:10px;top:10px;background:#fff;padding:8px 12px;z-index:100}
-h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.15}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.15}
 h2{font-size:clamp(2rem,4vw,3rem)}
 h3{font-size:1.5rem}
 section{padding:clamp(56px,8vw,104px) 0}
 .lead{font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:500}
 
 /* buttons */
-.btn{display:inline-block;border:0;cursor:pointer;font:600 1rem var(--sans);text-decoration:none;text-align:center;padding:.8em 1.6em;border-radius:999px;transition:transform .2s,background .2s,box-shadow .2s}
+.btn{display:inline-block;border:0;cursor:pointer;font:500 1rem var(--sans);text-decoration:none;text-align:center;padding:.8em 1.6em;border-radius:999px;transition:transform .2s,background .2s,box-shadow .2s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.18)}
 .btn:focus-visible,input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--mist);outline-offset:2px}
 .btn-coral{background:var(--coral);color:#fff}.btn-coral:hover{background:var(--coral-d)}
@@ -84,7 +90,7 @@ section{padding:clamp(56px,8vw,104px) 0}
 .intro-offer{color:var(--coral);font-size:1.6rem;font-weight:600;margin-bottom:28px}
 .video{display:flex;justify-content:center}
 .video-frame{position:relative;width:min(320px,80%);aspect-ratio:9/16;border:1px solid rgba(255,255,255,.6);border-radius:6px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
-.play{position:absolute;inset:0;margin:auto;width:72px;height:72px;border-radius:50%;border:0;background:rgba(255,255,255,.92);cursor:pointer;display:grid;place-items:center;transition:transform .2s}
+.play{position:absolute;left:50%;top:67.6%;translate:-50% -50%;width:72px;height:72px;border-radius:50%;border:0;background:rgba(255,255,255,.92);cursor:pointer;display:grid;place-items:center;transition:transform .2s}
 .play:hover{transform:scale(1.1)}
 .play svg{width:30px;fill:var(--navy)}
 .video-cap{margin-bottom:26px;font-weight:700;background:rgba(0,0,0,.55);padding:4px 10px;border-radius:4px}
@@ -95,9 +101,9 @@ section{padding:clamp(56px,8vw,104px) 0}
 .art h2{margin-bottom:18px;font-size:clamp(1.8rem,3.2vw,2.6rem)}
 .art p{margin-bottom:24px;max-width:520px;font-size:1.1rem}
 .art-visual{position:relative;height:100%;min-height:470px}
-.art-circle{position:absolute;right:0;top:0;width:min(560px,100%);aspect-ratio:1;border-radius:50%;overflow:hidden}
-.art-half{position:absolute;right:0;top:0;width:min(560px,100%);aspect-ratio:1;border-radius:50%;background:var(--coral);clip-path:inset(0 0 0 65%)}
-.art-circle{clip-path:inset(0 35% 0 0)}
+.art-circle{position:absolute;right:0;top:0;width:min(520px,100%);aspect-ratio:1;border-radius:50%;overflow:hidden}
+.art-half{position:absolute;right:0;top:0;width:min(520px,100%);aspect-ratio:1;border-radius:50%;background:var(--coral);clip-path:inset(0 0 0 65%)}
+.art-circle{clip-path:inset(0 35% 0 0);background-position:38% 30%}
 
 /* why */
 .why{background:var(--grey)}
@@ -265,4 +271,39 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
   .row2,.ins-list{grid-template-columns:1fr}
   .book-card{padding:20px}
   .wordmark{font-size:2.2rem}
+}
+
+/* StemWave hero (split) */
+.hero-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--navy);color:#fff;min-height:min(80vh,720px);padding:0}
+.hs-text{display:flex;align-items:center;padding:60px max(20px,calc((100vw - 1180px)/2)) 60px max(20px,calc((100vw - 1180px)/2));position:relative;z-index:1}
+.hs-text>div{max-width:560px}
+.hero-split h1{font-size:clamp(2.6rem,5.2vw,4.4rem);margin-bottom:24px}
+.hero-split .lead{margin-bottom:32px;max-width:480px;font-weight:400}
+.hs-photo{position:relative;min-height:420px;background-position:center}
+.hs-photo::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,rgba(40,53,79,0) 38%)}
+.hs-photo .offer{position:absolute;top:44px;left:12%}
+/* booking hero */
+.hero-overlay-light{background:linear-gradient(90deg,rgba(40,53,79,.9) 0%,rgba(40,53,79,.55) 50%,rgba(40,53,79,0) 100%)}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px}
+.btn-ghost{background:transparent;color:#fff;border:2px solid #fff}.btn-ghost:hover{background:#fff;color:var(--navy)}
+.service-badge{display:flex;justify-content:space-between;align-items:center;background:var(--coral);color:#fff;border-radius:10px;padding:10px 16px;margin-bottom:22px}
+.service-badge[hidden]{display:none}.service-badge a{font-size:.85rem;opacity:.9}
+.quotes{background:var(--coral);color:#fff;text-align:center}
+.quotes blockquote+blockquote{margin-top:64px}
+.quotes p{font:400 clamp(1.4rem,2.6vw,2rem)/1.4 var(--serif);margin-bottom:14px}
+.quotes cite{font-family:var(--serif);font-style:italic;opacity:.9}
+.contact{background:var(--navy);color:#fff}
+.contact h2{margin-bottom:16px}.contact>.wrap>p{margin-bottom:36px;font-family:var(--serif);font-size:1.15rem}
+.contact a{color:#fff}
+.c-form{display:flex;flex-direction:column;gap:16px;text-align:left;max-width:640px;margin-inline:auto}
+.c-form label{font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;font-weight:500}
+.c-form input,.c-form textarea{border-radius:2px;border:0}
+.c-form .btn{align-self:flex-start;border-radius:2px}
+.form-msg.ok{color:#9be3bd}.contact .form-msg.bad{color:#ffb4a8}
+@media (max-width:900px){
+  .hero-split{grid-template-columns:1fr}
+  .hs-text{padding:48px 20px 32px}
+  .hs-photo{min-height:360px}
+  .hs-photo::before{background:linear-gradient(180deg,var(--navy) 0%,rgba(40,53,79,0) 30%)}
+  .hs-photo .offer{top:auto;bottom:20px;left:auto;right:20px}
 }
