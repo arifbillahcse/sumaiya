@@ -307,3 +307,6 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
   .hs-photo::before{background:linear-gradient(180deg,var(--navy) 0%,rgba(40,53,79,0) 30%)}
   .hs-photo .offer{top:auto;bottom:20px;left:auto;right:20px}
 }
+
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+.form-msg.sending{color:inherit;opacity:.8}

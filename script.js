@@ -1,5 +1,15 @@
 (function(){
   'use strict';
+/* ---- SETTINGS: edit here ------------------------------------------
+   1. Create a free key at https://web3forms.com (enter the clinic's email).
+   2. Paste it below. Leave empty to run in demo mode (no email is sent).
+   3. Set VIDEO_URL to the YouTube/Vimeo embed URL of the StemWave video. */
+var CONFIG={
+  WEB3FORMS_KEY:'',
+  ENDPOINT:'https://api.web3forms.com/submit',
+  FROM_NAME:'Jester Family Chiropractic Website',
+  VIDEO_URL:''
+};
   var $=function(s,c){return (c||document).querySelector(s)};
   var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
 
@@ -16,6 +26,10 @@
     $$('.reveal').forEach(function(el){io.observe(el)});
   }else{$$('.reveal').forEach(function(el){el.classList.add('in')})}
 
+  /* hide social icons until real URLs are set in the HTML */
+  $$('.social a').forEach(function(a){if(a.getAttribute('href')==='#')a.style.display='none'});
+  var so=$('.social');if(so&&!$$('a',so).some(function(a){return a.style.display!=='none'})){so.previousElementSibling&&(so.previousElementSibling.style.display='none');so.style.display='none'}
+
   /* footer: year + today's hours */
   var yr=$('#yr');if(yr)yr.textContent=new Date().getFullYear();
   var t=$('#hours [data-day="'+new Date().getDay()+'"]');if(t)t.classList.add('today');
@@ -23,7 +37,7 @@
   /* video: set data-src="embed-url" on .video-frame to enable */
   var play=$('.play');
   if(play)play.addEventListener('click',function(){
-    var f=$('.video-frame'),src=f.getAttribute('data-src');
+    var f=$('.video-frame'),src=CONFIG.VIDEO_URL||f.getAttribute('data-src');
     if(src)f.innerHTML='<iframe src="'+src+'" allow="autoplay;fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
   });
 
@@ -41,14 +55,31 @@
     return ok;
   }
 
+
+  /* send to Web3Forms (or demo mode when no key) */
+  function send(fields,subject){
+    if(!CONFIG.WEB3FORMS_KEY){return new Promise(function(r){setTimeout(function(){console.info('[demo] form not sent (no WEB3FORMS_KEY):',fields);r(true)},400)})}
+    var body=Object.assign({access_key:CONFIG.WEB3FORMS_KEY,subject:subject,from_name:CONFIG.FROM_NAME},fields);
+    return fetch(CONFIG.ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)})
+      .then(function(r){return r.json()}).then(function(j){return !!j.success}).catch(function(){return false});
+  }
+  function formData(f){
+    var o={};$$('input,textarea',f).forEach(function(i){if(!i.name)return;o[i.name]=i.type==='checkbox'?(i.checked?'Yes':'No'):i.value.trim()});return o;
+  }
+
   /* generic lead / contact forms */
   $$('form.js-form').forEach(function(f){
-    var msg=$('.form-msg',f);
+    var msg=$('.form-msg',f),btn=$('button[type=submit]',f);
     f.addEventListener('submit',function(e){
       e.preventDefault();msg.className='form-msg';
       if(!validate(f)){msg.textContent='Please complete the highlighted fields.';msg.classList.add('bad');return}
-      /* TODO: POST new FormData(f) to your endpoint (Formspree / Web3Forms / WP admin-ajax) */
-      msg.textContent=f.getAttribute('data-ok')||'Thank you!';msg.classList.add('ok');f.reset();
+      var d=formData(f);if(d.botcheck==='Yes')return;delete d.botcheck;
+      btn.disabled=true;msg.textContent='Sending…';msg.classList.add('sending');
+      send(d,f.getAttribute('data-subject')||'Website form').then(function(ok){
+        btn.disabled=false;msg.className='form-msg';
+        if(ok){msg.textContent=f.getAttribute('data-ok')||'Thank you!';msg.classList.add('ok');f.reset()}
+        else{msg.textContent='Something went wrong. Please call us at 610.696.6676.';msg.classList.add('bad')}
+      });
     });
   });
 
@@ -118,10 +149,15 @@
       });
     };
     confirmBtn.addEventListener('click',function(){
-      var name=$('form',card).elements.first.value.trim();
-      /* TODO: send state + form values to your booking backend / Aloha / Formspree */
-      $('#doneMsg').textContent='Thanks, '+name+'! We received your '+(state.service?state.service+' ':'')+state.type.toLowerCase()+' request for '+state.day+' at '+state.time+'. Our team will confirm shortly.';
-      show(3);
+      var f=$('form',card),d=formData(f),name=d.first;
+      d.patient_type=state.type;d.service=state.service||'General appointment';d.requested_day=state.day;d.requested_time=state.time;
+      confirmBtn.disabled=true;confirmBtn.textContent='Sending…';
+      send(d,'Appointment request: '+d.service+' ('+state.type+')').then(function(ok){
+        confirmBtn.textContent='Request Appointment';confirmBtn.disabled=false;
+        if(!ok){alert('Sorry, we could not send your request. Please call 610.696.6676.');return}
+        $('#doneMsg').textContent='Thanks, '+name+'! We received your '+(state.service?state.service+' ':'')+state.type.toLowerCase()+' request for '+state.day+' at '+state.time+'. Our team will confirm shortly.';
+        show(3);
+      });
     });
   }
 })();
