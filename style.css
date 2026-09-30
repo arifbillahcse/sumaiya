@@ -412,7 +412,7 @@ p{text-wrap:pretty}
 
 /* Book-now pill */
 .ob-book{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:10px 20px 10px 22px;border-radius:999px;background:var(--navy);color:#fff;font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1;box-shadow:0 10px 22px rgba(15,22,38,.45),0 0 0 3px #fff;transition:background .25s,box-shadow .25s,gap .25s}
-.ob-book i{font-style:normal;font-size:1rem;line-height:1;color:var(--coral);transition:transform .25s}
+.ob-book i{font-style:normal;font-size:1rem;line-height:1;color:inherit;transition:transform .25s}
 .offer-badge:hover .ob-book{background:var(--coral);gap:12px}
 .offer-badge:hover .ob-book i{color:#fff;transform:translateX(2px)}
 @media (max-width:900px){
