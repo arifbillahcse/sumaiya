@@ -20,6 +20,14 @@ var CONFIG={
     $$('a',mn).forEach(function(a){a.addEventListener('click',function(){mn.classList.remove('open');mb.setAttribute('aria-expanded',false)})});
   }
 
+  /* header shadow on scroll */
+  var hdr=$('.site-header');
+  if(hdr){var onS=function(){hdr.classList.toggle('scrolled',window.scrollY>10)};onS();window.addEventListener('scroll',onS,{passive:true})}
+
+  /* full-bleed hero when assets/hero.jpg is provided */
+  var hero=$('.hero-split');
+  if(hero){var hi=new Image();hi.onload=function(){hero.style.setProperty('--hero','url(assets/hero.jpg)');hero.classList.add('hero-full')};hi.src='assets/hero.jpg'}
+
   /* reveal on scroll */
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
