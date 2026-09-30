@@ -3,13 +3,13 @@
 @font-face{font-family:"Quincy CF Text Light";font-weight:300;font-style:normal;font-display:swap;src:local("Quincy CF Text Light"),local("QuincyCFText-Light"),url(assets/fonts/quincy-cf-text-light.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text";font-weight:400;font-style:normal;font-display:swap;src:local("Quincy CF Text Regular"),local("QuincyCFText-Regular"),url(assets/fonts/quincy-cf-text-regular.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text";font-weight:500;font-style:normal;font-display:swap;src:local("Quincy CF Text Medium"),local("QuincyCFText-Medium"),url(assets/fonts/quincy-cf-text-medium.woff2) format("woff2")}
-@font-face{font-family:"Circular Std";font-weight:400;font-style:normal;font-display:swap;src:local("Circular Std Book"),local("CircularStd-Book"),url(assets/fonts/circular-book.woff2) format("woff2")}
-@font-face{font-family:"Circular Std";font-weight:500;font-style:normal;font-display:swap;src:local("Circular Std Medium"),local("CircularStd-Medium"),url(assets/fonts/circular-medium.woff2) format("woff2")}
-@font-face{font-family:"Circular Std";font-weight:700;font-style:normal;font-display:swap;src:local("Circular Std Bold"),local("CircularStd-Bold"),url(assets/fonts/circular-bold.woff2) format("woff2")}
+@font-face{font-family:"Circular Std";font-weight:400;font-style:normal;font-display:swap;src:local("Circular Std Book"),local("CircularStd-Book"),local("Circular-Book"),local("Circular Book"),url(assets/fonts/circular-book.woff2) format("woff2")}
+@font-face{font-family:"Circular Std";font-weight:500;font-style:normal;font-display:swap;src:local("Circular Std Medium"),local("CircularStd-Medium"),local("Circular-Medium"),local("Circular Medium"),url(assets/fonts/circular-medium.woff2) format("woff2")}
+@font-face{font-family:"Circular Std";font-weight:700;font-style:normal;font-display:swap;src:local("Circular Std Bold"),local("CircularStd-Bold"),local("Circular-Bold"),local("Circular Bold"),url(assets/fonts/circular-bold.woff2) format("woff2")}
 :root{
   --navy:#28354F; --navy-d:#1e283b; --coral:#EA7764; --coral-d:#d9614f;
   --mist:#d8e5e6; --grey:#f1f1f1; --ink:#29354f; --white:#fff;
-  --serif:"Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif; --sans:"Circular Std","Circular","CircularXX","Circular LL",Figtree,system-ui,sans-serif;
+  --serif:"Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif; --sans:"Circular Std","CircularStd","Circular","Circular Pro","Circular LL","CircularXX",Figtree,system-ui,sans-serif;
   --r:14px; --hdr:78px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -70,7 +70,7 @@ section{padding:clamp(56px,8vw,104px) 0}
 .benefits{padding:64px 0}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
 .benefit svg{width:76px;height:76px;margin:0 auto 18px;fill:none;stroke:var(--coral);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.benefit h3{font-family:var(--sans);font-weight:600;font-size:1.3rem;line-height:1.3}
+.benefit h3{font-family:var(--sans);font-weight:500;font-size:1.3rem;line-height:1.3}
 
 /* stemwave intro */
 .stemwave{background:var(--navy);color:#fff}
@@ -80,7 +80,7 @@ section{padding:clamp(56px,8vw,104px) 0}
 .wordmark svg{width:60px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round}
 .stemwave h2{margin-bottom:14px}
 .stemwave .lead{max-width:520px;margin-bottom:22px}
-.intro-offer{color:var(--coral);font-size:1.6rem;font-weight:600;margin-bottom:28px}
+.intro-offer{color:var(--coral);font-size:1.6rem;font-weight:500;margin-bottom:28px}
 .video{display:flex;justify-content:center}
 .video-frame{position:relative;width:min(320px,80%);aspect-ratio:9/16;border:1px solid rgba(255,255,255,.6);border-radius:6px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
 .play{position:absolute;left:50%;top:67.6%;translate:-50% -50%;width:72px;height:72px;border-radius:50%;border:0;background:rgba(255,255,255,.92);cursor:pointer;display:grid;place-items:center;transition:transform .2s}
@@ -102,7 +102,7 @@ section{padding:clamp(56px,8vw,104px) 0}
 .why{background:var(--grey)}
 .why .split{align-items:start;grid-template-columns:1fr 1fr}
 .coral{color:var(--coral);font-size:clamp(2.6rem,5vw,3.6rem);margin-bottom:34px}
-.why h3{font-family:var(--sans);font-weight:600;font-size:1.5rem;margin-bottom:14px}
+.why h3{font-family:var(--sans);font-weight:500;font-size:1.5rem;margin-bottom:14px}
 .why p{margin-bottom:18px;max-width:470px}
 .why .btn{margin-top:8px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px 22px}
@@ -141,19 +141,19 @@ section{padding:clamp(56px,8vw,104px) 0}
 .stepper li.on{background:var(--navy);color:#fff}.stepper li.on b{color:#fff}
 .panel{display:flex;flex-direction:column;gap:14px}
 .panel[hidden]{display:none}
-label{display:flex;flex-direction:column;gap:6px;font-size:.92rem;font-weight:600}
+label{display:flex;flex-direction:column;gap:6px;font-size:.92rem;font-weight:500}
 input,textarea{font:400 1rem var(--sans);color:var(--ink);padding:.8em 1em;border:1px solid #cfd4dc;border-radius:8px;background:#fff;width:100%}
 input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0 0 3px rgba(233,118,102,.25)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .err{border-color:#c0392b!important}
 .actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-.link{background:none;border:0;font:600 .95rem var(--sans);color:var(--navy);cursor:pointer;text-decoration:underline}
-.badge-type{align-self:flex-start;background:var(--mist);padding:4px 14px;border-radius:99px;font-weight:600;font-size:.85rem}
+.link{background:none;border:0;font:500 .95rem var(--sans);color:var(--navy);cursor:pointer;text-decoration:underline}
+.badge-type{align-self:flex-start;background:var(--mist);padding:4px 14px;border-radius:99px;font-weight:500;font-size:.85rem}
 .pick-title{font-weight:700}
 .days,.times{display:grid;gap:10px}
 .days{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
 .times{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
-.chip{border:1px solid #cfd4dc;background:#fff;border-radius:10px;padding:10px 6px;font:600 .9rem var(--sans);cursor:pointer;color:var(--navy);transition:.2s;line-height:1.25}
+.chip{border:1px solid #cfd4dc;background:#fff;border-radius:10px;padding:10px 6px;font:500 .9rem var(--sans);cursor:pointer;color:var(--navy);transition:.2s;line-height:1.25}
 .chip small{display:block;font-weight:500;opacity:.7}
 .chip:hover{border-color:var(--coral)}
 .chip[aria-checked=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
@@ -169,7 +169,7 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .forms h2{margin-bottom:14px}
 .forms .center{margin-bottom:40px}
 .form-btns{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
-.form-btns .btn{border-radius:4px;font-family:var(--serif);font-weight:500}
+.form-btns .btn{border-radius:4px;font-family:var(--sans);font-weight:500}
 
 /* testimonials */
 .testi{text-align:center;overflow-x:clip}
@@ -204,7 +204,7 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .consent{flex-direction:row;gap:12px;align-items:flex-start;font-size:.72rem!important;color:#444}
 .consent input{width:20px;height:20px;margin-top:2px;flex:none}
 .lf-form .btn{align-self:flex-start}
-.form-msg{min-height:1.5em;font-weight:600}
+.form-msg{min-height:1.5em;font-weight:500}
 .form-msg.ok{color:#1e7a4d}.form-msg.bad{color:#c0392b}
 
 /* footer */
@@ -274,10 +274,10 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .service-badge[hidden]{display:none}.service-badge a{font-size:.85rem;opacity:.9}
 .quotes{background:var(--coral);color:#fff;text-align:center}
 .quotes blockquote+blockquote{margin-top:64px}
-.quotes p{font:400 clamp(1.4rem,2.6vw,2rem)/1.4 var(--serif);margin-bottom:14px}
-.quotes cite{font-family:var(--serif);font-style:italic;opacity:.9}
+.quotes p{font:400 clamp(1.3rem,2.4vw,1.85rem)/1.45 var(--sans);margin-bottom:14px}
+.quotes cite{font-family:var(--sans);font-style:normal;font-weight:500;letter-spacing:.04em;opacity:.9}
 .contact{background:var(--navy);color:#fff}
-.contact h2{margin-bottom:16px}.contact>.wrap>p{margin-bottom:36px;font-family:var(--serif);font-size:1.15rem}
+.contact h2{margin-bottom:16px}.contact>.wrap>p{margin-bottom:36px;font-family:var(--sans);font-size:1.15rem}
 .contact a{color:#fff}
 .c-form{display:flex;flex-direction:column;gap:16px;text-align:left;max-width:640px;margin-inline:auto}
 .c-form label{font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;font-weight:500}
@@ -363,9 +363,9 @@ p{text-wrap:pretty}
 .testi{background:#fff}
 .slide{position:relative;border:0;box-shadow:0 24px 60px -20px rgba(40,53,79,.28),0 0 0 1px #eceef2}
 .slide::before{content:"“";position:absolute;top:2px;left:30px;font:400 7rem/1 var(--serif);color:var(--coral);opacity:.22}
-.slide p{font-family:var(--serif);font-size:1.12rem;line-height:1.7}
+.slide p{font-family:var(--sans);font-size:1.05rem;line-height:1.75}
 .stars{font-size:1.1rem}
-.slide footer strong{font-family:var(--serif);font-size:1.15rem;font-weight:400}
+.slide footer strong{font-family:var(--sans);font-size:1.05rem;font-weight:500}
 
 /* lead form */
 .lead-form{background:linear-gradient(180deg,#f2f2f1,#e9ebed)}
@@ -403,7 +403,7 @@ p{text-wrap:pretty}
 .ob-small{font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.75}
 .ob-price{font:400 3.2rem/.95 var(--serif);letter-spacing:-.03em;margin:1px 0 3px}
 .ob-price sup{font-size:1.2rem;vertical-align:top;position:relative;top:.42em;margin-right:2px}
-.ob-note{font-size:.56rem;font-weight:600;padding-top:5px;border-top:1px solid rgba(40,53,79,.15);color:var(--coral-d)}
+.ob-note{font-size:.56rem;font-weight:500;padding-top:5px;border-top:1px solid rgba(40,53,79,.15);color:var(--coral-d)}
 .hero-full .offer-badge{pointer-events:auto;right:auto;left:calc(max(20px,(100vw - 1180px)/2) + var(--h1) * 7.95 + 28px);top:40px;bottom:auto}
 @media (prefers-reduced-motion:reduce){.ob-ring{animation:none}}
 @media (max-width:900px){
@@ -424,3 +424,6 @@ p{text-wrap:pretty}
 
 /* Hero headline: weight 600 (Quincy Semibold if available, else nearest real weight; never faux bold) */
 .hero-split h1{font-family:"Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:600;font-synthesis:none;letter-spacing:-.01em}
+
+/* Circular everywhere except headings/logo/price numerals (Quincy) */
+button,input,textarea,select{font-family:var(--sans)}
