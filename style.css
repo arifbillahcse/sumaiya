@@ -300,22 +300,11 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .ticks li::before{content:"✓";color:var(--coral);font-weight:700;margin-right:8px}
 .hs-photo{position:relative;background-position:center;min-height:440px}
 .hs-photo::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--navy) 0%,rgba(40,53,79,.55) 18%,rgba(40,53,79,0) 45%),linear-gradient(0deg,rgba(40,53,79,.45),rgba(40,53,79,0) 40%)}
-.offer-card{position:absolute;left:clamp(24px,5vw,72px);bottom:48px;z-index:2;background:rgba(255,255,255,.97);color:var(--navy);text-decoration:none;border-radius:16px;padding:22px 28px 20px;display:flex;flex-direction:column;gap:2px;min-width:260px;box-shadow:0 20px 50px rgba(15,22,38,.35);border-top:4px solid var(--coral);transition:transform .25s,box-shadow .25s}
-.offer-card:hover{transform:translateY(-4px);box-shadow:0 26px 60px rgba(15,22,38,.45)}
-.oc-label{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coral)}
-.oc-price{font:400 4rem/1 var(--serif);letter-spacing:-.02em;margin-top:4px}
-.oc-price sup{font-size:1.7rem;vertical-align:top;position:relative;top:.45em;margin-right:3px}
-.oc-sub{font-size:.95rem;opacity:.85;margin-bottom:12px}
-.oc-cta{font-weight:700;font-size:.92rem;border-top:1px solid #e3e6ea;padding-top:12px}
-.oc-cta i{font-style:normal;display:inline-block;transition:transform .2s}
-.offer-card:hover .oc-cta i{transform:translateX(5px)}
 @media (max-width:900px){
   .hero-split{grid-template-columns:1fr;min-height:0}
   .hs-text{padding:44px 20px 36px}
   .hs-photo{min-height:340px}
   .hs-photo::before{background:linear-gradient(180deg,var(--navy) 0%,rgba(40,53,79,0) 30%),linear-gradient(0deg,rgba(40,53,79,.5),rgba(40,53,79,0) 45%)}
-  .offer-card{left:16px;right:16px;bottom:16px;min-width:0;flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:16px;padding:14px 18px}
-  .oc-label{flex:1 0 100%}.oc-price{font-size:2.6rem;margin:0}.oc-sub{flex:1;margin:0}.oc-cta{flex:1 0 100%;margin-top:8px;padding-top:8px}
 }
 
 /* ================= Design polish ================= */
@@ -335,13 +324,11 @@ p{text-wrap:pretty}
 .hero-full{display:block;min-height:min(86vh,800px);background:var(--navy) var(--hero) center/cover no-repeat}
 .hero-full .hs-photo{position:absolute;inset:0;background:none!important;min-height:0;pointer-events:none}
 .hero-full .hs-photo::before{background:linear-gradient(90deg,rgba(40,53,79,.97) 0%,rgba(40,53,79,.9) 38%,rgba(40,53,79,.35) 62%,rgba(40,53,79,0) 100%),linear-gradient(0deg,rgba(40,53,79,.4),rgba(40,53,79,0) 30%)}
-.hero-full .offer-card{pointer-events:auto;left:auto;right:max(20px,calc((100vw - 1180px)/2));top:48px;bottom:auto}
 .hero-full .hs-text{position:relative;min-height:inherit;z-index:2}
 @media (max-width:900px){
   .hero-full{min-height:0;background:var(--navy)}
   .hero-full .hs-photo{position:relative;inset:auto;min-height:460px;background:var(--hero) 70% 50%/cover no-repeat!important;pointer-events:auto}
   .hero-full .hs-photo::before{background:linear-gradient(180deg,var(--navy) 0%,rgba(40,53,79,0) 30%)}
-  .hero-full .offer-card{left:16px;right:16px;top:auto;bottom:16px}
 }
 
 /* benefits */
@@ -401,7 +388,30 @@ p{text-wrap:pretty}
 .social svg{width:22px;height:22px}.social a:hover svg{stroke:#fff}
 
 @media (max-width:900px){
-  .offer-card{padding:12px 16px}
+}
+
+/* ---------- Offer ticket ---------- */
+.offer-card{position:absolute;left:clamp(24px,5vw,72px);bottom:48px;z-index:2;display:block;text-decoration:none;color:var(--navy);filter:drop-shadow(0 18px 28px rgba(15,22,38,.4));transition:transform .3s,filter .3s}
+.offer-card:hover{transform:translateY(-5px) rotate(-1deg);filter:drop-shadow(0 26px 36px rgba(15,22,38,.5))}
+.oc-ticket{--stub:118px;display:flex;width:min(360px,calc(100vw - 32px));background:#fff;border-radius:14px;overflow:hidden;
+  -webkit-mask:radial-gradient(circle 11px at var(--stub) 0,#0000 97%,#000) top/100% 51% no-repeat,radial-gradient(circle 11px at var(--stub) 100%,#0000 97%,#000) bottom/100% 51% no-repeat;
+  mask:radial-gradient(circle 11px at var(--stub) 0,#0000 97%,#000) top/100% 51% no-repeat,radial-gradient(circle 11px at var(--stub) 100%,#0000 97%,#000) bottom/100% 51% no-repeat}
+.oc-stub{flex:0 0 var(--stub);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:18px 8px;color:#fff;background:linear-gradient(160deg,#f08b79,var(--coral) 55%,#d9614f)}
+.oc-price{font:400 2.9rem/1 var(--serif);letter-spacing:-.03em}
+.oc-price sup{font-size:1.15rem;vertical-align:top;position:relative;top:.35em;margin-right:2px}
+.oc-tag{font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.92}
+.oc-body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:18px 20px 18px 24px;border-left:2px dashed rgba(40,53,79,.22)}
+.oc-label{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral)}
+.oc-title{font:400 1.18rem/1.25 var(--serif)}
+.oc-cta{margin-top:6px;font-size:.86rem;font-weight:700}
+.oc-cta i{font-style:normal;display:inline-block;transition:transform .2s}
+.offer-card:hover .oc-cta i{transform:translateX(5px)}
+.hero-full .offer-card{pointer-events:auto;left:auto;right:max(20px,calc((100vw - 1180px)/2));top:52px;bottom:auto}
+@media (max-width:900px){
+  .offer-card{left:16px;right:16px;bottom:16px;top:auto}
+  .hero-full .offer-card{left:16px;right:16px;top:auto;bottom:16px}
+  .oc-ticket{width:100%;--stub:104px}
+  .oc-price{font-size:2.5rem}
+  .oc-body{padding:12px 16px 12px 20px}
   .oc-cta{display:none}
-  .oc-label{margin-bottom:2px}
 }
