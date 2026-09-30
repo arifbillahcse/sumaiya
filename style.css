@@ -391,30 +391,30 @@ p{text-wrap:pretty}
 }
 
 /* ---------- Offer badge (round) ---------- */
-.offer-badge{position:absolute;left:clamp(24px,5vw,72px);bottom:48px;z-index:2;width:216px;height:216px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f28d7b,var(--coral) 60%,#d9614f);color:var(--navy);text-decoration:none;display:grid;place-items:center;box-shadow:0 22px 44px rgba(15,22,38,.4),0 0 0 7px rgba(255,255,255,.22);transition:transform .35s,box-shadow .35s}
+.offer-badge{position:absolute;left:clamp(24px,5vw,72px);bottom:48px;z-index:2;width:176px;height:176px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f28d7b,var(--coral) 60%,#d9614f);color:var(--navy);text-decoration:none;display:grid;place-items:center;box-shadow:0 22px 44px rgba(15,22,38,.4),0 0 0 7px rgba(255,255,255,.22);transition:transform .35s,box-shadow .35s}
 .offer-badge:hover{transform:translateY(-6px) scale(1.04);box-shadow:0 30px 56px rgba(15,22,38,.5),0 0 0 9px rgba(255,255,255,.3)}
 .ob-ring{position:absolute;inset:0;width:100%;height:100%;animation:ob-spin 28s linear infinite}
 .ob-ring text{font:700 11.5px var(--sans);fill:#fff;letter-spacing:.2em}
 @keyframes ob-spin{to{transform:rotate(360deg)}}
-.ob-core{position:relative;width:150px;height:150px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(40,53,79,.08),0 4px 14px rgba(15,22,38,.18)}
-.ob-small{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
-.ob-price{font:400 4rem/.95 var(--serif);letter-spacing:-.03em;margin:2px 0 4px}
-.ob-price sup{font-size:1.5rem;vertical-align:top;position:relative;top:.42em;margin-right:2px}
-.ob-note{font-size:.66rem;font-weight:600;padding-top:6px;border-top:1px solid rgba(40,53,79,.15);color:var(--coral-d)}
+.ob-core{position:relative;width:122px;height:122px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(40,53,79,.08),0 4px 14px rgba(15,22,38,.18)}
+.ob-small{font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.75}
+.ob-price{font:400 3.2rem/.95 var(--serif);letter-spacing:-.03em;margin:1px 0 3px}
+.ob-price sup{font-size:1.2rem;vertical-align:top;position:relative;top:.42em;margin-right:2px}
+.ob-note{font-size:.56rem;font-weight:600;padding-top:5px;border-top:1px solid rgba(40,53,79,.15);color:var(--coral-d)}
 .hero-full .offer-badge{pointer-events:auto;right:auto;left:calc(max(20px,(100vw - 1180px)/2) + 470px);top:40px;bottom:auto}
 @media (prefers-reduced-motion:reduce){.ob-ring{animation:none}}
 @media (max-width:900px){
-  .offer-badge,.hero-full .offer-badge{left:16px;right:auto;top:auto;bottom:18px;width:156px;height:156px}
-  .ob-core{width:108px;height:108px}
-  .ob-small{font-size:.5rem}.ob-price{font-size:2.7rem}.ob-price sup{font-size:1rem}.ob-note{font-size:.5rem;padding-top:4px}
+  .offer-badge,.hero-full .offer-badge{left:16px;right:auto;top:auto;bottom:18px;width:136px;height:136px}
+  .ob-core{width:94px;height:94px}
+  .ob-small{font-size:.44rem}.ob-price{font-size:2.3rem}.ob-price sup{font-size:.85rem}.ob-note{font-size:.46rem;padding-top:3px}
   .ob-ring text{font-size:12px}
   }
 
 /* Book-now pill */
-.ob-book{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:10px 20px 10px 22px;border-radius:999px;background:var(--navy);color:#fff;font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1;box-shadow:0 10px 22px rgba(15,22,38,.45),0 0 0 3px #fff;transition:background .25s,box-shadow .25s,gap .25s}
-.ob-book i{font-style:normal;font-size:1rem;line-height:1;color:inherit;transition:transform .25s}
+.ob-book{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;padding:8px 16px 8px 18px;border-radius:999px;background:var(--navy);color:#fff;font-size:.64rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;line-height:1;box-shadow:0 10px 22px rgba(15,22,38,.45),0 0 0 3px #fff;transition:background .25s,box-shadow .25s,gap .25s}
+.ob-book i{font-style:normal;font-size:.9rem;line-height:1;color:inherit;transition:transform .25s}
 .offer-badge:hover .ob-book{background:var(--coral);gap:12px}
 .offer-badge:hover .ob-book i{color:#fff;transform:translateX(2px)}
 @media (max-width:900px){
-  .ob-book{bottom:-14px;padding:8px 15px 8px 17px;font-size:.62rem;letter-spacing:.12em;gap:6px}
+  .ob-book{bottom:-12px;padding:7px 13px 7px 15px;font-size:.56rem;letter-spacing:.11em;gap:5px}
 }
