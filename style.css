@@ -401,7 +401,7 @@ p{text-wrap:pretty}
 .ob-price{font:400 4rem/.95 var(--serif);letter-spacing:-.03em;margin:2px 0 4px}
 .ob-price sup{font-size:1.5rem;vertical-align:top;position:relative;top:.42em;margin-right:2px}
 .ob-note{font-size:.66rem;font-weight:600;padding-top:6px;border-top:1px solid rgba(40,53,79,.15);color:var(--coral-d)}
-.hero-full .offer-badge{pointer-events:auto;left:auto;right:max(20px,calc((100vw - 1180px)/2) + 20px);top:56px;bottom:auto}
+.hero-full .offer-badge{pointer-events:auto;right:auto;left:calc(max(20px,(100vw - 1180px)/2) + 470px);top:40px;bottom:auto}
 @media (prefers-reduced-motion:reduce){.ob-ring{animation:none}}
 @media (max-width:900px){
   .offer-badge,.hero-full .offer-badge{left:16px;right:auto;top:auto;bottom:18px;width:156px;height:156px}
