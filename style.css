@@ -1,4 +1,5 @@
 /* Licensed fonts: drop the .woff2 files into /assets/fonts (see README). Falls back to Source Serif 4 / Figtree. */
+@font-face{font-family:"Quincy CF Text Semibold";font-weight:600;font-style:normal;font-display:swap;src:local("Quincy CF Text Semibold"),local("QuincyCFText-Semibold"),local("Quincy CF Text SemiBold"),url(assets/fonts/quincy-cf-text-semibold.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text Light";font-weight:300;font-style:normal;font-display:swap;src:local("Quincy CF Text Light"),local("QuincyCFText-Light"),url(assets/fonts/quincy-cf-text-light.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text";font-weight:400;font-style:normal;font-display:swap;src:local("Quincy CF Text Regular"),local("QuincyCFText-Regular"),url(assets/fonts/quincy-cf-text-regular.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text";font-weight:500;font-style:normal;font-display:swap;src:local("Quincy CF Text Medium"),local("QuincyCFText-Medium"),url(assets/fonts/quincy-cf-text-medium.woff2) format("woff2")}
@@ -420,5 +421,5 @@ p{text-wrap:pretty}
   .ob-book{bottom:-12px;padding:7px 13px 7px 15px;font-size:.56rem;letter-spacing:.11em;gap:5px}
 }
 
-/* Lighter hero headline: uses Quincy Light if available, else Quincy Regular, else Source Serif 4 Light */
-.hero-split h1{font-family:"Quincy CF Text Light","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:300;letter-spacing:-.005em}
+/* Hero headline: weight 600 (Quincy Semibold if available, else nearest real weight; never faux bold) */
+.hero-split h1{font-family:"Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:600;font-synthesis:none;letter-spacing:-.01em}

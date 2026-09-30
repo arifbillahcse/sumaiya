@@ -3,4 +3,4 @@ Place licensed font files in landing/assets/fonts/ :
   circular-book.woff2, circular-medium.woff2, circular-bold.woff2   (Circular - body/buttons)
 Until then the page falls back to Source Serif 4 (headings) and Figtree (body).
 
-Optional (lighter hero headline): quincy-cf-text-light.woff2 (Quincy CF Text Light). Falls back to Regular if missing.
+Optional (hero headline, weight 600): quincy-cf-text-semibold.woff2 (Quincy CF Text Semibold). Falls back to Medium/Regular if missing.
