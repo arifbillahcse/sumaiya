@@ -896,3 +896,9 @@ html,body{max-width:100%;overflow-x:clip}
   .hero-split .hero-btns{gap:10px;margin-bottom:22px}
   .hero-split .hero-btns .btn,.hero-split .hero-btns .btn-lg{font-size:.86rem;padding:.62em 1.2em;min-height:40px;display:flex;align-items:center;justify-content:center;border-width:1.5px}
 }
+
+/* Mobile hero: offer badge top-right, text block starts below it */
+@media (max-width:640px){
+  .hero-full .hs-text{padding-top:122px}
+  .hero-full .kicker{max-width:none}
+}
