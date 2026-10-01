@@ -35,7 +35,7 @@ var CONFIG={
 
   /* hide social icons until real URLs are set in the HTML */
   $$('.social a').forEach(function(a){if(a.getAttribute('href')==='#')a.style.display='none'});
-  var so=$('.social');if(so&&!$$('a',so).some(function(a){return a.style.display!=='none'})){so.previousElementSibling&&(so.previousElementSibling.style.display='none');so.style.display='none'}
+  var so=$('.social');if(so&&!$$('a',so).some(function(a){return a.style.display!=='none'})){so.style.display='none'}
 
   /* footer: year + today's hours */
   var yr=$('#yr');if(yr)yr.textContent=new Date().getFullYear();
