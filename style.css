@@ -851,3 +851,12 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
   .ft-logo span{font-size:1.5rem}
   .ft-legal{flex-direction:column;align-items:flex-start;font-size:.78rem}
 }
+
+/* Booking hero: family photo anchored right, fading into navy behind the text (desktop) */
+@media (min-width:901px){
+  .hero.ph{background-color:var(--navy);background-image:var(--img);background-repeat:no-repeat;background-size:auto 100%;background-position:right center}
+  .hero.ph .hero-overlay-light{background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 30%,rgba(40,53,79,.82) 44%,rgba(40,53,79,.25) 62%,rgba(40,53,79,0) 78%)}
+}
+@media (max-width:900px){
+  .hero.ph{background-position:62% 8%;background-size:auto 78%;background-repeat:no-repeat;background-color:var(--navy)}
+}
