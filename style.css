@@ -602,11 +602,25 @@ button,input,textarea,select{font-family:var(--sans)}
   .foot-grid{gap:26px}
 }
 
-/* Mobile hero: photo behind the text, offer badge in front */
+/* Mobile hero: photo behind the text; compact offer badge sits in front, beside the headline */
 @media (max-width:900px){
   .hero-full{position:relative;display:block;min-height:0;background:var(--navy) var(--hero) 68% 40%/cover no-repeat}
   .hero-full .hs-photo{position:absolute;inset:0;min-height:0;background:none!important;pointer-events:none}
   .hero-full .hs-photo::before{background:linear-gradient(180deg,rgba(40,53,79,.86) 0%,rgba(40,53,79,.74) 40%,rgba(40,53,79,.55) 72%,rgba(40,53,79,.72) 100%)}
-  .hero-full .hs-text{position:relative;z-index:2;padding:196px 20px 56px}
-  .hero-full .offer-badge{pointer-events:auto;position:absolute;z-index:3;top:26px;left:20px;right:auto;bottom:auto;width:136px;height:136px}
+  .hero-full .hs-text{position:relative;z-index:2;padding:52px 20px 56px}
+  .hero-full h1{margin-bottom:46px}
+  .hero-full .offer-badge{pointer-events:auto;position:absolute;z-index:3;left:auto;right:16px;bottom:auto;top:128px;width:108px;height:108px;box-shadow:0 14px 28px rgba(15,22,38,.4),0 0 0 4px rgba(255,255,255,.22)}
+  .hero-full .ob-core{width:76px;height:76px}
+  .hero-full .ob-small{font-size:.34rem;letter-spacing:.12em}
+  .hero-full .ob-price{font-size:1.85rem;margin:0 0 2px}
+  .hero-full .ob-price sup{font-size:.7rem}
+  .hero-full .ob-note{font-size:.36rem;padding-top:2px}
+  .hero-full .ob-book{bottom:-11px;padding:6px 11px 6px 12px;font-size:.5rem;gap:4px;letter-spacing:.1em}
+}
+
+@media (max-width:380px){
+  .hero-full h1{font-size:1.95rem}
+  .hero-full .offer-badge{width:98px;height:98px;top:130px}
+  .hero-full .ob-core{width:68px;height:68px}
+  .hero-full .ob-price{font-size:1.65rem}
 }
