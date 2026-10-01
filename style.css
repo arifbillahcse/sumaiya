@@ -902,3 +902,8 @@ html,body{max-width:100%;overflow-x:clip}
   .hero-full .hs-text{padding-top:122px}
   .hero-full .kicker{max-width:none}
 }
+
+/* Mobile: hide the hero "Call" button (the sticky bar and header still offer calling) */
+@media (max-width:640px){
+  .hero-btns .btn-ghost,.hero-split .hero-btns .btn-ghost{display:none!important}
+}
