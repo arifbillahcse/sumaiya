@@ -763,3 +763,6 @@ button,input,textarea,select{font-family:var(--sans)}
   .care-actions .btn{width:100%}
   .care-link{align-self:center;display:inline-block}
 }
+
+/* All section titles: weight 700 (Quincy Bold if available; nearest real weight otherwise; no faux bold) */
+main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:700;font-synthesis:none;letter-spacing:-.005em}
