@@ -3,13 +3,13 @@
 @font-face{font-family:"Quincy CF Text Light";font-weight:300;font-style:normal;font-display:swap;src:local("Quincy CF Text Light"),local("QuincyCFText-Light"),url(assets/fonts/quincy-cf-text-light.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text";font-weight:400;font-style:normal;font-display:swap;src:local("Quincy CF Text Regular"),local("QuincyCFText-Regular"),url(assets/fonts/quincy-cf-text-regular.woff2) format("woff2")}
 @font-face{font-family:"Quincy CF Text";font-weight:500;font-style:normal;font-display:swap;src:local("Quincy CF Text Medium"),local("QuincyCFText-Medium"),url(assets/fonts/quincy-cf-text-medium.woff2) format("woff2")}
-@font-face{font-family:"Circular Std";font-weight:400;font-style:normal;font-display:swap;src:local("Circular Std Book"),local("CircularStd-Book"),local("Circular-Book"),local("Circular Book"),url(assets/fonts/circular-book.woff2) format("woff2")}
-@font-face{font-family:"Circular Std";font-weight:500;font-style:normal;font-display:swap;src:local("Circular Std Medium"),local("CircularStd-Medium"),local("Circular-Medium"),local("Circular Medium"),url(assets/fonts/circular-medium.woff2) format("woff2")}
-@font-face{font-family:"Circular Std";font-weight:700;font-style:normal;font-display:swap;src:local("Circular Std Bold"),local("CircularStd-Bold"),local("Circular-Bold"),local("Circular Bold"),url(assets/fonts/circular-bold.woff2) format("woff2")}
+@font-face{font-family:"circular";font-weight:400;font-style:normal;font-display:swap;src:local("Circular"),local("Circular Book"),local("Circular-Book"),local("CircularStd-Book"),local("Circular Std Book"),local("Circular Std"),url(assets/fonts/circular-book.woff2) format("woff2"),url(assets/fonts/circular-book.woff) format("woff"),url(assets/fonts/circular-book.otf) format("opentype"),url(assets/fonts/circular-book.ttf) format("truetype")}
+@font-face{font-family:"circular";font-weight:500;font-style:normal;font-display:swap;src:local("Circular Medium"),local("Circular-Medium"),local("CircularStd-Medium"),local("Circular Std Medium"),url(assets/fonts/circular-medium.woff2) format("woff2"),url(assets/fonts/circular-medium.woff) format("woff"),url(assets/fonts/circular-medium.otf) format("opentype"),url(assets/fonts/circular-medium.ttf) format("truetype")}
+@font-face{font-family:"circular";font-weight:700;font-style:normal;font-display:swap;src:local("Circular Bold"),local("Circular-Bold"),local("CircularStd-Bold"),local("Circular Std Bold"),url(assets/fonts/circular-bold.woff2) format("woff2"),url(assets/fonts/circular-bold.woff) format("woff"),url(assets/fonts/circular-bold.otf) format("opentype"),url(assets/fonts/circular-bold.ttf) format("truetype")}
 :root{
   --navy:#28354F; --navy-d:#1e283b; --coral:#EA7764; --coral-d:#d9614f;
   --mist:#d8e5e6; --grey:#f1f1f1; --ink:#29354f; --white:#fff;
-  --serif:"Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif; --sans:"Circular Std","CircularStd","Circular","Circular Pro","Circular LL","CircularXX",Figtree,system-ui,sans-serif;
+  --serif:"Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif; --sans:"circular","Circular Std","CircularStd","Circular Pro","Circular LL","CircularXX",Figtree,system-ui,sans-serif;
   --r:14px; --hdr:78px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
