@@ -487,13 +487,9 @@ button,input,textarea,select{font-family:var(--sans)}
 .sw-grid .video-frame.playing::after,.sw-grid .video-frame.playing .play,.sw-grid .video-frame.playing .video-cap{opacity:0;pointer-events:none}
 .sw-video::-webkit-media-controls-panel{background-image:linear-gradient(transparent,rgba(15,22,38,.7))}
 
-/* StemWave wordmark icon: focused ripple rings */
+/* StemWave wordmark icon: coral badge with parallel waves */
 .sw-copy .wordmark{gap:14px}
-.sw-copy .wordmark svg.wm-icon{width:42px;height:42px;flex:none;fill:none;stroke:none;overflow:visible}
-.wm-dot{fill:var(--coral)}
-.wm-ring{fill:none;stroke:#fff;stroke-width:1.8}
-.wm-ring.r1{stroke-opacity:.95}.wm-ring.r2{stroke-opacity:.55}.wm-ring.r3{stroke-opacity:.25}
-@keyframes wm-ripple{0%,100%{stroke-opacity:var(--o)}50%{stroke-opacity:calc(var(--o) * .35)}}
-.wm-ring{animation:wm-ripple 3.6s ease-in-out infinite}
-.wm-ring.r1{--o:.95}.wm-ring.r2{--o:.55;animation-delay:.3s}.wm-ring.r3{--o:.25;animation-delay:.6s}
-@media (prefers-reduced-motion:reduce){.wm-ring{animation:none}}
+.sw-copy .wordmark svg.wm-icon{width:40px;height:40px;flex:none;stroke:none;fill:none;overflow:visible;filter:drop-shadow(0 8px 14px rgba(234,119,100,.35))}
+.wm-bg{fill:var(--coral)}
+.wm-wave{fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.wm-wave.w2{stroke-opacity:.5}
