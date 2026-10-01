@@ -239,10 +239,6 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .btn-ghost{background:transparent;color:#fff;border:2px solid #fff}.btn-ghost:hover{background:#fff;color:var(--navy)}
 .service-badge{display:flex;justify-content:space-between;align-items:center;background:var(--coral);color:#fff;border-radius:10px;padding:10px 16px;margin-bottom:22px}
 .service-badge[hidden]{display:none}.service-badge a{font-size:.85rem;opacity:.9}
-.quotes{background:var(--coral);color:#fff;text-align:center}
-.quotes blockquote+blockquote{margin-top:64px}
-.quotes p{font:400 clamp(1.3rem,2.4vw,1.85rem)/1.45 var(--sans);margin-bottom:14px}
-.quotes cite{font-family:var(--sans);font-style:normal;font-weight:500;letter-spacing:.04em;opacity:.9}
 .form-msg.ok{color:#9be3bd}.contact .form-msg.bad{color:#ffb4a8}
 @media (max-width:900px){
 }
@@ -523,9 +519,7 @@ button,input,textarea,select{font-family:var(--sans)}
   .form-btns{flex-direction:column;gap:12px}
   .form-btns .btn{width:100%;font-size:1rem}
 
-  /* quotes + contact */
-  .quotes blockquote+blockquote{margin-top:44px}
-  .quotes p{font-size:1.2rem}
+  /* contact */
 
   /* footer */
 }
@@ -642,7 +636,6 @@ button,input,textarea,select{font-family:var(--sans)}
   .slide p{font-size:.92rem;line-height:1.65}
   .slide footer strong{font-size:.98rem}.slide footer span{font-size:.84rem}
   .stars{font-size:.95rem}
-  .quotes p{font-size:1.05rem}.quotes cite{font-size:.88rem}
 
   /* lead form */
   .lf-side h2{font-size:1.7rem}
