@@ -735,10 +735,15 @@ button,input,textarea,select{font-family:var(--sans)}
 }
 
 /* readability floors + tap targets */
-.btn-sm{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+.btn-sm:not(.header-cta){min-height:40px;display:inline-flex;align-items:center;justify-content:center}
 @media (max-width:640px){
   .kicker,.kicker.dark{font-size:.72rem}
   .logo-sub{font-size:.72rem}
   .num{font-size:.72rem}
   .sw-offer-text small{font-size:.72rem}
+}
+
+/* Mobile hero headline: 17px */
+@media (max-width:640px){
+  .hero-split h1,.hero-full h1{font-size:17px;line-height:1.3;margin-bottom:16px}
 }
