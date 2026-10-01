@@ -853,3 +853,6 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
 .c-form .consent a{color:var(--navy);text-decoration:underline}
 .c-form textarea{min-height:0}
 @media (max-width:640px){.c-form .consent{font-size:.72rem}}
+
+/* Mobile hero headline: two lines ("Move Freely Again / with StemWave Therapy") */
+@media (max-width:640px){.hero-split h1 .br-d{display:none}}
