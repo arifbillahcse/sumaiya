@@ -258,13 +258,6 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .quotes blockquote+blockquote{margin-top:64px}
 .quotes p{font:400 clamp(1.3rem,2.4vw,1.85rem)/1.45 var(--sans);margin-bottom:14px}
 .quotes cite{font-family:var(--sans);font-style:normal;font-weight:500;letter-spacing:.04em;opacity:.9}
-.contact{background:var(--navy);color:#fff}
-.contact h2{margin-bottom:16px}.contact>.wrap>p{margin-bottom:36px;font-family:var(--sans);font-size:1.15rem}
-.contact a{color:#fff}
-.c-form{display:flex;flex-direction:column;gap:16px;text-align:left;max-width:640px;margin-inline:auto}
-.c-form label{font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;font-weight:500}
-.c-form input,.c-form textarea{border-radius:2px;border:0}
-.c-form .btn{align-self:flex-start;border-radius:2px}
 .form-msg.ok{color:#9be3bd}.contact .form-msg.bad{color:#ffb4a8}
 @media (max-width:900px){
 }
@@ -554,8 +547,6 @@ button,input,textarea,select{font-family:var(--sans)}
   /* quotes + contact */
   .quotes blockquote+blockquote{margin-top:44px}
   .quotes p{font-size:1.2rem}
-  .contact>.wrap>p{font-size:1.02rem;margin-bottom:26px}
-  .c-form .btn{width:100%}
 
   /* footer */
   .foot-grid{gap:26px}
@@ -667,7 +658,6 @@ button,input,textarea,select{font-family:var(--sans)}
   input,textarea{font-size:16px}
   .forms h2,.contact h2{font-size:1.5rem}
   .forms .center,.contact>.wrap>p{font-size:.92rem}
-  .c-form label{font-size:.72rem}
 
   /* testimonials */
   .testi h2{font-size:1.5rem}.sub{font-size:.88rem}
@@ -790,4 +780,58 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
   .pl-list li{border-radius:11px}
   .pl-list p b{top:8px;left:8px;min-width:28px;height:22px;padding:0 7px;font-size:.74rem}
   .pl-list p span{left:11px;right:9px;bottom:10px;font-size:.8rem}
+}
+
+/* ---------- Contact (split card on mist) ---------- */
+.reach{background:linear-gradient(180deg,#e7eff0 0%,#f3f7f7 100%);padding:clamp(64px,8vw,112px) 0}
+.reach-card{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 50px 90px -40px rgba(40,53,79,.45),0 0 0 1px rgba(40,53,79,.06)}
+.reach-info{position:relative;overflow:hidden;color:#fff;padding:clamp(36px,4.5vw,64px);background:radial-gradient(520px 340px at 100% 0%,rgba(234,119,100,.22),transparent 65%),linear-gradient(165deg,#31405c,var(--navy) 55%,#222d44)}
+.reach-info::after{content:"";position:absolute;right:-90px;bottom:-90px;width:280px;height:280px;border-radius:50%;border:1px solid rgba(255,255,255,.12);box-shadow:0 0 0 38px rgba(255,255,255,.035),0 0 0 76px rgba(255,255,255,.025)}
+.reach-info .kicker{margin-bottom:14px}
+.reach-info h3{font:400 clamp(1.5rem,2.4vw,2rem)/1.2 var(--serif);margin:0 0 34px;max-width:300px}
+.reach-list{list-style:none;display:grid;gap:26px;position:relative;z-index:1}
+.reach-list li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start}
+.reach-list svg{width:44px;height:44px;padding:11px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);fill:none;stroke:var(--coral);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.reach-list small{display:block;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:6px}
+.reach-list a,.reach-list address,.reach-list span{display:block;font-style:normal;font-size:1.02rem;line-height:1.5;color:#fff;text-decoration:none}
+.reach-list span{font-size:.9rem;opacity:.7}
+.reach-list a[href^=tel]{font:400 1.45rem/1.2 var(--serif)}
+.reach-map{margin-top:8px;display:inline-block!important;font-size:.9rem!important;font-weight:500;border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:1px;transition:color .2s,border-color .2s}
+.reach-map:hover{color:var(--coral)!important;border-color:var(--coral)}
+.reach-hours{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:.95rem}
+.reach-hours dt{opacity:.7}.reach-hours dd{margin:0;color:#fff}
+.reach-form{padding:clamp(36px,4.5vw,64px)}
+.reach-form .kicker{display:none}
+.reach-form h2{font-size:clamp(2rem,3.2vw,2.8rem);line-height:1.1;color:var(--navy);margin:0}
+.reach-rule{display:block;width:56px;height:2px;background:var(--coral);margin:22px 0 20px}
+.reach-lead{color:rgba(40,53,79,.82);line-height:1.7;margin-bottom:30px;max-width:520px}
+.reach-lead a{color:var(--navy);font-weight:500;text-decoration:none;border-bottom:1px solid var(--coral)}
+.c-form{display:flex;flex-direction:column;gap:18px}
+.c-form label{font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.c-form input:not([type=checkbox]),.c-form textarea{border:1px solid #d9dfe6;border-radius:10px;background:#f7f9fa;padding:.9em 1em;font-size:1rem;text-transform:none;letter-spacing:0}
+.c-form input:focus,.c-form textarea:focus{background:#fff;border-color:var(--coral);box-shadow:0 0 0 3px rgba(234,119,100,.2)}
+.c-form .btn{align-self:flex-start;border-radius:999px;margin-top:6px}
+.reach .form-msg.ok{color:#1e7a4d}.reach .form-msg.bad{color:#c0392b}
+@media (max-width:900px){
+  .reach-card{grid-template-columns:1fr;border-radius:22px}
+  .reach-form{order:-1}
+  .reach-info::after{display:none}
+}
+@media (max-width:640px){
+  .reach{padding:52px 0 56px}
+  .reach-card{border-radius:18px}
+  .reach-form,.reach-info{padding:28px 20px}
+  .reach-form h2{font-size:1.5rem}
+  .reach-rule{margin:16px 0 14px}
+  .reach-lead{font-size:.92rem;margin-bottom:22px}
+  .c-form{gap:14px}
+  .c-form label{font-size:.75rem}
+  .c-form .btn{width:100%}
+  .reach-info h3{font-size:1.3rem;margin-bottom:24px}
+  .reach-list{gap:22px}
+  .reach-list li{grid-template-columns:38px 1fr;gap:13px}
+  .reach-list svg{width:38px;height:38px;padding:9px}
+  .reach-list a,.reach-list address{font-size:.94rem}
+  .reach-list a[href^=tel]{font-size:1.25rem}
+  .reach-hours{font-size:.88rem;gap:5px 14px}
 }
