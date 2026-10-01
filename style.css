@@ -475,3 +475,7 @@ button,input,textarea,select{font-family:var(--sans)}
 .art-visual::before{content:"";position:absolute;right:-24px;top:-24px;width:min(520px,100%);aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(40,53,79,.16);pointer-events:none}
 .art-visual{filter:drop-shadow(0 26px 30px rgba(40,53,79,.28))}
 @media (max-width:900px){.art-visual::before{display:none}}
+
+/* StemWave intro: wordmark + title at weight 600 (no faux bold) */
+.sw-copy .wordmark,.sw-copy .wordmark b{font-weight:600;font-synthesis:none}
+.sw-copy h2{font-family:"Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:600;font-synthesis:none}
