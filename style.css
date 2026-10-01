@@ -918,3 +918,13 @@ html,body{max-width:100%;overflow-x:clip}
   .hero.ph .hero-btns{display:block}
   .hero.ph .hero-btns .btn,.hero.ph .hero-btns .btn-lg{display:inline-flex;width:auto;min-height:44px;padding:.7em 1.9em;font-size:.95rem;font-weight:500}
 }
+
+/* Mobile: keep the video's coral glow + offset outline from spilling behind the text above */
+@media (max-width:900px){
+  .video-stage::after{display:none}
+  .video-stage::before{transform:translate(10px,10px);opacity:.4}
+  .stemwave{overflow:hidden}
+  .sw-copy{position:relative;z-index:2}
+  .sw-grid .video{position:relative;z-index:1}
+  .stemwave{background:var(--navy)}
+}
