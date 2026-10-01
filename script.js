@@ -108,6 +108,13 @@ var CONFIG={
       $$('button',dots).forEach(function(b,k){b.classList.toggle('on',k===cur)});
       if(user&&timer){clearInterval(timer);timer=null}
     };
+    /* swipe on touch screens */
+    var tx=null;
+    slider.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+    slider.addEventListener('touchend',function(e){
+      if(tx===null)return;var dx=e.changedTouches[0].clientX-tx;tx=null;
+      if(Math.abs(dx)>40)go(cur+(dx<0?1:-1),true);
+    },{passive:true});
     $('.prev').addEventListener('click',function(){go(cur-1,true)});
     $('.next').addEventListener('click',function(){go(cur+1,true)});
     go(0);

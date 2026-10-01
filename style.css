@@ -497,3 +497,107 @@ button,input,textarea,select{font-family:var(--sans)}
 
 /* StemWave intro title: weight 700 (Quincy Bold if available, else nearest real weight; no faux bold) */
 .sw-copy h2{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:700;font-synthesis:none;letter-spacing:-.005em}
+
+/* =============== Mobile refinements =============== */
+@media (max-width:900px){
+  body{padding-bottom:0}
+  .footer{padding-bottom:84px}
+  .sticky-bar{padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+  .lf-side::after{width:150px;height:150px;right:-60px;bottom:-60px}
+  .kicker{letter-spacing:.12em;font-size:.72rem}
+}
+@media (max-width:640px){
+  section{padding:56px 0}
+  .wrap{width:min(1180px,100% - 36px)}
+  h2{font-size:clamp(1.75rem,7vw,2.2rem)}
+
+  /* buttons: equal full-width rows */
+  .hero-btns{flex-direction:column;gap:12px}
+  .hero-btns .btn,.sw-copy .hero-btns .btn{width:100%;flex:none;text-align:center}
+
+  /* benefits */
+  .benefits{padding:48px 0 56px}
+  .grid-4{gap:22px 12px}
+  .benefit{padding:8px 4px}
+  .benefit svg{width:56px;height:56px;margin-bottom:12px}
+  .benefit h3{font-size:1rem;line-height:1.3;text-wrap:balance}
+
+  /* StemWave intro */
+  .stemwave{padding:56px 0 64px}
+  .sw-copy .wordmark{margin-bottom:22px}
+  .sw-copy h2{margin-bottom:14px}
+  .sw-copy .lead{margin-bottom:24px}
+  .sw-offer{display:flex;width:100%;justify-content:flex-start;margin-bottom:24px}
+  .video-stage{width:min(290px,76%)}
+
+  /* state of the art */
+  .art-grid{padding-top:44px}
+  .art p{font-size:1rem}
+  .art-visual{min-height:310px}
+  .art-circle,.art-half{width:min(300px,86%)}
+
+  /* why jester + tiles */
+  .why p{font-size:1rem}
+  .tiles{gap:16px 14px}
+  .tiles figcaption{font-size:.92rem;line-height:1.3}
+
+  /* testimonials */
+  .testi h2{margin-bottom:8px}
+  .sub{margin-bottom:28px;font-size:.95rem}
+  .slide{padding:30px 20px 26px;border-radius:20px}
+  .slide::before{font-size:5rem;left:18px;top:0}
+  .slide p{font-size:1rem;line-height:1.7;text-align:left}
+  .stars{text-align:center}
+  .slide footer{align-items:center}
+
+  /* lead form */
+  .lf-grid{gap:20px}
+  .lf-side{padding:30px 22px}
+  .lf-side h2{font-size:2rem}
+  .lf-side p:not(.eyebrow){font-size:1.05rem}
+  .eyebrow{font-size:1rem}
+  .lf-form{padding:22px 18px;border-radius:14px}
+  .lf-form .btn{padding:.95em}
+
+  /* booking hero: photo on top, text over a navy fade at the bottom */
+  .hero.ph{min-height:560px;align-items:flex-end;padding:0 0 34px;background-position:56% top}
+  .hero-overlay-light{background:linear-gradient(0deg,rgba(40,53,79,.97) 0%,rgba(40,53,79,.9) 40%,rgba(40,53,79,.2) 72%,rgba(40,53,79,0) 100%)}
+  .hero .hero-copy h1{font-size:2.3rem;margin-bottom:14px}
+  .hero .hero-copy .lead{font-size:1.02rem;margin-bottom:22px}
+
+  /* how we work: compact rows */
+  .how h2{margin-bottom:34px;font-size:1.7rem}
+  .steps{gap:26px}
+  .steps li{flex-direction:row;align-items:center;gap:18px;text-align:left}
+  .circle{flex:none;width:112px;height:112px;font-size:1.02rem;line-height:1.2}
+  .num{font-size:.7rem;margin-bottom:2px}
+  .steps p{max-width:none;font-size:.96rem;line-height:1.55}
+
+  /* insurance */
+  .ins-list{gap:12px}
+  .ins-list div{padding:16px 14px}
+  .ins-note{font-size:1rem}
+
+  /* booking card */
+  .booking .center{margin-bottom:26px}
+  .book-card{padding:18px 16px;border-radius:16px}
+  .stepper li{padding:10px 6px;gap:8px;font-size:.78rem}
+  .stepper b{font-size:1.4rem}
+  .days{grid-template-columns:repeat(4,1fr)}
+  .times{grid-template-columns:repeat(3,1fr)}
+  .actions{gap:10px}
+
+  /* patient forms */
+  .forms .center{margin-bottom:26px}
+  .form-btns{flex-direction:column;gap:12px}
+  .form-btns .btn{width:100%;font-size:1rem}
+
+  /* quotes + contact */
+  .quotes blockquote+blockquote{margin-top:44px}
+  .quotes p{font-size:1.2rem}
+  .contact>.wrap>p{font-size:1.02rem;margin-bottom:26px}
+  .c-form .btn{width:100%}
+
+  /* footer */
+  .foot-grid{gap:26px}
+}
