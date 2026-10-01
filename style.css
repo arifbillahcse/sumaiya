@@ -890,3 +890,9 @@ html,body{max-width:100%;overflow-x:clip}
   .hero-full .ob-core{width:56px;height:56px}
   .hero-full .ob-price{font-size:1.35rem}
 }
+
+/* Mobile hero buttons: compact */
+@media (max-width:640px){
+  .hero-split .hero-btns{gap:10px;margin-bottom:22px}
+  .hero-split .hero-btns .btn,.hero-split .hero-btns .btn-lg{font-size:.86rem;padding:.62em 1.2em;min-height:40px;display:flex;align-items:center;justify-content:center;border-width:1.5px}
+}
