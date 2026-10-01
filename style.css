@@ -852,7 +852,7 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
 }
 
 /* ---------- Patient forms (document cards) ---------- */
-.forms{background:#faeeeb;padding:clamp(64px,8vw,112px) 0;border-top:1px solid #f3dfda;border-bottom:1px solid #f0d8d2}
+.forms{background:#fcf8f7;padding:clamp(64px,8vw,112px) 0;border-top:1px solid #f4e8e5;border-bottom:1px solid #f1e3df}
 .pf-head{text-align:center;margin-bottom:clamp(32px,4vw,52px)}
 .pf-head h2{font-size:clamp(2rem,3.6vw,3rem);line-height:1.1;color:var(--navy);margin:0}
 .pf-rule{display:block;width:56px;height:2px;background:var(--coral);margin:22px auto 18px}
