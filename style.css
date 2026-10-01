@@ -405,7 +405,7 @@ p{text-wrap:pretty}
 .ob-price{font:400 3.2rem/.95 var(--serif);letter-spacing:-.03em;margin:1px 0 3px}
 .ob-price sup{font-size:1.2rem;vertical-align:top;position:relative;top:.42em;margin-right:2px}
 .ob-note{font-size:.56rem;font-weight:500;padding-top:5px;border-top:1px solid rgba(40,53,79,.15);color:var(--coral-d)}
-.hero-full .offer-badge{pointer-events:auto;right:auto;left:calc(max(20px,(100vw - 1180px)/2) + var(--h1) * 7.95 + 28px);top:40px;bottom:auto}
+.hero-full .offer-badge{pointer-events:auto;left:auto;right:max(24px,calc((100vw - 1180px)/2 + 8px));top:34px;bottom:auto}
 @media (prefers-reduced-motion:reduce){.ob-ring{animation:none}}
 @media (max-width:900px){
   .offer-badge,.hero-full .offer-badge{left:16px;right:auto;top:auto;bottom:18px;width:136px;height:136px}
