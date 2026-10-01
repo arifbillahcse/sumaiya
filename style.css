@@ -907,3 +907,14 @@ html,body{max-width:100%;overflow-x:clip}
 @media (max-width:640px){
   .hero-btns .btn-ghost,.hero-split .hero-btns .btn-ghost{display:none!important}
 }
+
+/* Mobile hero: Try StemWave Today as a compact, left-aligned pill (not full width) */
+@media (max-width:640px){
+  .hero-split .hero-btns{display:block}
+  .hero-split .hero-btns .btn,.hero-split .hero-btns .btn-lg{display:inline-flex;width:auto;min-height:44px;padding:.7em 1.9em;font-size:.95rem;font-weight:500}
+}
+@media (max-width:640px){
+  .hero-btns .btn-ghost,.hero-split .hero-btns .btn-ghost,.hero.ph .hero-btns .btn-ghost{display:none!important}
+  .hero.ph .hero-btns{display:block}
+  .hero.ph .hero-btns .btn,.hero.ph .hero-btns .btn-lg{display:inline-flex;width:auto;min-height:44px;padding:.7em 1.9em;font-size:.95rem;font-weight:500}
+}
