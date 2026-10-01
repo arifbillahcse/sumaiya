@@ -463,3 +463,15 @@ button,input,textarea,select{font-family:var(--sans)}
   .sw-offer{padding:14px 20px 14px 18px;gap:16px}.sw-price{font-size:2.6rem}.sw-offer-text{padding-left:16px}.sw-offer-text b{font-size:1.2rem}
   .video-stage{width:min(300px,78%)}
 }
+
+/* ---------- State of the Art section: light mist background ---------- */
+.art{background:linear-gradient(180deg,#e9f0f1 0%,var(--mist) 100%)!important;position:relative}
+.art::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 380px at 12% 20%,rgba(255,255,255,.55),transparent 65%);pointer-events:none}
+.art-grid{background:none!important;color:var(--navy)!important;position:relative}
+.art h2{color:var(--navy)}
+.art p{color:rgba(40,53,79,.86)}
+.art .kicker.dark{margin-bottom:14px}
+.art .btn-coral{box-shadow:0 12px 24px -10px rgba(234,119,100,.7)}
+.art-visual::before{content:"";position:absolute;right:-24px;top:-24px;width:min(520px,100%);aspect-ratio:1;border-radius:50%;border:1.5px solid rgba(40,53,79,.16);pointer-events:none}
+.art-visual{filter:drop-shadow(0 26px 30px rgba(40,53,79,.28))}
+@media (max-width:900px){.art-visual::before{display:none}}
