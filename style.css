@@ -856,3 +856,15 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
 
 /* Mobile hero headline: two lines ("Move Freely Again / with StemWave Therapy") */
 @media (max-width:640px){.hero-split h1 .br-d{display:none}}
+
+/* Mobile safety: never let anything widen the page (prevents browser zoom-out) and keep comfortable side padding */
+html,body{max-width:100%;overflow-x:clip}
+@media (max-width:640px){
+  .wrap{width:calc(100% - 44px);max-width:1180px}
+  .narrow{width:calc(100% - 44px)}
+  .hero-full .hs-text,.hero-split .hs-text{padding-left:22px;padding-right:22px}
+  .hero.ph .wrap{width:calc(100% - 44px)}
+  .reach-form,.reach-info{padding-left:22px;padding-right:22px}
+  .flow-card,.pf-card{padding-left:20px;padding-right:20px}
+  .care-visual,.ab-photo{max-width:calc(100% - 66px)}
+}
