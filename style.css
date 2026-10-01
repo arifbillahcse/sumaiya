@@ -868,3 +868,8 @@ html,body{max-width:100%;overflow-x:clip}
   .flow-card,.pf-card{padding-left:20px;padding-right:20px}
   .care-visual,.ab-photo{max-width:calc(100% - 66px)}
 }
+
+/* Mobile hero headline: larger, weight 700 (scales down on very narrow phones so it clears the offer badge) */
+@media (max-width:640px){
+  .hero-split h1,.hero-full h1{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:700;font-synthesis:none;font-size:min(22px,calc((100vw - 120px) / 10.6));line-height:1.28;margin-bottom:16px}
+}
