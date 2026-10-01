@@ -443,7 +443,7 @@ button,input,textarea,select{font-family:var(--sans)}
 .sw-price{font:400 3.2rem/1 var(--serif);color:var(--coral);letter-spacing:-.02em}
 .sw-price sup{font-size:1.3rem;vertical-align:top;position:relative;top:.5em;margin-right:2px}
 .sw-offer-text{display:flex;flex-direction:column;gap:2px;padding-left:22px;border-left:1px solid rgba(255,255,255,.16)}
-.sw-offer-text small{font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--coral)}
+.sw-offer-text small{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--coral)}
 .sw-offer-text b{font:400 1.45rem/1.2 var(--serif)}
 .sw-copy .hero-btns{display:flex;flex-wrap:wrap;gap:14px}
 
@@ -646,4 +646,99 @@ button,input,textarea,select{font-family:var(--sans)}
   .hero-full .ob-price{font-size:1.7rem}
   .hero-full .kicker{max-width:calc(100% - 118px)}
   .hero-full h1{font-size:max(1.6rem,calc((100vw - 140px) / 7.95))}
+}
+
+/* =============== Mobile type scale (smaller text) =============== */
+@media (max-width:640px){
+  body{font-size:15px;line-height:1.55}
+  .lead{font-size:1rem}
+  h2{font-size:clamp(1.5rem,6.2vw,1.85rem)}
+  h3{font-size:1.15rem}
+  .btn{font-size:.95rem;padding:.8em 1.3em}
+  .btn-lg{font-size:1rem;padding:.85em 1.5em}
+  .btn-sm{font-size:.85rem}
+  .kicker,.kicker.dark{font-size:.66rem;letter-spacing:.13em;margin-bottom:14px}
+
+  /* header */
+  .logo-main{font-size:1.5rem}.logo-sub{font-size:.66rem}
+
+  /* hero */
+  .hero-full h1,.hero-split h1{font-size:max(1.5rem,calc((100vw - 176px) / 7.95))}
+  .hero-split .lead{font-size:.95rem;margin-bottom:24px}
+  .ticks{font-size:.8rem;gap:6px 18px}
+  .hero-full .hs-text{padding-bottom:44px}
+
+  /* benefits */
+  .benefit h3{font-size:.9rem}
+  .benefit svg{width:48px;height:48px}
+
+  /* StemWave intro */
+  .sw-copy .wordmark{font-size:1.9rem;margin-bottom:18px}
+  .sw-copy .wordmark svg.wm-icon{width:34px;height:34px}
+  .sw-copy h2{font-size:clamp(1.55rem,6.8vw,1.9rem)}
+  .sw-copy .lead{font-size:.95rem}
+  .sw-price{font-size:2.3rem}
+  .sw-offer-text small{font-size:.6rem}.sw-offer-text b{font-size:1.05rem}
+  .video-cap,.sw-grid .video-cap{font-size:.82rem;padding:9px 13px}
+  .sw-grid .play{width:62px;height:62px}.sw-grid .play svg{width:24px}
+
+  /* art / why */
+  .art h2{font-size:1.5rem}.art p{font-size:.94rem}
+  .coral{font-size:2.1rem;margin-bottom:22px}
+  .why h3{font-size:1.15rem;margin-bottom:10px}
+  .why p{font-size:.94rem}
+  .tiles figcaption{font-size:.84rem}
+
+  /* how we work */
+  .how h2{font-size:1.45rem;margin-bottom:28px}
+  .circle{width:100px;height:100px;font-size:.9rem}
+  .num{font-size:.62rem}
+  .steps p{font-size:.9rem;line-height:1.5}
+
+  /* insurance */
+  .insurance h2{font-size:1.55rem}
+  .insurance .lead{font-size:.95rem}
+  .insurance h3{font-size:1.1rem;margin-bottom:16px}
+  .ins-list{font-size:.92rem}.ins-list span{font-size:.78rem}
+  .ins-note{font-size:.92rem}
+
+  /* booking */
+  .booking h2{font-size:1.55rem}.booking .center{font-size:.92rem}
+  .stepper li{font-size:.72rem}.stepper b{font-size:1.25rem}
+  .chip{font-size:.8rem;padding:9px 4px}
+  .pick-title{font-size:.9rem}
+  label{font-size:.82rem}
+
+  /* forms + contact: keep inputs at 16px so iOS doesn't zoom */
+  input,textarea{font-size:16px}
+  .forms h2,.contact h2{font-size:1.5rem}
+  .forms .center,.contact>.wrap>p{font-size:.92rem}
+  .c-form label{font-size:.72rem}
+
+  /* testimonials */
+  .testi h2{font-size:1.5rem}.sub{font-size:.88rem}
+  .slide p{font-size:.92rem;line-height:1.65}
+  .slide footer strong{font-size:.98rem}.slide footer span{font-size:.84rem}
+  .stars{font-size:.95rem}
+  .quotes p{font-size:1.05rem}.quotes cite{font-size:.88rem}
+
+  /* lead form */
+  .lf-side h2{font-size:1.7rem}
+  .lf-side p:not(.eyebrow){font-size:.95rem}.eyebrow{font-size:.85rem}
+  .lf-form label{font-size:.8rem}
+  .consent{font-size:.68rem!important}
+
+  /* footer */
+  .footer{font-size:.88rem}.connected{font-size:1.25rem}
+  .hours li span:first-child{min-width:104px}
+  .legal{font-size:.78rem}
+}
+
+/* readability floors + tap targets */
+.btn-sm{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+@media (max-width:640px){
+  .kicker,.kicker.dark{font-size:.72rem}
+  .logo-sub{font-size:.72rem}
+  .num{font-size:.72rem}
+  .sw-offer-text small{font-size:.72rem}
 }
