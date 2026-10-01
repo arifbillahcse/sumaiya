@@ -624,3 +624,26 @@ button,input,textarea,select{font-family:var(--sans)}
   .hero-full .ob-core{width:68px;height:68px}
   .hero-full .ob-price{font-size:1.65rem}
 }
+
+/* Mobile hero v2: badge pinned top-right, just under the header (beside kicker + first headline line) */
+@media (max-width:900px){
+  .hero-full .hs-text{padding:46px 20px 56px}
+  .hero-full h1{margin-bottom:26px}
+  .hero-full .offer-badge{top:14px;right:16px;left:auto;width:112px;height:112px}
+  .hero-full .ob-core{width:79px;height:79px}
+  .hero-full .ob-price{font-size:1.95rem}
+  .hero-full .ob-book{bottom:-10px}
+}
+@media (max-width:520px){
+  /* keep kicker + first headline line clear of the badge */
+  .hero-full .kicker{max-width:calc(100% - 132px)}
+  .hero-full h1{font-size:max(1.7rem,calc((100vw - 156px) / 7.95))}
+  .hero-full .hs-text{padding-top:44px}
+}
+@media (max-width:380px){
+  .hero-full .offer-badge{width:100px;height:100px;top:12px;right:12px}
+  .hero-full .ob-core{width:70px;height:70px}
+  .hero-full .ob-price{font-size:1.7rem}
+  .hero-full .kicker{max-width:calc(100% - 118px)}
+  .hero-full h1{font-size:max(1.6rem,calc((100vw - 140px) / 7.95))}
+}
