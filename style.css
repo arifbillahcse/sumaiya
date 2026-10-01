@@ -852,10 +852,10 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
   .ft-legal{flex-direction:column;align-items:flex-start;font-size:.78rem}
 }
 
-/* Booking hero: family photo anchored right, fading into navy behind the text (desktop) */
+/* Booking hero: family photo as full-width background behind the text (desktop) */
 @media (min-width:901px){
-  .hero.ph{background-color:var(--navy);background-image:var(--img);background-repeat:no-repeat;background-size:auto 100%;background-position:right center}
-  .hero.ph .hero-overlay-light{background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 30%,rgba(40,53,79,.82) 44%,rgba(40,53,79,.25) 62%,rgba(40,53,79,0) 78%)}
+  .hero.ph{background-color:var(--navy);background-image:var(--img);background-repeat:no-repeat;background-size:cover;background-position:center 6%}
+  .hero.ph .hero-overlay-light{background:linear-gradient(90deg,rgba(40,53,79,.94) 0%,rgba(40,53,79,.84) 34%,rgba(40,53,79,.5) 58%,rgba(40,53,79,.12) 82%,rgba(40,53,79,0) 100%),linear-gradient(0deg,rgba(40,53,79,.35),rgba(40,53,79,0) 30%)}
 }
 @media (max-width:900px){
   .hero.ph{background-position:62% 8%;background-size:auto 78%;background-repeat:no-repeat;background-color:var(--navy)}
