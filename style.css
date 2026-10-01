@@ -162,18 +162,6 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
 .dots button.on{background:var(--coral);width:26px;border-radius:99px}
 
 /* lead form */
-.lead-form{background:var(--grey)}
-.lf-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:stretch}
-.lf-side{background:var(--navy);color:#fff;padding:56px 44px;display:flex;flex-direction:column;justify-content:center;gap:20px;border-radius:6px}
-.eyebrow{text-transform:uppercase;font-weight:700;letter-spacing:.1em;font-size:1.3rem}
-.lf-side h2{color:var(--coral);font-size:clamp(2.2rem,4vw,3.2rem)}
-.lf-side p:not(.eyebrow){font-size:1.3rem;line-height:1.5}
-.lf-call{font-size:1rem!important}.lf-call a{color:var(--coral);font-weight:700}
-.lf-form{display:flex;flex-direction:column;gap:16px}
-.lf-form label{font-weight:500;font-size:.85rem}
-.consent{flex-direction:row;gap:12px;align-items:flex-start;font-size:.72rem!important;color:#444}
-.consent input{width:20px;height:20px;margin-top:2px;flex:none}
-.lf-form .btn{align-self:flex-start}
 .form-msg{min-height:1.5em;font-weight:500}
 .form-msg.ok{color:#1e7a4d}.form-msg.bad{color:#c0392b}
 
@@ -204,9 +192,8 @@ input:focus,textarea:focus{border-color:var(--coral);outline:none;box-shadow:0 0
   .hero-inner{flex-direction:column;align-items:flex-start}
   .hero-overlay{background:linear-gradient(180deg,rgba(41,53,79,.85),rgba(41,53,79,.7))}
   .grid-4{grid-template-columns:1fr 1fr}
-  .split,.why .split,.lf-grid,.art-grid{grid-template-columns:1fr}
+  .split{grid-template-columns:1fr}
   .slider{padding:0}.arrow{display:none}.slide{padding:32px 22px}
-  .lf-side{padding:36px 24px}
   .sticky-bar{display:grid;grid-template-columns:1fr 2fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 12px;background:rgba(255,255,255,.96);box-shadow:0 -6px 20px rgba(0,0,0,.15)}
   .sticky-bar .btn{border-radius:8px;padding:.7em}
   body{padding-bottom:64px}
@@ -304,13 +291,6 @@ p{text-wrap:pretty}
 .slide footer strong{font-family:var(--sans);font-size:1.05rem;font-weight:500}
 
 /* lead form */
-.lead-form{background:linear-gradient(180deg,#f2f2f1,#e9ebed)}
-.lf-side{background:linear-gradient(160deg,#2f3d5a,var(--navy) 55%,#222d44);box-shadow:0 30px 60px -24px rgba(40,53,79,.6);position:relative;overflow:hidden}
-.lf-side::after{content:"";position:absolute;right:-90px;bottom:-90px;width:260px;height:260px;border-radius:50%;background:var(--coral);opacity:.18}
-.lf-form{background:#fff;border-radius:16px;padding:34px;box-shadow:0 24px 60px -28px rgba(40,53,79,.35)}
-.lf-form input:not([type=checkbox]),.lf-form textarea{background:#f7f8fa;border-color:#e3e6ea}
-.lf-form input:focus,.lf-form textarea:focus{background:#fff}
-.lf-form .btn{width:100%;padding:1em}
 .btn-mist{background:var(--navy);color:#fff}.btn-mist:hover{background:var(--navy-d)}
 .stemwave .btn-mist,.lead-form .btn-mist{box-shadow:none}
 .stemwave .btn-mist{background:var(--mist);color:var(--navy)}
@@ -422,7 +402,6 @@ button,input,textarea,select{font-family:var(--sans)}
 @media (max-width:900px){
   body{padding-bottom:0}
   .sticky-bar{padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
-  .lf-side::after{width:150px;height:150px;right:-60px;bottom:-60px}
   .kicker{letter-spacing:.12em;font-size:.72rem}
 }
 @media (max-width:640px){
@@ -463,13 +442,6 @@ button,input,textarea,select{font-family:var(--sans)}
   .slide footer{align-items:center}
 
   /* lead form */
-  .lf-grid{gap:20px}
-  .lf-side{padding:30px 22px}
-  .lf-side h2{font-size:2rem}
-  .lf-side p:not(.eyebrow){font-size:1.05rem}
-  .eyebrow{font-size:1rem}
-  .lf-form{padding:22px 18px;border-radius:14px}
-  .lf-form .btn{padding:.95em}
 
   /* booking hero: photo on top, text over a navy fade at the bottom */
   .hero.ph{min-height:560px;align-items:flex-end;padding:0 0 34px;background-position:56% top}
@@ -608,10 +580,6 @@ button,input,textarea,select{font-family:var(--sans)}
   .stars{font-size:.95rem}
 
   /* lead form */
-  .lf-side h2{font-size:1.7rem}
-  .lf-side p:not(.eyebrow){font-size:.95rem}.eyebrow{font-size:.85rem}
-  .lf-form label{font-size:.8rem}
-  .consent{font-size:.68rem!important}
 
   /* footer */
 }
@@ -878,3 +846,10 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
   .pf-text b{font-size:1.1rem;margin-bottom:4px}.pf-text small{font-size:.82rem}
   .pf-go{grid-column:1 / -1;padding-top:12px;font-size:.75rem}
 }
+
+/* consent checkbox inside the split-card form */
+.c-form .consent{flex-direction:row;gap:12px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:.74rem;font-weight:400;line-height:1.55;color:rgba(40,53,79,.8)}
+.c-form .consent input{width:20px;height:20px;margin-top:2px;flex:none}
+.c-form .consent a{color:var(--navy);text-decoration:underline}
+.c-form textarea{min-height:0}
+@media (max-width:640px){.c-form .consent{font-size:.72rem}}
