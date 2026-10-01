@@ -3,12 +3,11 @@
 /* ---- SETTINGS: edit here ------------------------------------------
    1. Create a free key at https://web3forms.com (enter the clinic's email).
    2. Paste it below. Leave empty to run in demo mode (no email is sent).
-   3. Set VIDEO_URL to the YouTube/Vimeo embed URL of the StemWave video. */
+   3. The StemWave video is assets/stemwave-video.mp4 (replace the file to change it). */
 var CONFIG={
   WEB3FORMS_KEY:'',
   ENDPOINT:'https://api.web3forms.com/submit',
-  FROM_NAME:'Jester Family Chiropractic Website',
-  VIDEO_URL:''
+  FROM_NAME:'Jester Family Chiropractic Website'
 };
   var $=function(s,c){return (c||document).querySelector(s)};
   var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
@@ -42,12 +41,19 @@ var CONFIG={
   var yr=$('#yr');if(yr)yr.textContent=new Date().getFullYear();
   var t=$('#hours [data-day="'+new Date().getDay()+'"]');if(t)t.classList.add('today');
 
-  /* video: set data-src="embed-url" on .video-frame to enable */
-  var play=$('.play');
-  if(play)play.addEventListener('click',function(){
-    var f=$('.video-frame'),src=CONFIG.VIDEO_URL||f.getAttribute('data-src');
-    if(src)f.innerHTML='<iframe src="'+src+'" allow="autoplay;fullscreen" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>';
-  });
+  /* StemWave video: custom play button over the first frame; native controls once playing */
+  var frame=$('.video-frame'),vid=$('.sw-video'),play=$('.play');
+  if(frame&&vid&&play){
+    var start=function(){
+      frame.classList.add('playing');vid.controls=true;
+      var p=vid.play();if(p&&p.catch)p.catch(function(){frame.classList.remove('playing');vid.controls=false});
+    };
+    play.addEventListener('click',start);
+    vid.addEventListener('click',function(){if(!vid.controls)start()});
+    vid.addEventListener('ended',function(){frame.classList.remove('playing');vid.controls=false;vid.currentTime=0.1});
+    /* pause other media if the user scrolls far past: keep it simple, pause when tab hidden */
+    document.addEventListener('visibilitychange',function(){if(document.hidden&&!vid.paused)vid.pause()});
+  }
 
   /* validation */
   function validate(form){

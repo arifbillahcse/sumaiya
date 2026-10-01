@@ -479,3 +479,10 @@ button,input,textarea,select{font-family:var(--sans)}
 /* StemWave intro: wordmark + title at weight 600 (no faux bold) */
 .sw-copy .wordmark,.sw-copy .wordmark b{font-weight:600;font-synthesis:none}
 .sw-copy h2{font-family:"Quincy CF Text Semibold","Quincy CF Text","Quincy CF","Source Serif 4",Georgia,serif;font-weight:600;font-synthesis:none}
+
+/* StemWave video player */
+.sw-video{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;background:transparent;border-radius:inherit;cursor:pointer}
+.sw-grid .video-frame::after{z-index:1;transition:opacity .35s}
+.sw-grid .video-frame .play,.sw-grid .video-frame .video-cap{transition:opacity .35s,transform .25s}
+.sw-grid .video-frame.playing::after,.sw-grid .video-frame.playing .play,.sw-grid .video-frame.playing .video-cap{opacity:0;pointer-events:none}
+.sw-video::-webkit-media-controls-panel{background-image:linear-gradient(transparent,rgba(15,22,38,.7))}
