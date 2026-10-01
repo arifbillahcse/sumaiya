@@ -601,3 +601,12 @@ button,input,textarea,select{font-family:var(--sans)}
   /* footer */
   .foot-grid{gap:26px}
 }
+
+/* Mobile hero: photo behind the text, offer badge in front */
+@media (max-width:900px){
+  .hero-full{position:relative;display:block;min-height:0;background:var(--navy) var(--hero) 68% 40%/cover no-repeat}
+  .hero-full .hs-photo{position:absolute;inset:0;min-height:0;background:none!important;pointer-events:none}
+  .hero-full .hs-photo::before{background:linear-gradient(180deg,rgba(40,53,79,.86) 0%,rgba(40,53,79,.74) 40%,rgba(40,53,79,.55) 72%,rgba(40,53,79,.72) 100%)}
+  .hero-full .hs-text{position:relative;z-index:2;padding:196px 20px 56px}
+  .hero-full .offer-badge{pointer-events:auto;position:absolute;z-index:3;top:26px;left:20px;right:auto;bottom:auto;width:136px;height:136px}
+}
