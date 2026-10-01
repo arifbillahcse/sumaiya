@@ -854,9 +854,9 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
 
 /* Booking hero: family photo as full-width background behind the text (desktop) */
 @media (min-width:901px){
-  .hero.ph{background-color:var(--navy);background-image:var(--img);background-repeat:no-repeat;background-size:cover;background-position:center 6%}
+  .hero.ph{background-color:var(--navy);background-image:var(--img);background-repeat:no-repeat;background-size:cover;background-position:center center}
   .hero.ph .hero-overlay-light{background:linear-gradient(90deg,rgba(40,53,79,.94) 0%,rgba(40,53,79,.84) 34%,rgba(40,53,79,.5) 58%,rgba(40,53,79,.12) 82%,rgba(40,53,79,0) 100%),linear-gradient(0deg,rgba(40,53,79,.35),rgba(40,53,79,0) 30%)}
 }
 @media (max-width:900px){
-  .hero.ph{background-position:62% 8%;background-size:auto 78%;background-repeat:no-repeat;background-color:var(--navy)}
+  .hero.ph{background-position:50% 12%;background-size:auto 78%;background-repeat:no-repeat;background-color:var(--navy)}
 }
