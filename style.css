@@ -775,16 +775,6 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
 
 /* ---------- Footer (unique): CTA band + brand column ---------- */
 .footer{background:#1b2538;color:#fff;font-size:.95rem;position:relative}
-.ft-cta{background:linear-gradient(115deg,var(--coral) 0%,#e2604d 100%);position:relative;overflow:hidden}
-.ft-cta::before{content:"";position:absolute;right:-60px;top:-120px;width:420px;height:420px;border-radius:50%;border:1px solid rgba(255,255,255,.28);box-shadow:0 0 0 46px rgba(255,255,255,.07),0 0 0 92px rgba(255,255,255,.05)}
-.ft-cta-in{position:relative;display:flex;align-items:center;justify-content:space-between;gap:28px 40px;flex-wrap:wrap;padding:clamp(34px,4.5vw,54px) 0}
-.ft-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.85;margin-bottom:8px}
-.ft-title{font:700 clamp(1.5rem,2.8vw,2.3rem)/1.15 var(--serif);max-width:560px}
-.ft-cta-btns{display:flex;align-items:center;gap:18px 28px;flex-wrap:wrap}
-.ft-cta .btn-coral{background:var(--navy);box-shadow:0 14px 28px -12px rgba(15,22,38,.7)}
-.ft-cta .btn-coral:hover{background:#fff;color:var(--navy)}
-.ft-call{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font:400 1.35rem/1 var(--serif);border-bottom:1px solid rgba(255,255,255,.55);padding-bottom:4px}
-.ft-call svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ft-main{display:grid;grid-template-columns:1.2fr .95fr 1.15fr .75fr;gap:clamp(32px,4vw,64px);padding:clamp(48px,6vw,76px) 0 clamp(36px,4vw,52px)}
 .ft-logo{display:inline-block;text-decoration:none;color:#fff;line-height:1}
 .ft-logo span{display:block;font:400 1.9rem/1 var(--serif);letter-spacing:.34em;padding-left:.34em}
@@ -811,10 +801,6 @@ main h2,main h2.coral{font-family:"Quincy CF Text Bold","Quincy CF Text Semibold
 @media (max-width:1000px){.ft-main{grid-template-columns:1fr 1fr}}
 @media (max-width:900px){.footer{padding-bottom:78px}}
 @media (max-width:640px){
-  .ft-cta-in{flex-direction:column;align-items:flex-start;gap:20px;padding:34px 0}
-  .ft-title{font-size:1.45rem}
-  .ft-cta-btns{width:100%;flex-direction:column;align-items:stretch;gap:16px;text-align:center}
-  .ft-call{justify-content:center;align-self:center}
   .ft-main{grid-template-columns:1fr;gap:34px;padding:40px 0 30px}
   .ft-brand{text-align:left}
   .ft-logo span{font-size:1.5rem}
