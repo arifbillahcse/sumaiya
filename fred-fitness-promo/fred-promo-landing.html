@@ -1,0 +1,457 @@
+<!--
+  Fred Fitness — Santa Monica grand-opening promo landing page.
+  Paste this whole file into a single Elementor "HTML" widget (see README.md).
+  Everything is scoped under .ffp, so nothing here touches the rest of the site.
+
+  Edit points:
+    - Offer end:   data-end / data-tz on the .ffp root below (labels + countdown follow it).
+    - CTA links:   search for "fredfitness.com/membership" and "fredfitness.com/assessment".
+    - Photos:      each .ffp-ph block is a placeholder; drop an <img src="..." alt="..."> inside it
+                   and delete its <figcaption class="ffp-tag">.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Poppins:wght@400;500;600;700;800&amp;display=swap">
+
+<style>
+/* ---------- tokens + local reset (scoped) ---------- */
+.ffp{
+  --ffp-amber:#EFAE0C; --ffp-amber-hi:#FFC21F;
+  --ffp-green:#0B392C; --ffp-sage:#637660; --ffp-ink:#1A201E; --ffp-black:#0F0F0F;
+  --ffp-paper:#F9F8F4; --ffp-text:#3A3F3D; --ffp-mint:#A9C0B4;
+  --ffp-display:'Montserrat','Poppins',Arial,sans-serif;
+  --ffp-body:'Poppins',Arial,sans-serif;
+  --ffp-pad:clamp(20px,3.8vw,48px);
+  display:block; position:relative; width:100%;
+  font-family:var(--ffp-body); font-size:16px; line-height:1.6; font-weight:400;
+  color:var(--ffp-ink); background:var(--ffp-paper); text-align:left;
+  -webkit-font-smoothing:antialiased; overflow-x:clip;
+}
+.ffp *,.ffp *::before,.ffp *::after{box-sizing:border-box}
+.ffp h1,.ffp h2,.ffp h3,.ffp p,.ffp figure,.ffp ul,.ffp ol,.ffp blockquote,.ffp dl,.ffp dd,.ffp dt{margin:0;padding:0}
+.ffp ul,.ffp ol{list-style:none}
+.ffp a{color:inherit;text-decoration:none;background:transparent}
+.ffp img{display:block;max-width:100%;height:auto}
+.ffp .ffp-wrap{max-width:1280px;margin:0 auto;padding-left:var(--ffp-pad);padding-right:var(--ffp-pad)}
+.ffp .ffp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- shared type + buttons ---------- */
+.ffp .ffp-eyebrow{font:800 .72rem/1.4 var(--ffp-body);letter-spacing:.16em;text-transform:uppercase;color:var(--ffp-amber);margin:0 0 1rem}
+.ffp .ffp-eyebrow--sage{color:var(--ffp-sage)}
+.ffp .ffp-eyebrow--ink{color:#111}
+.ffp .ffp-h2{font:900 clamp(2.1rem,1.2rem + 2.6vw,3.4rem)/1.02 var(--ffp-display);letter-spacing:-.02em;text-transform:uppercase;color:var(--ffp-green)}
+.ffp .ffp-h2--light{color:#fff}
+.ffp .ffp-aside{font:400 .95rem/1.7 var(--ffp-body);color:var(--ffp-text);max-width:24rem}
+.ffp .ffp-aside--light{color:#a9aeab}
+.ffp .ffp-btn{
+  display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:3.25rem;
+  padding:.9rem 2rem;border:2px solid transparent;border-radius:6px;cursor:pointer;
+  font:800 .85rem/1.2 var(--ffp-body);letter-spacing:.06em;text-transform:uppercase;
+  transition:background-color .15s,color .15s,transform .15s,border-color .15s;
+}
+.ffp .ffp-btn--amber{background:var(--ffp-amber);color:#111}
+.ffp .ffp-btn--amber:hover{background:var(--ffp-amber-hi);color:#111;transform:translateY(-1px)}
+.ffp .ffp-btn--ghost{border-color:#fff;color:#fff;background:transparent}
+.ffp .ffp-btn--ghost:hover{background:#fff;color:#111}
+.ffp .ffp-btn--dark{background:#111;color:#fff}
+.ffp .ffp-btn--dark:hover{background:#000;color:#fff;transform:translateY(-1px)}
+.ffp .ffp-btn--sm{min-height:2.5rem;padding:.55rem 1.4rem;font-size:.75rem}
+.ffp a:focus-visible,.ffp summary:focus-visible{outline:3px solid #fff;outline-offset:3px;box-shadow:0 0 0 6px #111}
+
+/* ---------- photo placeholders ---------- */
+.ffp .ffp-ph{position:relative;overflow:hidden;border-radius:8px;background:var(--ph,#0B392C)}
+.ffp .ffp-ph>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ffp .ffp-tag{
+  position:absolute;left:1rem;right:1rem;bottom:1rem;padding:.7rem .9rem;border:1px dashed #F4C94A;border-radius:6px;
+  background:rgba(0,0,0,.28);color:#FFD866;font:800 .66rem/1.5 var(--ffp-body);letter-spacing:.14em;text-transform:uppercase;
+}
+
+/* ---------- announcement bar ---------- */
+.ffp .ffp-bar{background:var(--ffp-amber);color:#111;text-align:center;padding:.65rem var(--ffp-pad);
+  font:800 .7rem/1.4 var(--ffp-body);letter-spacing:.1em;text-transform:uppercase;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.2rem 1.1rem}
+.ffp .ffp-bar span+span::before{content:"";display:inline-block;width:.38rem;height:.38rem;border-radius:50%;background:rgba(0,0,0,.5);margin-right:1.1rem;vertical-align:.12em}
+
+/* ---------- hero ---------- */
+.ffp .ffp-hero{position:relative;background:linear-gradient(180deg,#181C1B 0%,#0F0F0F 100%);color:#fff;overflow:hidden}
+.ffp .ffp-hero__bg{position:absolute;inset:0;margin:0;border-radius:0;background:transparent}
+.ffp .ffp-hero__bg .ffp-tag{left:auto;right:var(--ffp-pad);bottom:1.5rem;max-width:26rem}
+.ffp .ffp-head{position:relative;z-index:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.5rem;padding-top:1.3rem;padding-bottom:1.3rem}
+.ffp .ffp-logo{font:900 1.3rem/1 var(--ffp-display);letter-spacing:-.01em;text-transform:uppercase;color:#fff}
+.ffp .ffp-logo sup{font-size:.4em;vertical-align:super;margin-left:.1em}
+.ffp .ffp-head__right{display:flex;align-items:center;gap:1.5rem}
+.ffp .ffp-phone{font:700 .85rem/1 var(--ffp-body);color:#fff;letter-spacing:.02em}
+.ffp .ffp-phone:hover{color:var(--ffp-amber)}
+.ffp .ffp-hero__body{position:relative;z-index:2;padding-top:clamp(2.2rem,7vw,6.2rem);padding-bottom:clamp(2.5rem,5vw,4.5rem)}
+.ffp .ffp-h1{font:900 clamp(2.6rem,1.2rem + 6.4vw,6.5rem)/.98 var(--ffp-display);letter-spacing:-.02em;text-transform:uppercase;color:#fff;margin:0 0 1.6rem}
+.ffp .ffp-br{display:none}
+.ffp .ffp-lead{font:400 clamp(1rem,.9rem + .5vw,1.25rem)/1.55 var(--ffp-body);color:#e6e8e7;max-width:36rem;margin:0 0 2rem}
+.ffp .ffp-deal{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1.2rem 3.2rem;margin:0 0 2rem}
+.ffp .ffp-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .8rem}
+.ffp .ffp-price__then{font:800 .75rem/1 var(--ffp-body);letter-spacing:.16em;text-transform:uppercase;color:var(--ffp-amber)}
+.ffp .ffp-price__amt{font:900 clamp(3.4rem,2rem + 4.4vw,5.6rem)/.9 var(--ffp-display);letter-spacing:-.04em;color:#fff}
+.ffp .ffp-price__per{font:400 .95rem/1.4 var(--ffp-body);color:#e6e8e7}
+.ffp .ffp-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem .7rem}
+.ffp .ffp-count__label{font:800 .72rem/1 var(--ffp-body);letter-spacing:.16em;text-transform:uppercase;color:#9b9f9d;margin-right:.3rem}
+.ffp .ffp-count__u{display:inline-flex;align-items:baseline;gap:.25rem}
+.ffp .ffp-count__n{font:900 clamp(1.7rem,1.3rem + 1.2vw,2.3rem)/1 var(--ffp-display);color:#fff;font-variant-numeric:tabular-nums}
+.ffp .ffp-count__k{font:800 .7rem/1 var(--ffp-body);letter-spacing:.1em;color:#9b9f9d;margin-right:.35rem}
+.ffp .ffp-actions{display:flex;flex-wrap:wrap;gap:.9rem}
+
+/* ---------- stats strip ---------- */
+.ffp .ffp-stats{background:var(--ffp-green);color:#fff}
+.ffp .ffp-stats__grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.ffp .ffp-stat{padding:1.7rem 1.4rem 1.7rem 1.4rem;border-left:1px solid rgba(255,255,255,.16)}
+.ffp .ffp-stat:first-child{border-left:0;padding-left:0}
+.ffp .ffp-stat__n{display:flex;align-items:center;gap:.5rem;font:900 clamp(1.7rem,1.2rem + 1.5vw,2.3rem)/1.1 var(--ffp-display);letter-spacing:-.01em}
+.ffp .ffp-stat__n--amber{color:var(--ffp-amber)}
+.ffp .ffp-stat__n svg{width:.95em;height:.95em;fill:var(--ffp-amber);flex:none}
+.ffp .ffp-stat__l{font:800 .68rem/1.5 var(--ffp-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ffp-mint);margin-top:.35rem}
+
+/* ---------- generic section ---------- */
+.ffp .ffp-sec{padding:clamp(3.5rem,8vw,6.5rem) 0}
+.ffp .ffp-sec--dark{background:var(--ffp-ink);color:#fff}
+.ffp .ffp-sec__head{display:grid;grid-template-columns:1.25fr 1fr;gap:1.5rem 3rem;align-items:end;margin-bottom:clamp(1.8rem,4vw,3rem)}
+.ffp .ffp-sec__head .ffp-aside{justify-self:end}
+
+/* ---------- the floor ---------- */
+.ffp .ffp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.ffp .ffp-card .ffp-ph{aspect-ratio:1/1.02;margin-bottom:1.1rem}
+.ffp .ffp-card__t{font:900 1.05rem/1.2 var(--ffp-display);letter-spacing:-.01em;text-transform:uppercase;color:var(--ffp-green);margin:0 0 .5rem}
+.ffp .ffp-card__p{font:400 .88rem/1.65 var(--ffp-text);color:var(--ffp-text)}
+
+/* ---------- bio age ---------- */
+.ffp .ffp-bio{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:clamp(2.5rem,6vw,5rem)}
+.ffp .ffp-bio .ffp-ph{min-height:22rem}
+.ffp .ffp-bio__card{background:var(--ffp-green);color:#fff;border-radius:8px;padding:clamp(1.8rem,3.4vw,3rem)}
+.ffp .ffp-bio__card .ffp-h2{margin-bottom:1.2rem}
+.ffp .ffp-bio__p{font:400 1rem/1.65 var(--ffp-body);color:#d3e3da;max-width:28rem;margin:0 0 1.6rem}
+.ffp .ffp-bio__grid{display:grid;grid-template-columns:auto auto;justify-content:start;gap:1.2rem 2.6rem;margin:0 0 1.9rem}
+.ffp .ffp-bio__grid dt{font:900 1.55rem/1.1 var(--ffp-display);letter-spacing:-.02em;color:#fff}
+.ffp .ffp-bio__grid dd{font:400 .78rem/1.3 var(--ffp-body);color:var(--ffp-mint)}
+
+/* ---------- classes ---------- */
+.ffp .ffp-sched{border-bottom:1px solid #2c3431}
+.ffp .ffp-sched li{display:grid;grid-template-columns:7.4rem 1fr auto;align-items:center;gap:.3rem 1rem;padding:1.15rem 0;border-top:1px solid #2c3431}
+.ffp .ffp-sched__day{font:800 .72rem/1.3 var(--ffp-body);letter-spacing:.16em;text-transform:uppercase;color:var(--ffp-amber)}
+.ffp .ffp-sched__cls{font:400 1rem/1.4 var(--ffp-body);color:#a8aeab}
+.ffp .ffp-sched__cls b{font-weight:700;color:#fff}
+.ffp .ffp-sched__time{font:400 .95rem/1.3 var(--ffp-body);color:#fff;white-space:nowrap}
+
+/* ---------- testimonials ---------- */
+.ffp .ffp-quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:clamp(1.8rem,4vw,2.6rem)}
+.ffp .ffp-quote{border-top:3px solid var(--ffp-amber);padding-top:1.3rem}
+.ffp .ffp-quote__t{font:700 clamp(1.1rem,.9rem + .7vw,1.45rem)/1.3 var(--ffp-display);color:var(--ffp-green);margin:0 0 .9rem}
+.ffp .ffp-quote__c{font:800 .68rem/1.4 var(--ffp-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ffp-sage);font-style:normal}
+
+/* ---------- offer band ---------- */
+.ffp .ffp-offer{background:var(--ffp-amber);color:#111;padding:clamp(3rem,6vw,5rem) 0}
+.ffp .ffp-offer__grid{display:grid;grid-template-columns:1fr auto;gap:2rem 3rem;align-items:center}
+.ffp .ffp-offer .ffp-h2{color:#111;font-size:clamp(2.2rem,1.2rem + 3.6vw,4rem);line-height:1;margin-bottom:1.3rem}
+.ffp .ffp-offer__p{font:400 1.05rem/1.6 var(--ffp-body);max-width:36rem;margin:0 0 1.1rem}
+.ffp .ffp-checks{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;margin:0 0 1.1rem;font:700 .82rem/1.3 var(--ffp-body)}
+.ffp .ffp-checks li{display:inline-flex;align-items:center;gap:.5rem}
+.ffp .ffp-checks li::before{content:"";width:.7rem;height:.38rem;border-left:2.5px solid #111;border-bottom:2.5px solid #111;transform:rotate(-45deg) translate(1px,-2px)}
+.ffp .ffp-fine{font:400 .74rem/1.5 var(--ffp-body);color:rgba(17,17,17,.7);max-width:38rem}
+.ffp .ffp-offer .ffp-btn{min-width:17rem;min-height:4rem;font-size:.95rem}
+
+/* ---------- find us + faq ---------- */
+.ffp .ffp-find{display:grid;grid-template-columns:1fr 1.1fr;gap:2.5rem clamp(2rem,6vw,5rem)}
+.ffp .ffp-find .ffp-h2{margin-bottom:1.3rem}
+.ffp .ffp-find__p{font:400 .92rem/1.75 var(--ffp-body);color:var(--ffp-text);margin:0 0 1.6rem}
+.ffp .ffp-find__p a{font-weight:600;color:var(--ffp-green);text-decoration:underline;text-underline-offset:3px}
+.ffp .ffp-find .ffp-ph{aspect-ratio:2.4/1.45}
+.ffp .ffp-faq{border-top:1px solid #dcdad3}
+.ffp .ffp-faq details{border-bottom:1px solid #dcdad3}
+.ffp .ffp-faq summary{display:flex;align-items:center;gap:.7rem;padding:1.15rem 0;cursor:pointer;list-style:none;
+  font:800 1.02rem/1.3 var(--ffp-display);letter-spacing:-.01em;color:var(--ffp-green)}
+.ffp .ffp-faq summary::-webkit-details-marker{display:none}
+.ffp .ffp-faq summary::before{content:"";flex:none;border-left:.7rem solid var(--ffp-green);border-top:.4rem solid transparent;border-bottom:.4rem solid transparent;transition:transform .15s}
+.ffp .ffp-faq details[open] summary::before{transform:rotate(90deg)}
+.ffp .ffp-faq details p{font:400 .92rem/1.7 var(--ffp-body);color:var(--ffp-text);padding:0 0 1.2rem 1.4rem;max-width:34rem}
+
+/* ---------- footer ---------- */
+.ffp .ffp-foot{background:#111;color:#fff;padding:1.6rem 0}
+.ffp .ffp-foot__in{display:flex;flex-wrap:wrap;gap:.8rem 2rem;align-items:center;justify-content:space-between}
+.ffp .ffp-foot__brand{font:900 .75rem/1 var(--ffp-display);letter-spacing:.02em;text-transform:uppercase}
+.ffp .ffp-foot__links{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;font:400 .78rem/1.4 var(--ffp-body)}
+.ffp .ffp-foot__links a:hover{color:var(--ffp-amber)}
+
+/* ---------- desktop refinements ---------- */
+@media (min-width:901px){
+  .ffp .ffp-br{display:inline}
+  .ffp .ffp-logo{font-size:1.45rem}
+  .ffp .ffp-lead{max-width:38rem}
+  .ffp .ffp-btn{font-size:.9rem}
+  .ffp .ffp-btn--sm{font-size:.78rem}
+}
+
+/* ---------- tablet / mobile ---------- */
+@media (max-width:900px){
+  .ffp .ffp-stats__grid{grid-template-columns:1fr 1fr}
+  .ffp .ffp-stat:nth-child(odd){border-left:0;padding-left:0}
+  .ffp .ffp-stat:nth-child(n+3){border-top:1px solid rgba(255,255,255,.16)}
+  .ffp .ffp-sec__head,.ffp .ffp-bio,.ffp .ffp-find,.ffp .ffp-offer__grid{grid-template-columns:1fr}
+  .ffp .ffp-sec__head .ffp-aside{justify-self:start}
+  .ffp .ffp-cards,.ffp .ffp-quotes{grid-template-columns:1fr}
+  .ffp .ffp-cards{gap:1.6rem}
+  .ffp .ffp-quotes{gap:1.8rem}
+  .ffp .ffp-card .ffp-ph{aspect-ratio:1/1.08}
+  .ffp .ffp-bio .ffp-ph{min-height:0;aspect-ratio:1/1}
+  .ffp .ffp-offer .ffp-btn{width:100%;min-width:0}
+  .ffp .ffp-hero__bg .ffp-tag{display:none}
+}
+@media (max-width:640px){
+  .ffp .ffp-sched li{grid-template-columns:6.4rem 1fr;grid-template-areas:"day cls" "time cls";align-items:start}
+  .ffp .ffp-sched__day{grid-area:day}
+  .ffp .ffp-sched__cls{grid-area:cls}
+  .ffp .ffp-sched__time{grid-area:time;font-size:.9rem}
+  .ffp .ffp-actions .ffp-btn{width:100%}
+  .ffp .ffp-head__right{gap:1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .ffp .ffp-btn,.ffp .ffp-faq summary::before{transition:none}
+  .ffp .ffp-btn--amber:hover,.ffp .ffp-btn--dark:hover{transform:none}
+}
+</style>
+
+<div class="ffp" id="ffp" data-end="2026-10-31T23:59:59-07:00" data-tz="America/Los_Angeles">
+
+  <!-- Announcement bar -->
+  <div class="ffp-bar">
+    <span>Grand Opening Celebration — First Month Free</span>
+    <span>Ends <span data-ffp-end>Oct 16</span></span>
+    <span>Santa Monica</span>
+  </div>
+
+  <!-- Header + hero -->
+  <section class="ffp-hero" aria-labelledby="ffp-h1">
+    <figure class="ffp-ph ffp-hero__bg">
+      <figcaption class="ffp-tag">[Full-bleed hero photo — member mid-rep on EGYM, brick + natural light]</figcaption>
+    </figure>
+
+    <header class="ffp-wrap ffp-head">
+      <a class="ffp-logo" href="https://fredfitness.com/" aria-label="Fred Fitness home">Fred Fitness<sup>®</sup></a>
+      <div class="ffp-head__right">
+        <a class="ffp-phone" href="tel:+13103943733">(310) 394-3733</a>
+        <a class="ffp-btn ffp-btn--amber ffp-btn--sm" href="https://fredfitness.com/membership/">Join Now</a>
+      </div>
+    </header>
+
+    <div class="ffp-wrap ffp-hero__body">
+      <p class="ffp-eyebrow">LA’s first AI-powered gym · Santa Monica</p>
+      <h1 class="ffp-h1" id="ffp-h1">First month free.<br class="ffp-br"> Lowest rate<br class="ffp-br"> locked in.</h1>
+      <p class="ffp-lead">Celebrate our Santa Monica grand opening with a free month on any 12-month membership.</p>
+
+      <div class="ffp-deal">
+        <div class="ffp-price">
+          <span class="ffp-price__then">Then</span>
+          <span class="ffp-price__amt">$125</span>
+          <span class="ffp-price__per">/month on a 12-month membership</span>
+        </div>
+        <div class="ffp-count" role="timer" aria-label="Time left on the offer">
+          <span class="ffp-count__label">Ends in</span>
+          <span class="ffp-count__u"><b class="ffp-count__n" data-ffp-unit="d">04</b><span class="ffp-count__k">D</span></span>
+          <span class="ffp-count__u"><b class="ffp-count__n" data-ffp-unit="h">06</b><span class="ffp-count__k">H</span></span>
+          <span class="ffp-count__u"><b class="ffp-count__n" data-ffp-unit="m">56</b><span class="ffp-count__k">M</span></span>
+          <span class="ffp-count__u"><b class="ffp-count__n" data-ffp-unit="s">18</b><span class="ffp-count__k">S</span></span>
+        </div>
+      </div>
+
+      <div class="ffp-actions">
+        <a class="ffp-btn ffp-btn--amber" href="https://fredfitness.com/membership/">Claim my free month</a>
+        <a class="ffp-btn ffp-btn--ghost" href="https://fredfitness.com/assessment/">Free Bio Age assessment</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats strip -->
+  <section class="ffp-stats" aria-label="Fred Fitness at a glance">
+    <div class="ffp-wrap ffp-stats__grid">
+      <div class="ffp-stat"><div class="ffp-stat__n">$0</div><div class="ffp-stat__l">Initiation fee</div></div>
+      <div class="ffp-stat"><div class="ffp-stat__n">11,500</div><div class="ffp-stat__l">Sq ft on 4th Street</div></div>
+      <div class="ffp-stat"><div class="ffp-stat__n">5 AM</div><div class="ffp-stat__l">Doors open, Mon–Fri</div></div>
+      <div class="ffp-stat"><div class="ffp-stat__n ffp-stat__n--amber"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l3.1 6.9 7.4.8-5.5 5 1.6 7.4L12 17.8 5.4 21.6 7 14.2 1.5 9.2l7.4-.8z"/></svg>5.0</div><div class="ffp-stat__l">Google rating</div></div>
+    </div>
+  </section>
+
+  <!-- The floor -->
+  <section class="ffp-sec" aria-labelledby="ffp-floor">
+    <div class="ffp-wrap">
+      <div class="ffp-sec__head">
+        <div>
+          <p class="ffp-eyebrow ffp-eyebrow--sage">The floor</p>
+          <h2 class="ffp-h2" id="ffp-floor">Every machine<br class="ffp-br"> knows your body</h2>
+        </div>
+        <p class="ffp-aside">Your Bio Age assessment loads into the equipment. Seats, weight and range of motion set themselves. You just train.</p>
+      </div>
+
+      <div class="ffp-cards">
+        <article class="ffp-card">
+          <figure class="ffp-ph" style="--ph:#0B392C"><figcaption class="ffp-tag">[Photo — EGYM Genius strength circuit]</figcaption></figure>
+          <h3 class="ffp-card__t">EGYM Genius Strength</h3>
+          <p class="ffp-card__p">AI-guided, gamified strength circuit. Adapts every set to your data.</p>
+        </article>
+        <article class="ffp-card">
+          <figure class="ffp-ph" style="--ph:#637660"><figcaption class="ffp-tag">[Photo — Matrix cardio row, window light]</figcaption></figure>
+          <h3 class="ffp-card__t">Matrix Cardio</h3>
+          <p class="ffp-card__p">Industry-leading treadmills, bikes and rowers, synced to your plan in the Fred app.</p>
+        </article>
+        <article class="ffp-card">
+          <figure class="ffp-ph" style="--ph:#1A201E"><figcaption class="ffp-tag">[Photo — Functional zone / recovery]</figcaption></figure>
+          <h3 class="ffp-card__t">Functional + Recovery</h3>
+          <p class="ffp-card__p">Free weights, mobility space, recovery tools and longevity products curated with Dr Robert Lufkin.</p>
+        </article>
+      </div>
+
+      <!-- Bio age -->
+      <div class="ffp-bio">
+        <figure class="ffp-ph" style="--ph:#0B392C"><figcaption class="ffp-tag">[Photo — Assessment: body comp scan / trainer with tablet]</figcaption></figure>
+        <div class="ffp-bio__card">
+          <p class="ffp-eyebrow">Step one · Free with this offer</p>
+          <h2 class="ffp-h2 ffp-h2--light">Find out your<br class="ffp-br"> Bio Age</h2>
+          <p class="ffp-bio__p">Body composition, mobility, strength and cardio in one session. The number tells you where you stand; the plan it generates tells you what to do about it. Reg. $100 — free when you join.</p>
+          <dl class="ffp-bio__grid">
+            <div><dt>Body comp</dt><dd>Fat, muscle, water</dd></div>
+            <div><dt>Mobility</dt><dd>Range of motion</dd></div>
+            <div><dt>Strength</dt><dd>Every major lift</dd></div>
+            <div><dt>Cardio</dt><dd>VO2 estimate</dd></div>
+          </dl>
+          <a class="ffp-btn ffp-btn--amber" href="https://fredfitness.com/assessment/">Book my assessment</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Classes -->
+  <section class="ffp-sec ffp-sec--dark" aria-labelledby="ffp-classes">
+    <div class="ffp-wrap">
+      <div class="ffp-sec__head">
+        <div>
+          <p class="ffp-eyebrow">Humans, too</p>
+          <h2 class="ffp-h2 ffp-h2--light" id="ffp-classes">Classes included.<br class="ffp-br"> Every week.</h2>
+        </div>
+        <p class="ffp-aside ffp-aside--light">Human-led, complimentary for members. Current Santa Monica schedule.</p>
+      </div>
+      <ul class="ffp-sched">
+        <li><span class="ffp-sched__day">Mon</span><span class="ffp-sched__cls"><b>Myofascial Release</b> · Betsy</span><span class="ffp-sched__time">10:00 AM</span></li>
+        <li><span class="ffp-sched__day">Mon</span><span class="ffp-sched__cls"><b>Glute Envy</b> · Ana</span><span class="ffp-sched__time">6:30 PM</span></li>
+        <li><span class="ffp-sched__day">Tue · Thu</span><span class="ffp-sched__cls"><b>Mat Pilates</b> · Gabriela</span><span class="ffp-sched__time">6:30 PM</span></li>
+        <li><span class="ffp-sched__day">Wed</span><span class="ffp-sched__cls"><b>Full Body Circuit</b> · Lynn</span><span class="ffp-sched__time">11:00 AM</span></li>
+        <li><span class="ffp-sched__day">Wed · Fri</span><span class="ffp-sched__cls"><b>Intense Core</b> · Ana</span><span class="ffp-sched__time">6:30 PM</span></li>
+        <li><span class="ffp-sched__day">Fri</span><span class="ffp-sched__cls"><b>Hip Mobility &amp; Core Stability</b> · Betsy</span><span class="ffp-sched__time">10:00 AM</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="ffp-sec" aria-labelledby="ffp-reviews">
+    <div class="ffp-wrap">
+      <h2 class="ffp-h2" id="ffp-reviews">From the floor</h2>
+      <div class="ffp-quotes">
+        <figure class="ffp-quote" style="margin:0">
+          <blockquote class="ffp-quote__t">“The machines are easy to use and adjust to your size.”</blockquote>
+          <figcaption class="ffp-quote__c">Connor Y. · Google</figcaption>
+        </figure>
+        <figure class="ffp-quote" style="margin:0">
+          <blockquote class="ffp-quote__t">“The AI-powered equipment and personalized feedback made the workout efficient and engaging.”</blockquote>
+          <figcaption class="ffp-quote__c">Lauren S. · Google</figcaption>
+        </figure>
+        <figure class="ffp-quote" style="margin:0">
+          <blockquote class="ffp-quote__t">“I walk in and don’t have to think about what my workout is going to be.”</blockquote>
+          <figcaption class="ffp-quote__c">Megan E. · Google</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offer band -->
+  <section class="ffp-offer" aria-labelledby="ffp-offer">
+    <div class="ffp-wrap ffp-offer__grid">
+      <div>
+        <p class="ffp-eyebrow ffp-eyebrow--ink">Grand opening celebration — first month free · Valid Oct 13–<span data-ffp-end-day>16</span></p>
+        <h2 class="ffp-h2" id="ffp-offer">First month free.<br class="ffp-br"> Lowest rate locked in.</h2>
+        <p class="ffp-offer__p">Join on a 12-month membership and your first month is on us. Lock in $125/month, $0 initiation, $0 assessment, 12 guest passes a year.</p>
+        <ul class="ffp-checks">
+          <li>$0 initiation</li><li>$0 assessment</li><li>Classes included</li><li>Santa Monica only</li>
+        </ul>
+        <p class="ffp-fine">[FINE PRINT — commitment terms, cancellation notice, new members only, cannot be combined with other offers]</p>
+      </div>
+      <a class="ffp-btn ffp-btn--dark" href="https://fredfitness.com/membership/">Claim my free month</a>
+    </div>
+  </section>
+
+  <!-- Find us + FAQ -->
+  <section class="ffp-sec" aria-labelledby="ffp-find">
+    <div class="ffp-wrap ffp-find">
+      <div>
+        <p class="ffp-eyebrow ffp-eyebrow--sage">Find us</p>
+        <h2 class="ffp-h2" id="ffp-find">1344 4th St<br class="ffp-br"> Santa Monica</h2>
+        <p class="ffp-find__p">Between Arizona Ave and Santa Monica Blvd.<br>Mon–Fri 5 AM–10 PM · Sat–Sun 6 AM–8 PM<br><a href="tel:+13103943733">(310) 394-3733</a> · <a href="mailto:info@fredfitness.com">info@fredfitness.com</a></p>
+        <figure class="ffp-ph" style="--ph:#637660"><figcaption class="ffp-tag">[Photo — 4th Street storefront]</figcaption></figure>
+      </div>
+      <div>
+        <p class="ffp-eyebrow ffp-eyebrow--sage">Questions</p>
+        <div class="ffp-faq">
+          <details><summary>Do you have humans there?</summary><p>Yes! We have a lovely team that provides ongoing support. We also offer human-led classes, such as Mat Pilates, which are complimentary to our members.</p></details>
+          <details><summary>What is AI-powered fitness?</summary><p>Your fitness assessment data, preferences, chat input, and goal selections are processed to generate a tailored training plan that is based on exercise science. All equipment adapts to your height, strength, range of motion, and your plan – completely removing the guesswork from your workout.</p></details>
+          <details><summary>I’m a beginner. Is this for me?</summary><p>Yes. Whether you’re a beginner or an experienced athlete, the equipment adapts to your preferences and goals, and our team is there to help you get started.</p></details>
+          <details><summary>Is there a day pass?</summary><p>Yes! Your first day pass is free ($40 thereafter). If you’re just visiting, we also offer week passes.</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="ffp-foot">
+    <div class="ffp-wrap ffp-foot__in">
+      <span class="ffp-foot__brand">Fred Fitness® · © 2026</span>
+      <nav class="ffp-foot__links" aria-label="Legal">
+        <a href="https://fredfitness.com/privacy-policy/">Privacy Policy</a>
+        <a href="https://fredfitness.com/terms-of-use/">Terms of Use</a>
+        <a href="https://www.instagram.com/fredfitnessofficial/" rel="noopener">@fredfitnessofficial</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var roots = document.querySelectorAll('.ffp[data-end]');
+  Array.prototype.forEach.call(roots, function (root) {
+    var end = Date.parse(root.getAttribute('data-end'));
+    if (isNaN(end)) { return; }
+
+    // Date labels follow data-end (in the offer's timezone).
+    try {
+      var tz = root.getAttribute('data-tz') || 'America/Los_Angeles';
+      var f = new Intl.DateTimeFormat('en-US', { timeZone: tz, month: 'short', day: 'numeric' }).formatToParts(new Date(end));
+      var mon = '', day = '';
+      f.forEach(function (p) { if (p.type === 'month') { mon = p.value; } if (p.type === 'day') { day = p.value; } });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-ffp-end]'), function (el) { el.textContent = mon + ' ' + day; });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-ffp-end-day]'), function (el) { el.textContent = day; });
+    } catch (e) { /* keep the static fallback text */ }
+
+    var els = {
+      d: root.querySelector('[data-ffp-unit="d"]'),
+      h: root.querySelector('[data-ffp-unit="h"]'),
+      m: root.querySelector('[data-ffp-unit="m"]'),
+      s: root.querySelector('[data-ffp-unit="s"]')
+    };
+    if (!els.d || !els.h || !els.m || !els.s) { return; }
+
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    function tick() {
+      var diff = Math.max(0, end - Date.now());
+      var s = Math.floor(diff / 1000);
+      els.d.textContent = pad(Math.floor(s / 86400));
+      els.h.textContent = pad(Math.floor(s % 86400 / 3600));
+      els.m.textContent = pad(Math.floor(s % 3600 / 60));
+      els.s.textContent = pad(s % 60);
+      if (diff === 0) { clearInterval(timer); root.classList.add('ffp-ended'); }
+    }
+    var timer = setInterval(tick, 1000);
+    tick();
+  });
+})();
+</script>
