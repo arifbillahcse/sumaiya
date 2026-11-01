@@ -2,6 +2,14 @@
 
 Versions follow `MAJOR.MINOR.PATCH`. The number lives in the `VERSION` file and is shown by `php cli/doctor.php`.
 
+## 1.5.0 - daily entries with sheet fields (client requirements, complete)
+
+* **Daily entry form on Trip Details** ("Add daily entry"): Job #, Date, Activity, Foreman, From, To, the sheet fields and expenses in one step. An entry never creates a job.
+* **One entry per job per day.** The same Job # and the same date in one trip is refused with a clear message (edit that day's entry instead); other dates are allowed. Entries without a date are never defaulted and never counted as a repeat. A future need for several entries on one day is a switch, `TRIP_SAME_DAY_ENTRIES=true` in `.env`; there is no database unique key on trip entries.
+* **Sheet fields** Grand, Job Beg, Depo, Addio, Total to BH are stored exactly as typed (money gated by the trips.financials permission). No formula is applied and they are not added to "Total expenses" (BH is likewise outside the six expense columns); their meaning is an open question for the client (see docs/ASSUMPTIONS).
+* Labels Helpers, MISC, Remarks; trip table/CSV order keeps BH then Foreman after the sheet fields.
+* **Upgrade:** `git pull origin main`, `php cli/migrate.php` (013, 014, 015), `php cli/doctor.php`, `php cli/verify.php`.
+
 ## 1.4.4 - a new Job and a daily entry are two different things (client clarification)
 
 * **New Job: the Job Number is unique, always.** A second job with the same Job # can never be created, in any letter case (`se1` and `SE1` are the same number), including a number that belongs to a deleted job in the Trash. The error is now clear: it names the number, says a Job # can only be used for one job, and tells the user to **add an entry to the job's trip** instead (for a deleted job: that it is in the Trash and can be restored). The database also refuses it on its own.

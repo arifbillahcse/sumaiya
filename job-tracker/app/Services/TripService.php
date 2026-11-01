@@ -22,6 +22,12 @@ final class TripService
     /** What a row records: the same job can be on a trip several times, once per activity and date. */
     public const ACTIVITIES = ['pickup' => 'Pickup', 'delivery' => 'Delivery', 'other' => 'Other'];
 
+    /** One entry per job per day unless TRIP_SAME_DAY_ENTRIES=true (assumption BB2). */
+    public static function sameDayAllowed(): bool
+    {
+        return (bool) \App\Core\Config::get('app.trips.same_day_entries', false);
+    }
+
     private const TEXT = ['job_number', 'job_date', 'activity', 'from_location', 'to_location', 'foreman_id', 'bh', 'remark'];
 
     /** Job rows one trip may hold. Each row posts up to 12 fields and PHP drops everything past max_input_vars (default 1000), so more would be cut off silently. */
@@ -171,7 +177,7 @@ final class TripService
     {
         $firstEntry = !array_filter($this->trips->rows($tripId), static fn (array $r): bool => (int) $r['job_id'] === $jobId);
         $result = $this->addJobRow($tripId, $jobId, $date, $activity, $allowRepeat);
-        if (($result === 'ok' || $result === 'ok_same') && $firstEntry) {
+        if ($result === 'ok' && $firstEntry) {
             // The job is now assigned to this trip, and to its foreman (a second entry of the same job changes nothing).
             \App\Core\Database::execute('UPDATE jobs SET trip_id = ?, foreman_id = ? WHERE id = ?', [$tripId, (int) $this->trips->find($tripId)['foreman_id'], $jobId]);
         }
@@ -179,25 +185,100 @@ final class TripService
     }
 
     /**
-     * Adds a job, typed by its job number, to a trip (the "Add job" box on the trip page).
+     * Records ONE daily entry of an existing job on a trip, with that day's own expenses (the "Add daily entry" form on the trip page).
+     * It refers to the job by id and never creates a job. The same job may have an entry on every date of the trip; the exact same
+     * job + date twice is refused (unless same-day entries are switched on). A job that was only assigned to the trip (an undated,
+     * empty placeholder entry) has that placeholder filled in instead of getting a second line.
      *
-     * @return string 'ok', 'ok_same' (added; an entry exactly like it already existed), 'no_trip', 'no_job' (unknown number), 'bad_date' or 'bad_activity'
+     * @param array<string,mixed> $input job_number, job_date, activity, from_location, to_location, foreman_id, bh, remark, the expense and sheet fields
+     * @return array{result:string,errors:array<int,string>,date:?string,job:string}
+     *         result: 'ok', 'no_trip', 'no_number', 'no_job' (unknown number), 'same_day' or 'invalid'
      */
-    public function addJobByNumber(int $tripId, string $jobNumber, ?string $date = null, ?string $activity = null): string
+    public function addEntry(int $tripId, array $input): array
     {
-        $job = trim($jobNumber) === '' ? null : $this->trips->findJobByNumber(trim($jobNumber));
+        $trip = $this->trips->find($tripId);
+        $withMoney = $this->canSeeFinancials();
+        $clean = [];
+        foreach ([...self::TEXT, ...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS, ...TripRepository::SHEET_TEXT] as $field) {
+            $value = $input[$field] ?? '';
+            $clean[$field] = is_scalar($value) ? trim((string) $value) : '';
+        }
+        $out = static fn (string $result, array $errors = [], ?string $date = null): array => ['result' => $result, 'errors' => $errors, 'date' => $date, 'job' => $clean['job_number']];
+        if ($trip === null) {
+            return $out('no_trip');
+        }
+        if ($clean['job_number'] === '') {
+            return $out('no_number');
+        }
+        $job = $this->trips->findJobByNumber($clean['job_number']);
         if ($job === null) {
-            return $this->trips->find($tripId) === null ? 'no_trip' : 'no_job';
+            return $out('no_job');
         }
-        $date = ($date === null || trim($date) === '') ? null : trim($date);
-        if ($date !== null && (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) !== 1 || !checkdate((int) substr($date, 5, 2), (int) substr($date, 8, 2), (int) substr($date, 0, 4)))) {
-            return 'bad_date';
+        $validator = Validator::make($clean, TripRules::row($withMoney), TripRules::labels());
+        if (!$validator->passes()) {
+            return $out('invalid', array_merge(...array_values($validator->errors())));
         }
-        $activity = ($activity === null || $activity === '') ? null : $activity;
-        if ($activity !== null && !isset(self::ACTIVITIES[$activity])) {
-            return 'bad_activity';
+        $valid = $validator->validated();
+        $date = ($valid['job_date'] ?? null) ?: null;
+
+        $placeholder = null;
+        foreach ($this->trips->rows($tripId) as $row) {
+            if ((int) $row['job_id'] !== (int) $job['id']) {
+                continue;
+            }
+            if ($date !== null && !self::sameDayAllowed() && (string) ($row['job_date'] ?? '') === $date) {
+                return $out('same_day', [], $date);
+            }
+            if ($placeholder === null && self::isPlaceholder($row)) {
+                $placeholder = $row;
+            }
         }
-        return $this->addJob($tripId, (int) $job['id'], $date, $activity, true);
+        $hadRow = (bool) array_filter($this->trips->rows($tripId), static fn (array $r): bool => (int) $r['job_id'] === (int) $job['id']);
+
+        $row = [
+            'job_id' => (int) $job['id'], 'job_number' => (string) $job['job_number'],
+            'customer_name' => trim($job['customer_first_name'] . ' ' . $job['customer_last_name']),
+            'job_date' => $date, 'activity' => ($valid['activity'] ?? null) ?: null,
+            'from_location' => ($valid['from_location'] ?? null) ?: $job['from_location'],
+            'to_location' => ($valid['to_location'] ?? null) ?: ($job['to_location'] ?? null),
+            'foreman_id' => ($valid['foreman_id'] ?? null) !== null && ($valid['foreman_id'] ?? '') !== '' ? (int) $valid['foreman_id'] : (int) $trip['foreman_id'],
+            'bh' => $valid['bh'] ?? null, 'remark' => $valid['remark'] ?? null,
+        ];
+        foreach ([...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $field) {
+            $row[$field] = $withMoney ? $this->decimal($valid[$field] ?? null) : null;
+        }
+        $row['job_beg'] = $withMoney ? (($valid['job_beg'] ?? null) ?: null) : null;
+
+        if ($placeholder !== null && $date !== null) {
+            $this->trips->fillRow((int) $placeholder['id'], $row, Auth::id());
+        } else {
+            $this->trips->appendRow($tripId, $row, Auth::id());
+        }
+        if (!$hadRow) {
+            \App\Core\Database::execute('UPDATE jobs SET trip_id = ?, foreman_id = ? WHERE id = ?', [$tripId, (int) $trip['foreman_id'], (int) $job['id']]);
+        }
+        AuditService::record('trip_updated', 'trip', $tripId, ['jobs' => (int) $trip['job_count']], [
+            'jobs_added' => [(string) $job['job_number'] . ($date !== null ? ' (' . $date . ($row['activity'] !== null ? ' ' . self::ACTIVITIES[$row['activity']] : '') . ')' : '')],
+            ...($withMoney ? ['entry_expenses' => $this->entryTotal($row)] : []),
+        ]);
+        return $out('ok', [], $date);
+    }
+
+    /** An undated entry with nothing in it: what assigning a job to a trip leaves behind, waiting for its first real entry. */
+    private static function isPlaceholder(array $row): bool
+    {
+        foreach (['job_date', 'activity', 'bh', 'remark', 'job_beg', ...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $f) {
+            if (($row[$f] ?? null) !== null && $row[$f] !== '') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** @param array<string,mixed> $row */
+    private function entryTotal(array $row): string
+    {
+        return TripTotals::forRows([$row])['total'];
     }
 
     /**
@@ -206,7 +287,6 @@ final class TripService
      */
     private function addJobRow(int $tripId, int $jobId, ?string $date = null, ?string $activity = null, bool $allowRepeat = false): string
     {
-        $same = false;
         $trip = $this->trips->find($tripId);
         if ($trip === null) {
             return 'no_trip';
@@ -215,7 +295,7 @@ final class TripService
         if ($job === null) {
             return 'no_job';
         }
-        $date = $date ?: ($job['pickup_date'] ?? null);
+        $date = $date ?: null;
         foreach ($this->trips->rows($tripId) as $row) {
             if ((int) $row['job_id'] !== $jobId) {
                 continue;
@@ -223,8 +303,8 @@ final class TripService
             if (!$allowRepeat) {
                 return 'already';
             }
-            if ((string) ($row['job_date'] ?? '') === (string) $date && (string) ($row['activity'] ?? '') === (string) $activity) {
-                $same = true; // a further entry exactly like an existing one: allowed, with a note
+            if ($date !== null && !self::sameDayAllowed() && (string) ($row['job_date'] ?? '') === (string) $date) {
+                return 'same_day'; // that day already has an entry for this job
             }
         }
         $this->trips->appendRow($tripId, [
@@ -234,7 +314,7 @@ final class TripService
             'to_location' => $job['to_location'] ?? null, 'foreman_id' => (int) $trip['foreman_id'],
         ], Auth::id());
         AuditService::record('trip_updated', 'trip', $tripId, ['jobs' => (int) $trip['job_count']], ['jobs_added' => [(string) $job['job_number'] . ($activity !== null ? ' (' . self::ACTIVITIES[$activity] . ($date !== null ? ' ' . $date : '') . ')' : '')]]);
-        return $same ? 'ok_same' : 'ok';
+        return 'ok';
     }
 
     /**
@@ -300,7 +380,7 @@ final class TripService
                 continue;
             }
             $clean = [];
-            foreach ([...self::TEXT, ...TripRepository::MONEY] as $field) {
+            foreach ([...self::TEXT, ...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS, ...TripRepository::SHEET_TEXT] as $field) {
                 $value = $raw[$field] ?? '';
                 $clean[$field] = is_scalar($value) ? trim((string) $value) : '';
             }
@@ -329,12 +409,17 @@ final class TripService
                 $errors[$key . 'job_number'][] = "Row {$number}: job \"{$valid['job_number']}\" was not found (check the job number; deleted jobs cannot be added). A trip entry is for a job that already exists; it never creates a job, so create the job first under Jobs.";
                 continue;
             }
-            $date = ($valid['job_date'] ?? null) ?: ($job['pickup_date'] ?? null);
+            // The date is what the user typed; it is never filled in (a daily entry is about a day the user names).
+            $date = ($valid['job_date'] ?? null) ?: null;
             $activity = ($valid['activity'] ?? null) ?: null;
-            // The same job can be on a trip as many times as the client likes. Nothing is refused; entries that look exactly alike
-            // (same job, date and activity) only produce a note after saving, because they may be a slip.
-            $entry = (int) $job['id'] . '|' . (string) $date . '|' . (string) $activity;
-            $seen[$entry] = ($seen[$entry] ?? ['count' => 0, 'job' => (string) $job['job_number'], 'date' => $date, 'activity' => $activity]);
+            // One Job # can have many daily entries on a trip, one per date. The exact same job + date twice is refused (a slip), unless
+            // same-day entries are switched on. Entries without a date are never refused, but are noted.
+            $entry = (int) $job['id'] . '|' . (string) $date;
+            if ($date !== null && !self::sameDayAllowed() && isset($seen[$entry])) {
+                $errors[$key . 'job_number'][] = "Row {$number}: job {$job['job_number']} already has an entry on {$date} in this trip. Each day is one entry: change that day's entry instead of adding another, or use another date.";
+                continue;
+            }
+            $seen[$entry] = ($seen[$entry] ?? ['count' => 0, 'job' => (string) $job['job_number'], 'date' => $date]);
             $seen[$entry]['count']++;
 
             $keep = $existing[(int) ($raw['id'] ?? 0)] ?? null;
@@ -352,11 +437,12 @@ final class TripService
                 'bh' => $valid['bh'] ?? null,
                 'remark' => $valid['remark'] ?? null,
             ];
-            foreach (TripRepository::MONEY as $field) {
+            foreach ([...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $field) {
                 $row[$field] = $withMoney
                     ? $this->decimal($valid[$field] ?? null)
                     : ($keep !== null && ($keep[$field] ?? null) !== null ? $this->decimal($keep[$field]) : null);
             }
+            $row['job_beg'] = $withMoney ? (($valid['job_beg'] ?? null) ?: null) : ($keep['job_beg'] ?? null);
             $rows[] = $row;
         }
 
@@ -366,9 +452,8 @@ final class TripService
         foreach ($seen as $e) {
             if ($e['count'] > 1) {
                 $warnings[] = 'Job ' . $e['job'] . ' appears ' . $e['count'] . ' times'
-                    . ($e['date'] !== null && $e['date'] !== '' ? ' on ' . $e['date'] : '')
-                    . ($e['activity'] !== null ? ' as ' . self::ACTIVITIES[$e['activity']] : ' with no activity')
-                    . '. Check that this is what you meant.';
+                    . ($e['date'] !== null && $e['date'] !== '' ? ' on ' . $e['date'] : ' with no date')
+                    . '. Give each entry its own date so the days can be told apart.';
             }
         }
 
@@ -414,7 +499,8 @@ final class TripService
         }
         $sig = static fn (array $list): array => array_map(static fn (array $r): array => [
             (int) $r['job_id'], (string) ($r['job_date'] ?? ''), (string) ($r['activity'] ?? ''), (string) ($r['from_location'] ?? ''), (string) ($r['to_location'] ?? ''), (int) ($r['foreman_id'] ?? 0), (string) ($r['bh'] ?? ''), (string) ($r['remark'] ?? ''),
-            ...array_map(static fn (string $f): string => ($r[$f] ?? null) === null ? '' : number_format((float) $r[$f], 2, '.', ''), TripRepository::MONEY),
+            ...array_map(static fn (string $f): string => ($r[$f] ?? null) === null ? '' : number_format((float) $r[$f], 2, '.', ''), [...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS]),
+            (string) ($r['job_beg'] ?? ''),
         ], $list);
         $rowsChanged = $sig($oldRows) !== $sig($rows);
         if ($rowsChanged) {
@@ -498,7 +584,7 @@ final class TripService
             unset($row['customer_phone']); // a customer's phone number goes with seeing jobs
         }
         if (!$this->canSeeFinancials()) {
-            foreach (TripRepository::MONEY as $field) {
+            foreach ([...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS, ...TripRepository::SHEET_TEXT] as $field) {
                 unset($row[$field]);
             }
         }

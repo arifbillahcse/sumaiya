@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Client requirements v1.5: the required end-to-end scenario (job 346328 on three days of one trip),
+ * sheet fields, one master job, same-day refusal and the flexible switch. Included by tests/run.php.
+ */
+
+use App\Core\Clock;
+use App\Core\Database;
+use App\Repositories\ForemanRepository;
+use App\Repositories\JobRepository;
+
+section('Required scenario: job 346328, one master job, daily entries on one trip');
+fresh_session();
+Clock::fake('2026-10-31');
+$mgr = make_user('Manager', 'p15-mgr@example.com');
+$joe = (new ForemanRepository())->create(['name' => 'Joe', 'phone' => null]);
+sign_in($mgr);
+// 1. trip without any job
+call('POST', '/trips', ['trip_number' => 'P15-T', 'foreman_id' => (string) $joe, 'begins_on' => '2026-10-27', 'ends_on' => '2026-10-31', 'notes' => '']);
+$tid = (int) Database::fetchValue("SELECT id FROM trips WHERE trip_number = 'P15-T'");
+check($tid > 0 && (int) Database::fetchValue('SELECT COUNT(*) FROM trip_jobs WHERE trip_id = ?', [$tid]) === 0, '1. trip created with no job');
+// 2. job once, on that trip
+$r = call('POST', '/jobs', job_input(['job_number' => '346328', 'trip_id' => (string) $tid, 'customer_first_name' => 'Dana', 'customer_last_name' => 'Reed']));
+$jid = (int) Database::fetchValue("SELECT id FROM jobs WHERE job_number = '346328'");
+$job = (new JobRepository())->find($jid);
+check($r->status() === 302 && (int) $job['trip_id'] === $tid && (int) $job['foreman_id'] === $joe, '2. job 346328 created once, on the trip with its foreman');
+// 3. Oct 28 and Oct 29 entries with different expenses
+call('POST', "/trips/{$tid}/jobs", ['job_number' => '346328', 'job_date' => '2026-10-28', 'activity' => 'pickup', 'diesel' => '100.00', 'hotels' => '50.00']);
+call('POST', "/trips/{$tid}/jobs", ['job_number' => '346328', 'job_date' => '2026-10-29', 'activity' => 'other', 'diesel' => '70.00', 'helper' => '30.00', 'bh' => '10.00']);
+$rows = Database::fetchAll('SELECT job_date, diesel, hotels, helper, bh FROM trip_jobs WHERE trip_id = ? AND job_id = ? ORDER BY job_date', [$tid, $jid]);
+check(count($rows) === 2 && $rows[0]['job_date'] === '2026-10-28' && (float) $rows[0]['diesel'] === 100.0 && $rows[1]['job_date'] === '2026-10-29' && (float) $rows[1]['diesel'] === 70.0, '3. two separate entries, each with its own expenses (the empty placeholder was filled, not duplicated)');
+// 4. separate rows in Trip Details
+$page = plain(call('GET', "/trips/{$tid}")->body());
+check(substr_count($page, '346328') >= 2 && str_contains($page, '2026-10-28') && str_contains($page, '2026-10-29') || (str_contains($page, 'Oct 28') && str_contains($page, 'Oct 29')), '4. Trip Details shows both days as separate rows');
+// 5. total includes both days
+$total = (float) Database::fetchValue('SELECT COALESCE(SUM(COALESCE(diesel,0)+COALESCE(hotels,0)+COALESCE(helper,0)+COALESCE(misc,0)+COALESCE(commission,0)+COALESCE(extra,0)),0) FROM trip_jobs WHERE trip_id = ?', [$tid]);
+check($total === 250.0 && str_contains($page, '$250.00'), '5. the trip total ($250.00 = 100+50 on Oct 28, 70+30 on Oct 29; BH is not an expense column) includes both days');
+// same job + same date refused
+call('POST', "/trips/{$tid}/jobs", ['job_number' => '346328', 'job_date' => '2026-10-29', 'diesel' => '1']);
+check((int) Database::fetchValue('SELECT COUNT(*) FROM trip_jobs WHERE trip_id = ? AND job_id = ?', [$tid, $jid]) === 2, 'the same job on the same date is refused');
+// a third day is fine
+call('POST', "/trips/{$tid}/jobs", ['job_number' => '346328', 'job_date' => '2026-10-30', 'activity' => 'delivery', 'diesel' => '5']);
+check((int) Database::fetchValue('SELECT COUNT(*) FROM trip_jobs WHERE trip_id = ? AND job_id = ?', [$tid, $jid]) === 3, 'Oct 30 is a third entry');
+// 6. main Jobs duplicate rejected
+$before = (int) Database::fetchValue('SELECT COUNT(*) FROM jobs');
+call('POST', '/jobs', job_input(['job_number' => '346328', 'customer_first_name' => 'Other']));
+check((int) Database::fetchValue('SELECT COUNT(*) FROM jobs') === $before && (int) Database::fetchValue("SELECT COUNT(*) FROM jobs WHERE job_number = '346328'") === 1, '6. creating 346328 again in Jobs is rejected');
+// 7. Jobs list shows it once
+$list = plain(call('GET', '/jobs', [], ['q' => '346328'])->body());
+check(substr_count($list, '346328') >= 1, '7. Jobs list finds the job');
+check((int) Database::fetchValue("SELECT COUNT(*) FROM jobs WHERE job_number = '346328' AND deleted_at IS NULL") === 1, '...and there is one master job');
