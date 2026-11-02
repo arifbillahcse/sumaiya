@@ -28,7 +28,7 @@ final class TripService
         return (bool) \App\Core\Config::get('app.trips.same_day_entries', false);
     }
 
-    private const TEXT = ['job_number', 'job_date', 'activity', 'from_location', 'to_location', 'foreman_id', 'bh', 'remark'];
+    private const TEXT = ['job_number', 'job_date', 'activity', 'from_location', 'to_location', 'foreman_id', 'bh', 'broker', 'remark'];
 
     /** Job rows one trip may hold. Each row posts up to 12 fields and PHP drops everything past max_input_vars (default 1000), so more would be cut off silently. */
     public const MAX_ROWS = 60;
@@ -55,6 +55,19 @@ final class TripService
         $trip = $this->forViewer($trip);
         $trip['rows'] = array_map(fn (array $r): array => $this->rowForViewer($r), $rows);
         $trip['totals'] = $this->canSeeFinancials() ? TripTotals::forRows($rows) : null;
+        $trip['sheet_totals'] = null;
+        if ($trip['totals'] !== null) {
+            // The client's closing sheet: "ALL EXP" = Diesel + Hotels + Helpers + MISC; the Foreman column is summed on its own.
+            $pay = 0;
+            foreach ($rows as $r) {
+                $pay += ($r['foreman_pay'] ?? null) === null ? 0 : (int) round((float) $r['foreman_pay'] * 100);
+            }
+            $t = $trip['totals'];
+            $trip['sheet_totals'] = [
+                'foreman_pay' => number_format($pay / 100, 2, '.', ''),
+                'all_exp' => number_format(((int) round((float) $t['diesel'] * 100) + (int) round((float) $t['hotels'] * 100) + (int) round((float) $t['helper'] * 100) + (int) round((float) $t['misc'] * 100)) / 100, 2, '.', ''),
+            ];
+        }
         return $trip;
     }
 
@@ -242,12 +255,14 @@ final class TripService
             'from_location' => ($valid['from_location'] ?? null) ?: $job['from_location'],
             'to_location' => ($valid['to_location'] ?? null) ?: ($job['to_location'] ?? null),
             'foreman_id' => ($valid['foreman_id'] ?? null) !== null && ($valid['foreman_id'] ?? '') !== '' ? (int) $valid['foreman_id'] : (int) $trip['foreman_id'],
-            'bh' => $valid['bh'] ?? null, 'remark' => $valid['remark'] ?? null,
+            'bh' => $valid['bh'] ?? null, 'broker' => $valid['broker'] ?? null, 'remark' => $valid['remark'] ?? null,
         ];
         foreach ([...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $field) {
             $row[$field] = $withMoney ? $this->decimal($valid[$field] ?? null) : null;
         }
-        $row['job_beg'] = $withMoney ? (($valid['job_beg'] ?? null) ?: null) : null;
+        if ($withMoney) {
+            $row = self::deriveSheet($row);
+        }
 
         if ($placeholder !== null && $date !== null) {
             $this->trips->fillRow((int) $placeholder['id'], $row, Auth::id());
@@ -264,10 +279,36 @@ final class TripService
         return $out('ok', [], $date);
     }
 
+    /**
+     * The client's own sheet formulas (Forman_Closing.xlsx), applied only to a cell left empty so a typed figure always wins:
+     * Addio (Additional) = Grand - Job Beg;  Total to BH = Job Beg - Depo + Addio.
+     *
+     * @param array<string,mixed> $row
+     * @return array<string,mixed>
+     */
+    public static function deriveSheet(array $row): array
+    {
+        $n = static fn ($v): ?int => ($v === null || $v === '') ? null : (int) round((float) $v * 100);
+        $grand = $n($row['grand'] ?? null);
+        $beg = $n($row['job_beg'] ?? null);
+        $depo = $n($row['depo'] ?? null) ?? 0;
+        $addio = $n($row['addio'] ?? null);
+        if ($addio === null && $grand !== null && $beg !== null) {
+            $addio = $grand - $beg;
+            $row['addio'] = number_format($addio / 100, 2, '.', '');
+        }
+        if (($row['total_to_bh'] ?? null) === null || $row['total_to_bh'] === '') {
+            if ($beg !== null) {
+                $row['total_to_bh'] = number_format(($beg - $depo + ($addio ?? 0)) / 100, 2, '.', '');
+            }
+        }
+        return $row;
+    }
+
     /** An undated entry with nothing in it: what assigning a job to a trip leaves behind, waiting for its first real entry. */
     private static function isPlaceholder(array $row): bool
     {
-        foreach (['job_date', 'activity', 'bh', 'remark', 'job_beg', ...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $f) {
+        foreach (['job_date', 'activity', 'bh', 'broker', 'remark', ...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $f) {
             if (($row[$f] ?? null) !== null && $row[$f] !== '') {
                 return false;
             }
@@ -435,6 +476,7 @@ final class TripService
                 // The foreman of an entry defaults to the trip's foreman.
                 'foreman_id' => ($valid['foreman_id'] ?? null) !== null && ($valid['foreman_id'] ?? '') !== '' ? (int) $valid['foreman_id'] : ((int) ($post['foreman_id'] ?? 0) ?: null),
                 'bh' => $valid['bh'] ?? null,
+                'broker' => $valid['broker'] ?? null,
                 'remark' => $valid['remark'] ?? null,
             ];
             foreach ([...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS] as $field) {
@@ -442,7 +484,9 @@ final class TripService
                     ? $this->decimal($valid[$field] ?? null)
                     : ($keep !== null && ($keep[$field] ?? null) !== null ? $this->decimal($keep[$field]) : null);
             }
-            $row['job_beg'] = $withMoney ? (($valid['job_beg'] ?? null) ?: null) : ($keep['job_beg'] ?? null);
+            if ($withMoney) {
+                $row = self::deriveSheet($row);
+            }
             $rows[] = $row;
         }
 
@@ -498,9 +542,8 @@ final class TripService
             }
         }
         $sig = static fn (array $list): array => array_map(static fn (array $r): array => [
-            (int) $r['job_id'], (string) ($r['job_date'] ?? ''), (string) ($r['activity'] ?? ''), (string) ($r['from_location'] ?? ''), (string) ($r['to_location'] ?? ''), (int) ($r['foreman_id'] ?? 0), (string) ($r['bh'] ?? ''), (string) ($r['remark'] ?? ''),
+            (int) $r['job_id'], (string) ($r['job_date'] ?? ''), (string) ($r['activity'] ?? ''), (string) ($r['from_location'] ?? ''), (string) ($r['to_location'] ?? ''), (int) ($r['foreman_id'] ?? 0), (string) ($r['bh'] ?? ''), (string) ($r['broker'] ?? ''), (string) ($r['remark'] ?? ''),
             ...array_map(static fn (string $f): string => ($r[$f] ?? null) === null ? '' : number_format((float) $r[$f], 2, '.', ''), [...TripRepository::MONEY, ...TripRepository::SHEET_AMOUNTS]),
-            (string) ($r['job_beg'] ?? ''),
         ], $list);
         $rowsChanged = $sig($oldRows) !== $sig($rows);
         if ($rowsChanged) {

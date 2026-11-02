@@ -52,3 +52,17 @@ check((int) Database::fetchValue('SELECT COUNT(*) FROM jobs') === $before && (in
 $list = plain(call('GET', '/jobs', [], ['q' => '346328'])->body());
 check(substr_count($list, '346328') >= 1, '7. Jobs list finds the job');
 check((int) Database::fetchValue("SELECT COUNT(*) FROM jobs WHERE job_number = '346328' AND deleted_at IS NULL") === 1, '...and there is one master job');
+
+section('Closing sheet (Forman_Closing.xlsx): broker, foreman pay, sheet formulas, closing totals');
+$peg = mk_job(['job_number' => 'A1677613', 'customer_first_name' => 'Peggy', 'customer_last_name' => 'Brown']);
+call('POST', "/trips/{$tid}/jobs", ['job_number' => 'A1677613', 'job_date' => '2026-10-02', 'activity' => 'pickup', 'broker' => 'Top Nation',
+    'grand' => '4016.50', 'job_beg' => '2628.75', 'depo' => '1526', 'bh' => '2590.12', 'foreman_pay' => '2151.50', 'diesel' => '71.09', 'hotels' => '119', 'helper' => '200', 'misc' => '10']);
+$pr = Database::fetchAll('SELECT * FROM trip_jobs WHERE job_id = ?', [$peg])[0];
+check($pr['broker'] === 'Top Nation' && (float) $pr['foreman_pay'] === 2151.5, 'Broker and the amount paid to the foreman are saved on the entry');
+check((float) $pr['addio'] === 1387.75 && (float) $pr['total_to_bh'] === 2490.5, 'Additional = Grand - Job Begins (1387.75) and Total to BH = Job Begins - Deposit + Additional (2490.50), as the sheet row for this job shows');
+call('POST', "/trips/{$tid}/jobs", ['job_number' => 'A1677613', 'job_date' => '2026-10-03', 'grand' => '100', 'job_beg' => '60', 'addio' => '5', 'total_to_bh' => '9']);
+$typed = Database::fetchAll("SELECT addio, total_to_bh FROM trip_jobs WHERE job_id = ? AND job_date = '2026-10-03'", [$peg])[0];
+check((float) $typed['addio'] === 5.0 && (float) $typed['total_to_bh'] === 9.0, 'a figure typed by the user is never overwritten by the formula');
+$pg = plain(call('GET', "/trips/{$tid}")->body());
+check(str_contains($pg, 'Broker') && str_contains($pg, 'Top Nation') && str_contains($pg, 'Foreman pay') && str_contains($pg, 'All expenses as on the closing sheet (Diesel + Hotels + Helpers + MISC): $') && str_contains($pg, 'Paid to foreman'), 'the trip page shows Broker, Foreman pay and the closing-sheet totals');
+check(preg_match('~Helpers \+ MISC\): \$([\d,.]+)~', $pg, $mm) === 1 && $mm[1] === '655.09', 'sheet "ALL EXP" = Diesel+Hotels+Helpers+MISC over every entry (255 + 400.09 = 655.09)');

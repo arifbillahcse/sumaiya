@@ -21,7 +21,7 @@ final class TripExportService
 
     private const ACTIVITY_LABELS = ['pickup' => 'Pickup', 'delivery' => 'Delivery', 'other' => 'Other'];
     private const MONEY_LABELS = ['diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers', 'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra'];
-    private const SHEET_LABELS = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH'];
+    private const SHEET_LABELS = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'foreman_pay' => 'Foreman pay'];
 
     public function __construct(private TripRepository $trips = new TripRepository())
     {
@@ -33,7 +33,7 @@ final class TripExportService
         $columns = [
             'trip_number' => 'Trip Number', 'begins_on' => 'Trip Begins', 'ends_on' => 'Trip Ends',
             'job_number' => 'Job #', 'customer_name' => 'Customer Name', 'customer_phone' => 'Customer Phone', 'job_date' => 'Date', 'activity' => 'Activity',
-            'from_location' => 'From', 'to_location' => 'To',
+            'from_location' => 'From', 'to_location' => 'To', 'broker' => 'Broker',
         ];
         if (!$phone) {
             unset($columns['customer_phone']);
@@ -136,7 +136,7 @@ final class TripExportService
                     if ($k === 'activity') {
                         return self::ACTIVITY_LABELS[$v] ?? (string) $v;
                     }
-                    return (isset(self::MONEY_LABELS[$k]) || in_array($k, ['grand', 'depo', 'addio', 'total_to_bh'], true)) ? number_format((float) $v, 2, '.', '') : (string) $v;
+                    return (isset(self::MONEY_LABELS[$k]) || in_array($k, ['grand', 'job_beg', 'depo', 'addio', 'total_to_bh', 'foreman_pay'], true)) ? number_format((float) $v, 2, '.', '') : (string) $v;
                 }, $keys);
                 $sent++;
             }

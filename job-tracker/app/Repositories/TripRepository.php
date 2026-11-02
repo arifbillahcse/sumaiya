@@ -22,8 +22,8 @@ final class TripRepository
      * unconfirmed, so they are stored as typed, never calculated and NOT part of "Total expenses" (a job-level figure repeated on every
      * daily entry would be counted many times). Like the expenses they need trips.financials.
      */
-    public const SHEET_AMOUNTS = ['grand', 'depo', 'addio', 'total_to_bh'];
-    public const SHEET_TEXT = ['job_beg'];
+    public const SHEET_AMOUNTS = ['grand', 'job_beg', 'depo', 'addio', 'total_to_bh', 'foreman_pay'];
+    public const SHEET_TEXT = [];
 
     private const SELECT = 'SELECT t.*, f.name AS foreman_name,
             (SELECT COUNT(*) FROM trip_jobs tj WHERE tj.trip_id = t.id) AS job_count,
@@ -104,10 +104,10 @@ final class TripRepository
         Database::transaction(function () use ($rowId, $row, $userId): void {
             Database::execute(
                 'UPDATE trip_jobs SET job_date = ?, activity = ?, from_location = ?, to_location = ?, foreman_id = ?, bh = ?, diesel = ?, hotels = ?, helper = ?, misc = ?, commission = ?, extra = ?, remark = ?,
-                    grand = ?, job_beg = ?, depo = ?, addio = ?, total_to_bh = ? WHERE id = ?',
+                    grand = ?, job_beg = ?, depo = ?, addio = ?, total_to_bh = ?, foreman_pay = ?, broker = ? WHERE id = ?',
                 [$row['job_date'], $row['activity'] ?? null, $row['from_location'], $row['to_location'] ?? null, $row['foreman_id'] ?? null, $row['bh'] ?? null,
                     $row['diesel'] ?? null, $row['hotels'] ?? null, $row['helper'] ?? null, $row['misc'] ?? null, $row['commission'] ?? null, $row['extra'] ?? null, $row['remark'] ?? null,
-                    $row['grand'] ?? null, $row['job_beg'] ?? null, $row['depo'] ?? null, $row['addio'] ?? null, $row['total_to_bh'] ?? null, $rowId]
+                    $row['grand'] ?? null, $row['job_beg'] ?? null, $row['depo'] ?? null, $row['addio'] ?? null, $row['total_to_bh'] ?? null, $row['foreman_pay'] ?? null, $row['broker'] ?? null, $rowId]
             );
             Database::execute('UPDATE trips SET updated_by = ?, updated_at = ? WHERE id = (SELECT trip_id FROM trip_jobs WHERE id = ?)', [$userId, gmdate('Y-m-d H:i:s'), $rowId]);
         });
@@ -277,11 +277,11 @@ final class TripRepository
         $order = $startOrder;
         foreach ($rows as $row) {
             Database::insert(
-                'INSERT INTO trip_jobs (trip_id, job_id, sort_order, job_number, customer_name, job_date, activity, from_location, to_location, foreman_id, bh, diesel, hotels, helper, misc, commission, extra, remark, grand, job_beg, depo, addio, total_to_bh)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                'INSERT INTO trip_jobs (trip_id, job_id, sort_order, job_number, customer_name, job_date, activity, from_location, to_location, foreman_id, bh, diesel, hotels, helper, misc, commission, extra, remark, grand, job_beg, depo, addio, total_to_bh, foreman_pay, broker)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [$tripId, $row['job_id'], $order++, $row['job_number'], $row['customer_name'], $row['job_date'] ?? null, $row['activity'] ?? null, $row['from_location'] ?? null, $row['to_location'] ?? null, $row['foreman_id'] ?? null, $row['bh'] ?? null,
                     $row['diesel'] ?? null, $row['hotels'] ?? null, $row['helper'] ?? null, $row['misc'] ?? null, $row['commission'] ?? null, $row['extra'] ?? null, $row['remark'] ?? null,
-                    $row['grand'] ?? null, $row['job_beg'] ?? null, $row['depo'] ?? null, $row['addio'] ?? null, $row['total_to_bh'] ?? null]
+                    $row['grand'] ?? null, $row['job_beg'] ?? null, $row['depo'] ?? null, $row['addio'] ?? null, $row['total_to_bh'] ?? null, $row['foreman_pay'] ?? null, $row['broker'] ?? null]
             );
         }
     }

@@ -32,13 +32,13 @@ final class TripRules
             'to_location' => 'nullable|max:190',
             'foreman_id' => 'nullable|integer|exists:foremen,id',
             'bh' => 'nullable|max:100',
+            'broker' => 'nullable|max:100',
             'remark' => 'nullable|max:500',
         ];
         if ($withMoney) {
-            foreach (['diesel', 'hotels', 'helper', 'misc', 'commission', 'extra', 'grand', 'depo', 'addio', 'total_to_bh'] as $field) {
+            foreach (['diesel', 'hotels', 'helper', 'misc', 'commission', 'extra', 'grand', 'job_beg', 'depo', 'addio', 'total_to_bh', 'foreman_pay'] as $field) {
                 $rules[$field] = 'nullable|money|min_value:0|max_value:9999999999.99';
             }
-            $rules['job_beg'] = 'nullable|max:100';
         }
         return $rules;
     }
@@ -50,7 +50,7 @@ final class TripRules
             'trip_number' => 'Trip number', 'foreman_id' => 'Foreman', 'begins_on' => 'Trip begins', 'ends_on' => 'Trip ends',
             'notes' => 'Notes', 'activity' => 'Activity', 'from_location' => 'From', 'to_location' => 'To',
             'job_number' => 'Job #', 'job_date' => 'Date', 'bh' => 'BH', 'diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers',
-            'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra', 'grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'remark' => 'Remarks',
+            'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra', 'grand' => 'Grand', 'job_beg' => 'Job Beg', 'foreman_pay' => 'Foreman pay', 'broker' => 'Broker', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'remark' => 'Remarks',
         ];
     }
 }
