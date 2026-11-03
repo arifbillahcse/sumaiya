@@ -1,6 +1,6 @@
 <?php
 /** @var array<string,mixed> $trip  @var bool $showMoney */
-$sheet = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'foreman_pay' => 'Foreman pay'];
+$sheet = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH'];
 $cols = ['diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers', 'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra'];
 $dl = static fn (string $label, string $html): string => '<dt class="col-sm-4 text-body-secondary fw-normal">' . e($label) . '</dt><dd class="col-sm-8 mb-0">' . $html . '</dd>';
 ?>
@@ -44,19 +44,13 @@ $dl = static fn (string $label, string $html): string => '<dt class="col-sm-4 te
                         <?php foreach (\App\Services\TripService::ACTIVITIES as $k => $label): ?><option value="<?= e($k) ?>"><?= e($label) ?></option><?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-6 col-md-3">
-                    <label class="form-label small" for="add-foreman">Foreman</label>
-                    <select class="form-select form-select-sm" id="add-foreman" name="foreman_id">
-                        <option value="">Trip's foreman</option>
-                        <?php foreach ($foremen as $f): ?><option value="<?= e($f['id']) ?>"><?= e($f['name']) ?></option><?php endforeach; ?>
-                    </select>
-                </div>
                 <div class="col-6 col-md-3"><label class="form-label small" for="add-from">From</label><input type="text" class="form-control form-control-sm" id="add-from" name="from_location" maxlength="190" placeholder="job's From"></div>
                 <div class="col-6 col-md-3"><label class="form-label small" for="add-to">To</label><input type="text" class="form-control form-control-sm" id="add-to" name="to_location" maxlength="190" placeholder="job's To"></div>
                 <div class="col-6 col-md-3"><label class="form-label small" for="add-broker">Broker</label><input type="text" class="form-control form-control-sm" id="add-broker" name="broker" maxlength="100"></div>
                 <div class="col-6 col-md-3"><label class="form-label small" for="add-bh">BH</label><input type="text" class="form-control form-control-sm" id="add-bh" name="bh" maxlength="100"></div>
+                <?php if ($showMoney): ?><div class="col-6 col-md-3"><label class="form-label small" for="add-foreman_pay">Foreman</label><input type="number" class="form-control form-control-sm" id="add-foreman_pay" name="foreman_pay" step="0.01" min="0" inputmode="decimal"></div><?php endif; ?>
                 <?php if ($showMoney): ?>
-                    <?php foreach (['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'foreman_pay' => 'Foreman pay', 'diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers', 'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra'] as $name => $label): ?>
+                    <?php foreach (['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers', 'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra'] as $name => $label): ?>
                         <div class="col-6 col-md-3">
                             <label class="form-label small" for="add-<?= e($name) ?>"><?= e($label) ?></label>
                             <input type="number" class="form-control form-control-sm" id="add-<?= e($name) ?>" name="<?= e($name) ?>" step="0.01" min="0" inputmode="decimal">
@@ -109,7 +103,7 @@ $dl = static fn (string $label, string $html): string => '<dt class="col-sm-4 te
                         <td class="text-end jt-money"><?= ($row[$field] ?? null) === null || $row[$field] === '' ? '—' : e(fmt_money($row[$field])) ?></td>
                     <?php endforeach; endif; ?>
                     <td><?= e($row['bh'] ?: '—') ?></td>
-                    <td><?= e($row['row_foreman'] ?: $trip['foreman_name']) ?></td>
+                    <td class="text-end jt-money"><?= !$showMoney || ($row['foreman_pay'] ?? null) === null || $row['foreman_pay'] === '' ? '—' : e(fmt_money($row['foreman_pay'])) ?></td>
                     <?php if ($showMoney): foreach ($cols as $field => $label): ?>
                         <td class="text-end jt-money"><?= ($row[$field] ?? null) === null ? '—' : e(fmt_money($row[$field])) ?></td>
                     <?php endforeach; endif; ?>
@@ -131,7 +125,7 @@ $dl = static fn (string $label, string $html): string => '<dt class="col-sm-4 te
                 </tr>
                 <?php if (!empty($trip['sheet_totals'])): ?>
                 <tr>
-                    <td colspan="<?= e(9 + count($sheet) + count($cols)) ?>" class="text-end jt-subtle">All expenses as on the closing sheet (Diesel + Hotels + Helpers + MISC): <strong><?= e(fmt_money($trip['sheet_totals']['all_exp'])) ?></strong> &middot; Paid to foreman (Foreman pay column): <strong><?= e(fmt_money($trip['sheet_totals']['foreman_pay'])) ?></strong></td>
+                    <td colspan="<?= e(9 + count($sheet) + count($cols)) ?>" class="text-end jt-subtle">All expenses as on the closing sheet (Diesel + Hotels + Helpers + MISC): <strong><?= e(fmt_money($trip['sheet_totals']['all_exp'])) ?></strong> &middot; Paid to foreman (Foreman column): <strong><?= e(fmt_money($trip['sheet_totals']['foreman_pay'])) ?></strong></td>
                     <td></td>
                 </tr>
                 <?php endif; ?>

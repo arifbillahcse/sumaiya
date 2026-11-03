@@ -467,7 +467,7 @@ $lines = array_map('str_getcsv', array_filter(explode("\n", substr($csv, 3))));
 $ti = array_search('Trip Number', $lines[0], true);
 $ji = array_search('Job #', $lines[0], true);
 $empty = array_values(array_filter($lines, static fn (array $l): bool => $l[$ti] === 'WF-EMPTY'));
-check(count($empty) === 1 && $empty[0][$ji] === '' && $empty[0][array_search('Foreman', $lines[0], true)] === 'Joe', 'a trip with no jobs is one line in the CSV, with empty job columns, so it is not lost');
+check(count($empty) === 1 && $empty[0][$ji] === '' && $empty[0][array_search('Foreman Name', $lines[0], true)] === 'Joe', 'a trip with no jobs is one line in the CSV, with empty job columns, so it is not lost');
 $lineOnce = array_values(array_filter($lines, static fn (array $l): bool => $l[$ti] === 'WF-1'));
 check(count($lineOnce) === 1, '...and an empty trip is not repeated');
 $rep = (new TripService())->foremanReport(\App\Services\TripCriteria::fromRequest(\App\Core\Request::make('GET', '/trips/report', [], [])));
@@ -512,9 +512,9 @@ sign_in($mgr);
 $f = call('GET', '/trips/create')->body();
 check(!str_contains($f, 'collected_by') && !str_contains($f, 'Collected by'), 'the trip form no longer has "Collected by"');
 check(preg_match('/name="rows\[0\]\[activity\]"/', $f) === 1 && str_contains($f, '>Pickup<') && str_contains($f, '>Delivery<') && str_contains($f, '>Other<'), 'each job row has an Activity choice: Pickup / Delivery / Other');
-check(str_contains($f, 'name="rows[0][from_location]"') && str_contains($f, 'name="rows[0][to_location]"') && str_contains($f, 'name="rows[0][foreman_id]"') && str_contains($f, 'foreman</option>'), 'and From, To and Foreman');
+check(str_contains($f, 'name="rows[0][from_location]"') && str_contains($f, 'name="rows[0][to_location]"') && str_contains($f, 'name="rows[0][foreman_pay]"') , 'and From, To and Foreman');
 $pos = static fn (string $needle): int => (int) strpos($f, $needle);
-check($pos('rows[0][job_number]') < $pos('rows[0][job_date]') && $pos('rows[0][job_date]') < $pos('rows[0][activity]') && $pos('rows[0][activity]') < $pos('rows[0][from_location]') && $pos('rows[0][from_location]') < $pos('rows[0][to_location]') && $pos('rows[0][to_location]') < $pos('rows[0][bh]') && $pos('rows[0][bh]') < $pos('rows[0][foreman_id]') && $pos('rows[0][foreman_id]') < $pos('rows[0][diesel]'), 'column order: Job #, Date, Activity, From, To, BH, Foreman, then the expenses (BH and Foreman as in the client\'s sheet)');
+check($pos('rows[0][job_number]') < $pos('rows[0][job_date]') && $pos('rows[0][job_date]') < $pos('rows[0][activity]') && $pos('rows[0][activity]') < $pos('rows[0][from_location]') && $pos('rows[0][from_location]') < $pos('rows[0][to_location]') && $pos('rows[0][to_location]') < $pos('rows[0][bh]') && $pos('rows[0][bh]') < $pos('rows[0][foreman_pay]') && $pos('rows[0][foreman_pay]') < $pos('rows[0][diesel]'), 'column order: Job #, Date, Activity, From, To, BH, Foreman, then the expenses (BH and Foreman as in the client\'s sheet)');
 
 // Create Trip -> Add existing job -> Pickup Oct 30 -> Delivery Oct 31
 $r = call('POST', '/trips', ['trip_number' => 'AC-1', 'foreman_id' => (string) $joe, 'begins_on' => '2026-10-30', 'ends_on' => '2026-10-31',
@@ -537,8 +537,8 @@ $tp = call('GET', "/trips/{$tid}");
 $tb = $tp->body();
 $pt = plain($tb);
 check(substr_count($pt, 'B6048649') >= 2 && str_contains($pt, 'Pickup') && str_contains($pt, 'Delivery') && str_contains($pt, 'Warehouse A') && str_contains($pt, 'Atlanta, GA') && str_contains($pt, 'Denver, CO') && str_contains($pt, 'Oct 30, 2026') && str_contains($pt, 'Oct 31, 2026'), 'Trip Details shows both entries with date, activity, From and To');
-check(preg_match('~Job # Customer Date Activity From To Broker Grand Job Beg Depo Addio Total to BH Foreman pay BH Foreman Diesel Hotels Helpers MISC Commission Extra Remarks~', $pt) === 1, 'the table columns are Job #, Customer, Date, Activity, From, To, Grand, Job Beg, Depo, Addio, Total to BH, BH, Foreman, then Diesel, Hotels, Helpers, MISC, Commission, Extra, Remarks');
-check(str_contains($pt, 'Joe') && str_contains($pt, 'Sam') && str_contains($pt, 'Jobs on this trip (2)') && !str_contains($pt, 'Collected by'), 'the Foreman column shows each entry\'s foreman; the count is 2 entries; no "Collected by"');
+check(preg_match('~Job # Customer Date Activity From To Broker Grand Job Beg Depo Addio Total to BH BH Foreman Diesel Hotels Helpers MISC Commission Extra Remarks~', $pt) === 1, 'the table columns are Job #, Customer, Date, Activity, From, To, Grand, Job Beg, Depo, Addio, Total to BH, BH, Foreman, then Diesel, Hotels, Helpers, MISC, Commission, Extra, Remarks');
+check(str_contains($pt, 'Joe') && str_contains($pt, 'Jobs on this trip (2)') && !str_contains($pt, 'Collected by'), 'the Foreman column shows each entry\'s foreman; the count is 2 entries; no "Collected by"');
 check(str_contains($pt, '$125.50') && substr_count($tb, 'href="/jobs/' . $jobId . '"') >= 2, 'the totals add both entries ($50 + $75.50), and each entry links to the job');
 
 // one entry per job per day: the exact same job + date twice is refused; different dates are all fine
@@ -587,7 +587,7 @@ check($p['rows'][0]['from_location'] === 'Atlanta, GA' && $p['rows'][0]['to_loca
 // Edit keeps everything
 call('GET', '/trips'); // a page load, so the flash data of the last failed post is gone
 $edit = call('GET', "/trips/{$tid}/edit")->body();
-check(substr_count($edit, 'value="B6048649"') === 2 && str_contains($edit, 'value="Warehouse A"') && preg_match('/<option value="delivery" selected>/', $edit) === 1 && preg_match('/<option value="' . $sam . '" selected>/', $edit) === 1, 'Edit shows both entries with their activity, places and foreman selected');
+check(substr_count($edit, 'value="B6048649"') === 2 && str_contains($edit, 'value="Warehouse A"') && preg_match('/<option value="delivery" selected>/', $edit) === 1, 'Edit shows both entries with their activity and places');
 $u = Database::fetchValue('SELECT updated_at FROM trips WHERE id = ?', [$tid]);
 Database::execute('UPDATE trips SET updated_at = ? WHERE id = ?', ['2026-10-30 09:00:00', $tid]);
 $er = (new TripRepository())->rows($tid);
@@ -649,7 +649,7 @@ check(isset($h['Activity'], $h['To'], $h['Foreman'], $h['BH']) && $h['BH'] + 1 =
 $find = static fn (string $act, string $date): ?array => array_values(array_filter(array_slice($lines, 1), static fn (array $l): bool => $l[$h['Activity']] === $act && $l[$h['Date']] === $date))[0] ?? null;
 $pk = $find('Pickup', '2026-10-30');
 $dl = $find('Delivery', '2026-11-01');
-check($pk !== null && $dl !== null && $pk[$h['Job #']] === 'B6048649' && $dl[$h['Job #']] === 'B6048649' && $dl[$h['To']] === 'Denver, CO' && $dl[$h['Foreman']] === 'Sam' && $pk[$h['From']] === 'Atlanta, GA', 'both entries of the same job are in the export, one line each, with activity, date, From, To and Foreman');
+check($pk !== null && $dl !== null && $pk[$h['Job #']] === 'B6048649' && $dl[$h['Job #']] === 'B6048649' && $dl[$h['To']] === 'Denver, CO' && $dl[$h['Foreman Name']] === 'Sam' && $pk[$h['From']] === 'Atlanta, GA', 'both entries of the same job are in the export, one line each, with activity, date, From, To and Foreman');
 // the trip list search no longer looks at collected by, and still finds by job number
 check(str_contains(call('GET', '/trips', [], ['q' => 'B6048649'])->body(), 'AC-1'), 'searching the trip list by job number still finds the trip');
 

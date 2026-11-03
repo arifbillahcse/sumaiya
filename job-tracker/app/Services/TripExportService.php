@@ -21,7 +21,7 @@ final class TripExportService
 
     private const ACTIVITY_LABELS = ['pickup' => 'Pickup', 'delivery' => 'Delivery', 'other' => 'Other'];
     private const MONEY_LABELS = ['diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers', 'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra'];
-    private const SHEET_LABELS = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'foreman_pay' => 'Foreman pay'];
+    private const SHEET_LABELS = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH'];
 
     public function __construct(private TripRepository $trips = new TripRepository())
     {
@@ -41,11 +41,14 @@ final class TripExportService
         if ($money) {
             $columns += self::SHEET_LABELS;
         }
-        $columns += ['bh' => 'BH', 'foreman_name' => 'Foreman'];
+        $columns += ['bh' => 'BH'];
+        if ($money) {
+            $columns['foreman_pay'] = 'Foreman';
+        }
         if ($money) {
             $columns += self::MONEY_LABELS;
         }
-        return $columns + ['remark' => 'Remarks'];
+        return $columns + ['remark' => 'Remarks', 'foreman_name' => 'Foreman Name'];
     }
 
     public function tooLarge(TripCriteria $criteria): bool

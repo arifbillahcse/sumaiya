@@ -5,7 +5,7 @@
  * @var array<int,array<string,mixed>> $foremen  @var bool $editMoney  @var string $prefillJob job number to put in the first row ("New trip with this job")
  */
 $val = static fn (string $key): string => old_or($key, $trip[$key] ?? '');
-$sheet = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH', 'foreman_pay' => 'Foreman pay'];
+$sheet = ['grand' => 'Grand', 'job_beg' => 'Job Beg', 'depo' => 'Depo', 'addio' => 'Addio', 'total_to_bh' => 'Total to BH'];
 $money = ['diesel' => 'Diesel', 'hotels' => 'Hotels', 'helper' => 'Helpers', 'misc' => 'MISC', 'commission' => 'Commission', 'extra' => 'Extra'];
 
 // Rows: what the user typed (after a validation error), else the saved rows; then spare rows.
@@ -116,7 +116,7 @@ $choice = static function (int $i, string $field, array $row, array $options): s
                             <td><?= $cell($i, $field, $row, ['type' => 'number', 'step' => '0.01', 'min' => '0', 'inputmode' => 'decimal']) ?><?= error_text('rows.' . $i . '.' . $field) ?></td>
                         <?php endforeach; endif; ?>
                         <td><?= $cell($i, 'bh', $row, ['maxlength' => 100]) ?></td>
-                        <td><?= $choice($i, 'foreman_id', $row, ['' => "Trip's foreman"] + array_column($foremen, 'name', 'id')) ?><?= error_text('rows.' . $i . '.foreman_id') ?></td>
+                        <td><?php if ($editMoney): ?><?= $cell($i, 'foreman_pay', $row, ['type' => 'number', 'step' => '0.01', 'min' => '0', 'inputmode' => 'decimal']) ?><?= error_text('rows.' . $i . '.foreman_pay') ?><?php else: ?>&mdash;<?php endif; ?></td>
                         <?php if ($editMoney): foreach ($money as $field => $label): ?>
                             <td><?= $cell($i, $field, $row, ['type' => 'number', 'step' => '0.01', 'min' => '0', 'inputmode' => 'decimal']) ?><?= error_text('rows.' . $i . '.' . $field) ?></td>
                         <?php endforeach; endif; ?>

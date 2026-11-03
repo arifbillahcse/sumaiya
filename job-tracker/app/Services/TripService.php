@@ -474,7 +474,7 @@ final class TripService
                 'from_location' => ($valid['from_location'] ?? null) ?: $job['from_location'],
                 'to_location' => ($valid['to_location'] ?? null) ?: ($job['to_location'] ?? null),
                 // The foreman of an entry defaults to the trip's foreman.
-                'foreman_id' => ($valid['foreman_id'] ?? null) !== null && ($valid['foreman_id'] ?? '') !== '' ? (int) $valid['foreman_id'] : ((int) ($post['foreman_id'] ?? 0) ?: null),
+                'foreman_id' => ($valid['foreman_id'] ?? null) !== null && ($valid['foreman_id'] ?? '') !== '' ? (int) $valid['foreman_id'] : ($keep !== null && ($keep['foreman_id'] ?? null) !== null ? (int) $keep['foreman_id'] : ((int) ($post['foreman_id'] ?? 0) ?: null)),
                 'bh' => $valid['bh'] ?? null,
                 'broker' => $valid['broker'] ?? null,
                 'remark' => $valid['remark'] ?? null,

@@ -64,5 +64,18 @@ call('POST', "/trips/{$tid}/jobs", ['job_number' => 'A1677613', 'job_date' => '2
 $typed = Database::fetchAll("SELECT addio, total_to_bh FROM trip_jobs WHERE job_id = ? AND job_date = '2026-10-03'", [$peg])[0];
 check((float) $typed['addio'] === 5.0 && (float) $typed['total_to_bh'] === 9.0, 'a figure typed by the user is never overwritten by the formula');
 $pg = plain(call('GET', "/trips/{$tid}")->body());
-check(str_contains($pg, 'Broker') && str_contains($pg, 'Top Nation') && str_contains($pg, 'Foreman pay') && str_contains($pg, 'All expenses as on the closing sheet (Diesel + Hotels + Helpers + MISC): $') && str_contains($pg, 'Paid to foreman'), 'the trip page shows Broker, Foreman pay and the closing-sheet totals');
+check(str_contains($pg, 'Broker') && str_contains($pg, 'Top Nation') && str_contains($pg, 'Foreman') && str_contains($pg, 'All expenses as on the closing sheet (Diesel + Hotels + Helpers + MISC): $') && str_contains($pg, 'Paid to foreman'), 'the trip page shows Broker, the Foreman amount and the closing-sheet totals');
 check(preg_match('~Helpers \+ MISC\): \$([\d,.]+)~', $pg, $mm) === 1 && $mm[1] === '655.09', 'sheet "ALL EXP" = Diesel+Hotels+Helpers+MISC over every entry (255 + 400.09 = 655.09)');
+
+section('Foreman column in the trip form is a number');
+$ef = call('GET', "/trips/{$tid}/edit")->body();
+check(str_contains($ef, 'name="rows[0][foreman_pay]"') && str_contains($ef, 'type="number"') && !str_contains($ef, 'name="rows[0][foreman_id]"'), 'each row has a Foreman number box, not a name drop-down');
+$trow = Database::fetchAll('SELECT id, job_number, job_date, foreman_id FROM trip_jobs WHERE trip_id = ? AND job_id = ? ORDER BY id', [$tid, $jid])[0];
+$post = ['trip_number' => 'P15-T', 'foreman_id' => (string) $joe, 'begins_on' => '2026-10-27', 'loaded_at' => (string) Database::fetchValue('SELECT updated_at FROM trips WHERE id = ?', [$tid]), 'rows' => []];
+foreach (Database::fetchAll('SELECT * FROM trip_jobs WHERE trip_id = ? ORDER BY sort_order, id', [$tid]) as $i => $r) {
+    $post['rows'][$i] = ['id' => (string) $r['id'], 'job_number' => $r['job_number'], 'job_date' => (string) $r['job_date'], 'activity' => (string) $r['activity'], 'foreman_pay' => (int) $r['id'] === (int) $trow['id'] ? '1234.50' : (string) $r['foreman_pay'],
+        'diesel' => (string) $r['diesel'], 'hotels' => (string) $r['hotels'], 'helper' => (string) $r['helper']];
+}
+call('POST', "/trips/{$tid}", $post);
+$after = Database::fetchAll('SELECT foreman_pay, foreman_id FROM trip_jobs WHERE trip_id = ? AND job_id = ? AND job_date = ?', [$tid, $jid, $trow['job_date']])[0] ?? ['foreman_pay' => null, 'foreman_id' => null];
+check((float) $after['foreman_pay'] === 1234.5 && (int) $after['foreman_id'] === (int) $trow['foreman_id'], 'a number typed in the Foreman box is saved, and the entry keeps its foreman');
