@@ -62,7 +62,7 @@ check($pr['broker'] === 'Top Nation' && (float) $pr['foreman_pay'] === 2151.5, '
 check((float) $pr['addio'] === 1387.75 && (float) $pr['total_to_bh'] === 2490.5, 'Additional = Grand - Job Begins (1387.75) and Total to BH = Job Begins - Deposit + Additional (2490.50), as the sheet row for this job shows');
 call('POST', "/trips/{$tid}/jobs", ['job_number' => 'A1677613', 'job_date' => '2026-10-03', 'grand' => '100', 'job_beg' => '60', 'addio' => '5', 'total_to_bh' => '9']);
 $typed = Database::fetchAll("SELECT addio, total_to_bh FROM trip_jobs WHERE job_id = ? AND job_date = '2026-10-03'", [$peg])[0];
-check((float) $typed['addio'] === 5.0 && (float) $typed['total_to_bh'] === 9.0, 'a figure typed by the user is never overwritten by the formula');
+check((float) $typed['addio'] === 40.0 && (float) $typed['total_to_bh'] === 100.0, 'the sheet formulas always apply: Addio = 100 - 60 = 40, Total to BH = 60 - 0 + 40 = 100 (a typed 5 and 9 are replaced)');
 $pg = plain(call('GET', "/trips/{$tid}")->body());
 check(str_contains($pg, 'Broker') && str_contains($pg, 'Top Nation') && str_contains($pg, 'Foreman') && str_contains($pg, 'All expenses as on the closing sheet (Diesel + Hotels + Helpers + MISC): $') && str_contains($pg, 'Paid to foreman'), 'the trip page shows Broker, the Foreman amount and the closing-sheet totals');
 check(preg_match('~Helpers \+ MISC\): \$([\d,.]+)~', $pg, $mm) === 1 && $mm[1] === '655.09', 'sheet "ALL EXP" = Diesel+Hotels+Helpers+MISC over every entry (255 + 400.09 = 655.09)');
@@ -79,3 +79,18 @@ foreach (Database::fetchAll('SELECT * FROM trip_jobs WHERE trip_id = ? ORDER BY 
 call('POST', "/trips/{$tid}", $post);
 $after = Database::fetchAll('SELECT foreman_pay, foreman_id FROM trip_jobs WHERE trip_id = ? AND job_id = ? AND job_date = ?', [$tid, $jid, $trow['job_date']])[0] ?? ['foreman_pay' => null, 'foreman_id' => null];
 check((float) $after['foreman_pay'] === 1234.5 && (int) $after['foreman_id'] === (int) $trow['foreman_id'], 'a number typed in the Foreman box is saved, and the entry keeps its foreman');
+
+section('Sheet formulas follow every edit (Forman_Closing_2.xlsx)');
+// edit Grand through the trip form: Addio and Total to BH are recalculated, not left at the old figures
+$e1 = Database::fetchAll('SELECT * FROM trip_jobs WHERE trip_id = ? AND job_id = ? AND job_date = ?', [$tid, $peg, '2026-10-02'])[0];
+$post = ['trip_number' => 'P15-T', 'foreman_id' => (string) $joe, 'begins_on' => '2026-10-27', 'loaded_at' => (string) Database::fetchValue('SELECT updated_at FROM trips WHERE id = ?', [$tid]), 'rows' => []];
+foreach (Database::fetchAll('SELECT * FROM trip_jobs WHERE trip_id = ? ORDER BY sort_order, id', [$tid]) as $i => $r) {
+    $post['rows'][$i] = ['id' => (string) $r['id'], 'job_number' => $r['job_number'], 'job_date' => (string) $r['job_date'], 'activity' => (string) $r['activity'],
+        'grand' => (int) $r['id'] === (int) $e1['id'] ? '5000' : (string) $r['grand'], 'job_beg' => (int) $r['id'] === (int) $e1['id'] ? '2628.75' : (string) $r['job_beg'], 'depo' => (int) $r['id'] === (int) $e1['id'] ? '1526' : (string) $r['depo'],
+        'addio' => (string) $r['addio'], 'total_to_bh' => (string) $r['total_to_bh']];
+}
+call('POST', "/trips/{$tid}", $post);
+$e2 = Database::fetchAll('SELECT grand, job_beg, depo, addio, total_to_bh FROM trip_jobs WHERE trip_id = ? AND job_id = ? AND job_date = ?', [$tid, $peg, '2026-10-02'])[0];
+check((float) $e2['addio'] === 2371.25 && (float) $e2['total_to_bh'] === 3474.0, 'after Grand is edited to 5000: Addio = 5000 - 2628.75 = 2371.25 and Total to BH = 2628.75 - 1526 + 2371.25 = 3474.00');
+$ef = call('GET', "/trips/{$tid}/edit")->body();
+check(str_contains($ef, 'data-calc="addio"') && preg_match('~name="rows\[\d+\]\[addio\]"[^>]*readonly~', $ef) === 1, 'Addio and Total to BH are read-only boxes in the form (calculated)');

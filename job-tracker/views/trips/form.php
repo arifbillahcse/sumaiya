@@ -113,7 +113,7 @@ $choice = static function (int $i, string $field, array $row, array $options): s
                         <td><?= $cell($i, 'to_location', $row, ['maxlength' => 190, 'placeholder' => "job's To"]) ?><?= error_text('rows.' . $i . '.to_location') ?></td>
                         <td><?= $cell($i, 'broker', $row, ['maxlength' => 100]) ?></td>
                         <?php if ($editMoney): foreach ($sheet as $field => $label): ?>
-                            <td><?= $cell($i, $field, $row, ['type' => 'number', 'step' => '0.01', 'min' => '0', 'inputmode' => 'decimal']) ?><?= error_text('rows.' . $i . '.' . $field) ?></td>
+                            <td><?= $cell($i, $field, $row, ['type' => 'number', 'step' => '0.01', 'min' => in_array($field, ['addio', 'total_to_bh'], true) ? '-9999999999' : '0', 'inputmode' => 'decimal', 'data-calc' => $field] + (in_array($field, ['addio', 'total_to_bh'], true) ? ['readonly' => 'readonly', 'title' => 'Calculated from Grand, Job Beg and Depo'] : [])) ?><?= error_text('rows.' . $i . '.' . $field) ?></td>
                         <?php endforeach; endif; ?>
                         <td><?= $cell($i, 'bh', $row, ['maxlength' => 100]) ?></td>
                         <td><?php if ($editMoney): ?><?= $cell($i, 'foreman_pay', $row, ['type' => 'number', 'step' => '0.01', 'min' => '0', 'inputmode' => 'decimal']) ?><?= error_text('rows.' . $i . '.foreman_pay') ?><?php else: ?>&mdash;<?php endif; ?></td>
