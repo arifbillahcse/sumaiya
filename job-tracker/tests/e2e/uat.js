@@ -409,11 +409,6 @@ async function createJob(page, number, availableOffset, extra = {}) {
             await Promise.all([page.waitForNavigation(), page.click('button:has-text("Add daily entry")')]);
             return (await page.textContent('main')).replace(/\s+/g, ' ');
         };
-        await page.evaluate(() => { document.querySelector('#add-entry').open = true; });
-        await page.fill('#add-grand', '4016.50');
-        await page.fill('#add-job_beg', '2628.75');
-        await page.fill('#add-depo', '1526');
-        must((await page.inputValue('#add-addio')) === '1387.75' && (await page.inputValue('#add-total_to_bh')) === '2490.50', 'the sheet formulas did not fill Additional / Total to BH while typing: ' + (await page.inputValue('#add-addio')) + ' / ' + (await page.inputValue('#add-total_to_bh')));
         let t = await addEntry('2026-10-28', 'pickup', { diesel: '100', hotels: '50' });
         must(t.includes('was added to the trip'), 'Oct 28 entry not added: ' + t.slice(0, 200));
         t = await addEntry('2026-10-29', 'other', { diesel: '70', helper: '30' });

@@ -481,8 +481,9 @@ final class TripService
                     ? $this->decimal($valid[$field] ?? null)
                     : ($keep !== null && ($keep[$field] ?? null) !== null ? $this->decimal($keep[$field]) : null);
             }
-            if ($withMoney) {
-                $row = self::deriveSheet($row);
+            // Broker, Grand, Job Beg and Depo are no longer shown or edited; whatever is stored stays as it is.
+            foreach (['broker', 'grand', 'job_beg', 'depo'] as $hidden) {
+                $row[$hidden] = $keep[$hidden] ?? null;
             }
             $rows[] = $row;
         }
