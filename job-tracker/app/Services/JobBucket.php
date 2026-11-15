@@ -132,14 +132,14 @@ final class JobBucket
             return ["{$base} AND {$alias}.status IN (?, ?, ?)", ['booked', 'in_transit', 'on_hold']];
         }
         if ($bucket === self::FUTURE) {
-            // Booked jobs whose pickup date (the section date) is after today: not picked up yet.
-            return ["{$base} AND {$alias}.status = ? AND {$d} > ?", ['booked', Clock::today()]];
+            // Booked jobs with a pickup date after today: not picked up yet. A job with no pickup date is not a future job (it is counted from its 1st available date, as before).
+            return ["{$base} AND {$alias}.status = ? AND {$alias}.pickup_date IS NOT NULL AND {$alias}.pickup_date > ?", ['booked', Clock::today()]];
         }
 
         if (self::basis() === 'pickup' && in_array($bucket, [self::READY, self::LATER], true)) {
             // Age rule: picked up from N days ago up to today is Ready; older than N days is More Than N Days; after today is Future Jobs.
             return $bucket === self::READY
-                ? ["{$base} AND {$alias}.status = ? AND {$d} >= ? AND {$d} <= ?", ['booked', self::pastCutoff(), Clock::today()]]
+                ? ["{$base} AND {$alias}.status = ? AND {$d} >= ? AND ({$alias}.pickup_date IS NULL OR {$alias}.pickup_date <= ?)", ['booked', self::pastCutoff(), Clock::today()]]
                 : ["{$base} AND {$alias}.status = ? AND {$d} < ?", ['booked', self::pastCutoff()]];
         }
 
@@ -162,7 +162,7 @@ final class JobBucket
     {
         return match ((string) $job['status']) {
             'booked' => self::basis() === 'pickup'
-                ? (self::dateOf($job) > Clock::today() ? self::FUTURE : (self::dateOf($job) >= self::pastCutoff() ? self::READY : self::LATER))
+                ? ((string) ($job['pickup_date'] ?? '') !== '' && substr((string) $job['pickup_date'], 0, 10) > Clock::today() ? self::FUTURE : (self::dateOf($job) >= self::pastCutoff() ? self::READY : self::LATER))
                 : ((string) $job['first_available_date'] <= self::cutoff() && (string) $job['first_available_date'] >= self::pastCutoff() ? self::READY : self::LATER),
             'in_transit' => self::TRANSIT,
             'delivered' => self::DELIVERED,

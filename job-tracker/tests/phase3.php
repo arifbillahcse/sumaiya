@@ -746,8 +746,8 @@ foreach ([
     mk_job(['job_number' => $number, 'pickup_date' => $pickup, 'first_available_date' => $available]);
 }
 mk_job(['job_number' => 'P-transit', 'status' => 'in_transit', 'pickup_date' => '2026-01-01', 'first_available_date' => '2026-01-01']);
-check(numbers('ready') === ['P-30', 'P-today'], 'Ready = picked up from 30 days ago up to today (no pickup date: the 1st available date is used)');
-check(numbers('future') === ['P-future', 'P-none-new'], 'Future Jobs = booked, pickup date after today (no pickup date: the 1st available date is used)');
+check(numbers('ready') === ['P-30', 'P-none-new', 'P-today'], 'Ready = picked up from 30 days ago up to today, or not picked up and with no pickup date (the 1st available date is used)');
+check(numbers('future') === ['P-future'], 'Future Jobs = booked with a pickup date after today (a job with no pickup date is never a future job)');
 check(numbers('booked') === ['P-30', 'P-31', 'P-future', 'P-none-new', 'P-none-old', 'P-today', 'P-transit'], 'Booked Jobs = every job that is not delivered (the in-transit job is included)');
 check(numbers('later') === ['P-31', 'P-none-old'], 'More Than 30 Days = picked up more than 30 days ago');
 check(numbers('transit') === ['P-transit'], 'In Transit still depends on status only');
@@ -781,7 +781,7 @@ $id = (int) Database::fetchValue("SELECT id FROM jobs WHERE job_number = 'P-toda
 Database::execute("UPDATE jobs SET pickup_date = '2026-06-01' WHERE id = ?", [$id]);
 check(in_array('P-today', numbers('later'), true), 'editing the pickup date to an old date moves the job to More Than 30 Days at once');
 Database::execute("UPDATE jobs SET pickup_date = NULL WHERE id = ?", [$id]);
-check(in_array('P-today', numbers('future'), true) && !in_array('P-today', numbers('ready'), true), 'clearing it falls back to the 1st available date (far ahead = Future Jobs)');
+check(in_array('P-today', numbers('ready'), true) && !in_array('P-today', numbers('future'), true), 'clearing it falls back to the 1st available date (far ahead = Ready)');
 
 $page = call('GET', '/jobs/more-than-30');
 check(str_contains(plain(call('GET', '/jobs/ready')->body()), 'picked up within the last 30 days') && str_contains(plain($page->body()), 'picked up more than 30 days ago'), 'the list descriptions explain the pickup rule');

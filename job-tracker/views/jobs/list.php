@@ -54,7 +54,7 @@ $columns = array_values(array_filter(
 $descriptions = [
     JobBucket::ALL => 'Every job, including those on hold or cancelled.',
     JobBucket::BOOKED => 'Every job that is not delivered yet: booked, on the road or on hold. Delivered and cancelled jobs are not listed here.',
-    JobBucket::FUTURE => 'Booked jobs whose pickup date is after today: they are not picked up yet. Jobs with no pickup date are counted from their 1st available date.',
+    JobBucket::FUTURE => 'Booked jobs with a pickup date after today: they are not picked up yet. A job with no pickup date is never listed here.',
     JobBucket::READY => JobBucket::basis() === 'pickup'
         ? "Booked jobs picked up within the last {$threshold} days (up to today). Jobs with no pickup date are counted from their 1st available date."
         : "Booked jobs whose 1st available date is within {$threshold} days of today (including up to {$threshold} days overdue).",
