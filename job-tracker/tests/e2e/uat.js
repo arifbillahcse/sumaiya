@@ -458,7 +458,11 @@ async function createJob(page, number, availableOffset, extra = {}) {
         for (const path of ['/jobs', '/jobs/booked', '/jobs/future', '/jobs/ready', '/jobs/more-than-30', '/jobs/delivered']) {
             await page.goto(BASE + path);
             const over = await page.locator('.table-responsive').first().evaluate((el) => el.scrollWidth - el.clientWidth);
-            must(over <= 0, path + ' scrolls sideways by ' + over + 'px');
+            if (over > 0) {
+                const widths = await page.locator('thead th').evaluateAll((ths) => ths.map((t) => t.textContent.trim().replace(/\\s+/g, ' ').slice(0, 24) + ':' + Math.round(t.getBoundingClientRect().width)));
+                const widest = await page.locator('tbody tr').evaluateAll((rows) => rows.map((r) => [...r.children].map((c, i) => [i, Math.round(c.getBoundingClientRect().width), c.textContent.trim().replace(/\\s+/g, ' ').slice(0, 40)])).flat().sort((a, b) => b[1] - a[1]).slice(0, 4));
+                must(false, path + ' scrolls sideways by ' + over + 'px; columns ' + widths.join(' | ') + '; widest cells ' + JSON.stringify(widest));
+            }
         }
         await page.setViewportSize({ width: 1280, height: 800 });
     });
