@@ -877,6 +877,7 @@ summary:focus-visible {
     .jt-table.jt-compact .jt-subtle { font-size: 0.72rem; }
     .jt-table.jt-compact .badge, .jt-table.jt-compact .jt-chip { font-size: 0.68rem; }
     .jt-table.jt-compact td.jt-actions .btn { padding: 0.2rem 0.45rem; font-size: 0.75rem; }
+    .jt-table.jt-compact td.jt-actions { min-width: 0; }
     .jt-table.jt-compact .jt-sort-sep { opacity: 0.5; }
 }
 
