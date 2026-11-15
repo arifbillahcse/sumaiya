@@ -485,7 +485,7 @@ async function createJob(page, number, availableOffset, extra = {}) {
         await page.fill('#job_range', 'R-2'); await page.fill('#pads', '14');
         await Promise.all([page.waitForNavigation(), page.click('main form button[type=submit]')]);
         const detail = (await page.textContent('main')).replace(/\s+/g, ' ');
-        must(/Range R-2/.test(detail) && /Pads 14/.test(detail), 'Range and Pads are not on the job page: ' + detail.slice(0, 200));
+        must(/Range\s*R-2/.test(detail) && /Pads\s*14/.test(detail), 'Range and Pads are not on the job page: ' + detail.slice(0, 200));
         // storage payment: a job picked up 45 days ago owes one month of storage (A-CF 1000 x 0.60 = 600)
         await createJob(page, RUN + '-STO', 10, { pickup: -45, cf: '1000' });
         await page.goto(BASE + '/jobs?q=' + RUN + '-STO');
