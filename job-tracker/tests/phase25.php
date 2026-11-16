@@ -65,7 +65,7 @@ check(!preg_match('~<form[^>]*action="[^"]*/jobs/' . $j1 . '/status"[^>]*>\s*<in
 check(preg_match('~id="statusModal-in_transit".*?<select[^>]*name="carrier_name"[^>]*required.*?<option value="KEN">KEN</option>.*?<option value="DINOCA">DINOCA</option>.*?<option value="Kenth">Kenth</option>.*?name="driver_name".*?name="driver_phone"~s', $show) === 1, 'the dialog has a required Carrier drop-down with the three carriers, and Driver name and phone');
 $status($j1, ['to' => 'in_transit']);
 check($state($j1)['status'] === 'booked', 'without a carrier the job does not move');
-check(str_contains(call('GET', "/jobs/{$j1}")->body(), 'The Carrier field is required') || str_contains(call('GET', "/jobs/{$j1}")->body(), 'Carrier'), 'and the dialog says a carrier is needed');
+check(preg_match('/carrier is required/i', plain(call('GET', "/jobs/{$j1}")->body())) === 1, 'and the dialog says a carrier is required');
 $status($j1, ['to' => 'in_transit', 'carrier_name' => 'XYZ Haulers']);
 check($state($j1)['status'] === 'booked', 'a carrier that is not on the list is refused');
 check(str_contains(plain(call('GET', "/jobs/{$j1}")->body()), 'Choose a carrier from the list.'), '...with "Choose a carrier from the list."');
