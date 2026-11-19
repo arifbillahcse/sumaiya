@@ -42,6 +42,7 @@ return static function (Router $router): void {
     $router->get('/jobs/future', [JobListController::class, 'future'])->can('jobs.view')->name('jobs.future');
     $router->get('/jobs/ready', [JobListController::class, 'ready'])->can('jobs.view')->name('jobs.ready');
     $router->get('/jobs/more-than-30', [JobListController::class, 'later'])->can('jobs.view')->name('jobs.later');
+    $router->get('/jobs/stage', [JobListController::class, 'stage'])->can('jobs.view')->name('jobs.stage');
     $router->get('/jobs/in-transit', [JobListController::class, 'transit'])->can('jobs.view')->name('jobs.transit');
     $router->get('/jobs/delivered', [JobListController::class, 'delivered'])->can('jobs.view')->name('jobs.delivered');
     $router->get('/jobs/create', [JobController::class, 'create'])->can('jobs.create')->name('jobs.create');
