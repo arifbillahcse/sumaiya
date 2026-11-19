@@ -11,6 +11,7 @@ use App\Controllers\ForemanController;
 use App\Controllers\ImportController;
 use App\Controllers\JobController;
 use App\Controllers\JobCalendarController;
+use App\Controllers\JobStatementController;
 use App\Controllers\JobListController;
 use App\Controllers\RoleController;
 use App\Controllers\SettingsController;
@@ -38,6 +39,7 @@ return static function (Router $router): void {
     // /jobs/create and /jobs/trash are literal paths; {id:int} only ever matches digits, so there is no clash.
     $router->get('/jobs', [JobListController::class, 'all'])->can('jobs.view')->name('jobs');
     $router->get('/jobs/calendar', [JobCalendarController::class, 'index'])->can('jobs.view')->name('jobs.calendar');
+    $router->get('/jobs/statement', [JobStatementController::class, 'index'])->can('jobs.view_financials')->name('jobs.statement');
     $router->get('/jobs/booked', [JobListController::class, 'booked'])->can('jobs.view')->name('jobs.booked');
     $router->get('/jobs/future', [JobListController::class, 'future'])->can('jobs.view')->name('jobs.future');
     $router->get('/jobs/ready', [JobListController::class, 'ready'])->can('jobs.view')->name('jobs.ready');

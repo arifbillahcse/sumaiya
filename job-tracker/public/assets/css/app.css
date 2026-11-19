@@ -939,3 +939,12 @@ summary:focus-visible {
 .jt-btn-amber:focus-visible { outline: 3px solid #1d4ea3; outline-offset: 2px; color: #fff; }
 .jt-btn-amber-ic { font-size: 1rem; line-height: 1; }
 @media print { .jt-tracklinks { display: none; } }
+
+/* Carrier / driver statement (v1.11.0) */
+.jt-statement-sum { max-width: 24rem; border: 1px solid var(--jt-card-border); border-radius: 0.5rem; overflow: hidden; }
+.jt-statement-sum > div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0.8rem; border-bottom: 1px solid var(--jt-card-border); }
+.jt-statement-sum > div:last-child { border-bottom: 0; }
+.jt-statement-sum small { color: var(--jt-muted); }
+.jt-statement-due { background: #334155; color: #fff; font-weight: 700; }
+.jt-statement td, .jt-statement th { overflow-wrap: anywhere; }
+@media print { .jt-noprint { display: none !important; } .jt-statement-due { background: #fff !important; color: #000 !important; border-top: 2px solid #000; } }
