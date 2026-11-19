@@ -567,6 +567,11 @@ async function createJob(page, number, availableOffset, extra = {}) {
         await Promise.all([page.waitForNavigation(), page.click('button[data-confirm]')]);
     });
     await step('the Driver / Job Tracking buttons sit at the top, open in the same tab and fit a phone', async () => {
+        // the earlier HTTP suites share this database and may have saved Settings without these two fields, so set them here, as a person would
+        await page.goto(BASE + '/settings');
+        await page.fill('#tracking_driver_url', 'https://app.bhrelocationinc.com/');
+        await page.fill('#tracking_job_url', 'http://app.americanprovanline.com/');
+        await Promise.all([page.waitForNavigation(), page.click('button:has-text("Save settings")')]);
         for (const path of ['/dashboard', '/jobs', '/jobs/calendar']) {
             await page.goto(BASE + path);
             const links = page.locator('nav.jt-tracklinks a.jt-btn-amber');
