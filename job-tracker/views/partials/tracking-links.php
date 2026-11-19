@@ -7,6 +7,6 @@ if ($driver === '' && $job === '') {
 }
 ?>
 <nav class="jt-tracklinks" aria-label="Tracking links">
-    <?php if ($driver !== ''): ?><a class="jt-btn-amber" href="<?= e($driver) ?>" target="_blank" rel="noopener noreferrer"><span class="jt-btn-amber-ic" aria-hidden="true">&#128506;&#65039;</span>Driver Tracking</a><?php endif; ?>
-    <?php if ($job !== ''): ?><a class="jt-btn-amber" href="<?= e($job) ?>" target="_blank" rel="noopener noreferrer"><span class="jt-btn-amber-ic" aria-hidden="true">&#128205;</span>Job Tracking</a><?php endif; ?>
+    <?php if ($driver !== ''): ?><a class="jt-btn-amber" href="<?= e($driver) ?>"><span class="jt-btn-amber-ic" aria-hidden="true">&#128506;&#65039;</span>Driver Tracking</a><?php endif; ?>
+    <?php if ($job !== ''): ?><a class="jt-btn-amber" href="<?= e($job) ?>"><span class="jt-btn-amber-ic" aria-hidden="true">&#128205;</span>Job Tracking</a><?php endif; ?>
 </nav>

@@ -13,7 +13,7 @@ use App\Services\SettingsService;
 use App\Services\TrackingLinks;
 
 section('Tracking buttons: address checks');
-foreach (['http://app.bhrelocationinc.com/driver-tracking.php', 'https://app.example.com/a/b?x=1&y=2', 'HTTP://Example.com/'] as $ok) {
+foreach (['https://app.bhrelocationinc.com/', 'https://app.example.com/a/b?x=1&y=2', 'HTTP://Example.com/'] as $ok) {
     check(TrackingLinks::parse($ok)['error'] === null && TrackingLinks::parse($ok)['value'] === $ok, "accepted: {$ok}");
 }
 check(TrackingLinks::parse('')['error'] === null && TrackingLinks::parse('   ')['value'] === '', 'an empty address is allowed (the button is hidden)');
@@ -29,8 +29,8 @@ Clock::fake('2026-11-20');
 $admin = make_user('Admin', 'p26-admin@example.com');
 sign_in($admin);
 $html = call('GET', '/dashboard')->body();
-check(TrackingLinks::driver() === 'http://app.bhrelocationinc.com/driver-tracking.php' && TrackingLinks::job() === 'http://app.americanprovanline.com/', 'the shipped addresses are the two the client gave');
-check(preg_match('~<nav class="jt-tracklinks"[^>]*>.*?href="http://app\.bhrelocationinc\.com/driver-tracking\.php" target="_blank" rel="noopener noreferrer"[^>]*>.*?Driver Tracking</a>.*?href="http://app\.americanprovanline\.com/" target="_blank" rel="noopener noreferrer"[^>]*>.*?Job Tracking</a>~s', $html) === 1, 'the page has the two buttons: Driver Tracking and Job Tracking, each opening its address in a new tab');
+check(TrackingLinks::driver() === 'https://app.bhrelocationinc.com/' && TrackingLinks::job() === 'http://app.americanprovanline.com/', 'the shipped addresses are the two the client gave');
+check(preg_match('~<nav class="jt-tracklinks"[^>]*>.*?href="https://app\.bhrelocationinc\.com/"[^>]*>.*?Driver Tracking</a>.*?href="http://app\.americanprovanline\.com/"[^>]*>.*?Job Tracking</a>~s', $html) === 1, 'the page has the two buttons: Driver Tracking and Job Tracking, each opening its address in a new tab');
 check(strpos($html, 'jt-tracklinks') < strpos($html, 'class="jt-topbar"'), 'the bar is above the top bar, at the very top');
 foreach (['/jobs', '/jobs/calendar', '/trips', '/settings', '/jobs/create'] as $path) {
     check(str_contains(call('GET', $path)->body(), 'class="jt-tracklinks"'), "{$path} has the bar too");
@@ -47,7 +47,7 @@ SettingsService::flush();
 check(TrackingLinks::job() === 'https://app.americanprovanline.com/job-tracking.php' && str_contains(call('GET', '/dashboard')->body(), 'href="https://app.americanprovanline.com/job-tracking.php"'), 'changing the Job Tracking address changes the button');
 $save(['tracking_driver_url' => 'javascript:alert(1)']);
 SettingsService::flush();
-check(TrackingLinks::driver() === 'http://app.bhrelocationinc.com/driver-tracking.php', 'a bad address is refused and the saved one stays');
+check(TrackingLinks::driver() === 'https://app.bhrelocationinc.com/', 'a bad address is refused and the saved one stays');
 $save(['tracking_driver_url' => '']);
 SettingsService::flush();
 $d = call('GET', '/dashboard')->body();
